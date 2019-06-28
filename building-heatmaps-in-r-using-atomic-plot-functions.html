@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Visualising networks in R using atomic plot functions — Peter Wooldridge's Blog</title>
+	<meta name="description" content="Title: Visualising networks in R using atomic plot functions; Date: 2017-09-28; Author: Peter Wooldridge">
+	<meta name="author" content="Peter Wooldridge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+		<script src="/theme/html5.js"></script>
+		<![endif]-->
+	<link href="/theme/css/ipython.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/simplex/bootstrap.min.css" rel="stylesheet">
+	<link href="/theme/css/local.css" rel="stylesheet">
+	<link href="/theme/css/pygments.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+	<div class="page-header">
+		<h1><a href="/">Peter Wooldridge's Blog</a>
+			<br>	</div>
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+<div class="article" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="text-center article-header">
+		<h1 itemprop="name headline" class="article-title">Visualising networks in R using atomic plot functions</h1>
+		<span itemprop="author" itemscope itemtype="http://schema.org/Person">
+			<h4 itemprop="name">Peter Wooldridge</h4>
+		</span>
+		<time datetime="2017-09-28T21:13:00+01:00" itemprop="datePublished">Thu 28 September 2017</time>
+	</div>
+	<div>
+		Category:
+		<span itemprop="articleSection">
+			<a href="/category/misc.html" rel="category">misc</a>
+		</span>
+	</div>
+ 
+	<div>
+		Tags:
+		<span itemprop="keywords">
+			<a href="/tag/r-networks-visualisation.html" rel="tag">R networks visualisation</a>
+		</span>
+	</div>
+	<div itemprop="articleBody" class="article-body"><p>One of the most natural ways to visualise a social network is a network diagram which consists of a series of dots representing the entity in the network and lines representing the relationships between the entities. This type of visualisation looks as follows:</p>
+<div class="figure">
+<img alt="" src="images/standard-network-plot.png" />
+</div>
+<p>We can encode community information to this type of plot by colouring the nodes according to the communitiy memberships.</p>
+<p>As Mike Bostock <a class="reference external" href="https://bost.ocks.org/mike/miserables/">showed</a>, another interesting way to visualise a network is with the adjacency matrix. As a reminder the Adjacency matrix is defined as follows:</p>
+<div class="math">
+\begin{equation*}
+A_{ij} = \left\{
+\begin{array}{lr}
+1 &amp; : \text{if }i\text{ connected to }j\\
+0 &amp; : \text{otherwise}
+\end{array}
+\right.
+\end{equation*}
+</div>
+<p>The usefullness of the visualisation of the adjacency matrix depends largely on the order of the rows and columns in the plot. By finding communities in the network, we can reorder the rows and columns of the adjacency matrix accordingly to produce a plot that looks as follows:</p>
+<div class="figure">
+<img alt="" src="images/lesmis.png" />
+</div>
+<p>In this post I show how to create the above plot using atomic plot functions in R. The coloured blocks down the diagonal of the plot represent the different communities in the network.</p>
+<p>To get started, the first thing we need is some data in a matrix object. We load the same Les Misérables data as used for the visualisation <a class="reference external" href="https://bost.ocks.org/mike/miserables/">here</a>:</p>
+<div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">jsonlite</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">igraph</span><span class="p">)</span>
+
+<span class="n">json_data</span> <span class="o">&lt;-</span> <span class="nf">fromJSON</span><span class="p">(</span><span class="s">&quot;https://bost.ocks.org/mike/miserables/miserables.json&quot;</span><span class="p">)</span>
+</pre></div>
+<p>The <code>fromJSON</code> function reads the les miserables data into a list containing information about the nodes and edges in the graph. We extract two fields from the list, a vector of character names and the edge data</p>
+<div class="highlight"><pre><span></span><span class="n">characters</span> <span class="o">&lt;-</span> <span class="n">json_data[[1]]</span><span class="o">$</span><span class="n">name</span>
+<span class="n">edges</span> <span class="o">&lt;-</span> <span class="n">json_data[[2]]</span>
+</pre></div>
+<p>We can view these two objects:</p>
+<div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="nf">head</span><span class="p">(</span><span class="n">characters</span><span class="p">)</span>
+<span class="n">[1]</span> <span class="s">&quot;Myriel&quot;</span>          <span class="s">&quot;Napoleon&quot;</span>        <span class="s">&quot;Mlle.Baptistine&quot;</span> <span class="s">&quot;Mme.Magloire&quot;</span>
+<span class="n">[5]</span> <span class="s">&quot;CountessdeLo&quot;</span>    <span class="s">&quot;Geborand&quot;</span>
+
+<span class="o">&gt;</span> <span class="nf">head</span><span class="p">(</span><span class="n">edges</span><span class="p">)</span>
+  <span class="n">source</span> <span class="n">target</span> <span class="n">value</span>
+<span class="m">1</span>      <span class="m">1</span>      <span class="m">0</span>     <span class="m">1</span>
+<span class="m">2</span>      <span class="m">2</span>      <span class="m">0</span>     <span class="m">8</span>
+<span class="m">3</span>      <span class="m">3</span>      <span class="m">0</span>    <span class="m">10</span>
+<span class="m">4</span>      <span class="m">3</span>      <span class="m">2</span>     <span class="m">6</span>
+<span class="m">5</span>      <span class="m">4</span>      <span class="m">0</span>     <span class="m">1</span>
+<span class="m">6</span>      <span class="m">5</span>      <span class="m">0</span>     <span class="m">1</span>
+</pre></div>
+<p>The <code>edges</code> object contains information about which node (source column) is connected to which (target column) and the co-occurence number (value column). This a succint way to represent a matrix as we only have rows for the non-zero matrix elements. Representing a matrix in this way is known as Triplet representation.</p>
+<p>Next, we convert each of the numeric columns of <code>edges</code> into character names by iterating through each row of <code>edges</code> and replacing the <code>source</code> and <code>target</code> numbers with the name of the character at that index of the characters array. We add one to the index to account for the fact that R indexes from one not zero.</p>
+<div class="highlight"><pre><span></span><span class="n">edges_w_names</span> <span class="o">&lt;-</span> <span class="nf">t</span><span class="p">(</span><span class="nf">apply</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">MARGIN</span><span class="o">=</span><span class="m">1</span><span class="p">,</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">src_idx</span> <span class="o">&lt;-</span> <span class="nf">as.numeric</span><span class="p">(</span><span class="n">x[</span><span class="s">&quot;source&quot;</span><span class="n">]</span><span class="m">+1</span><span class="p">)</span>
+  <span class="n">dest_idx</span> <span class="o">&lt;-</span> <span class="nf">as.numeric</span><span class="p">(</span><span class="n">x[</span><span class="s">&quot;target&quot;</span><span class="n">]</span><span class="m">+1</span><span class="p">)</span>
+  <span class="nf">c</span><span class="p">(</span><span class="n">characters[src_idx]</span><span class="p">,</span> <span class="n">characters[dest_idx]</span><span class="p">,</span> <span class="n">x[</span><span class="s">&quot;value&quot;</span><span class="n">]</span><span class="p">)</span>
+<span class="p">}))</span>
+<span class="n">edges_w_names</span> <span class="o">&lt;-</span> <span class="nf">as.data.frame</span><span class="p">(</span><span class="n">edges_w_names</span><span class="p">,</span> <span class="n">stringsAsFactors</span><span class="o">=</span><span class="bp">F</span><span class="p">)</span>
+
+<span class="nf">colnames</span><span class="p">(</span><span class="n">edges_w_names</span><span class="p">)</span> <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;source&quot;</span><span class="p">,</span> <span class="s">&quot;target&quot;</span><span class="p">,</span> <span class="s">&quot;value&quot;</span><span class="p">)</span>
+<span class="n">edges_w_names</span><span class="o">$</span><span class="n">source</span> <span class="o">&lt;-</span> <span class="nf">as.character</span><span class="p">(</span><span class="n">edges_w_names</span><span class="o">$</span><span class="n">source</span><span class="p">)</span>
+<span class="n">edges_w_names</span><span class="o">$</span><span class="n">target</span> <span class="o">&lt;-</span> <span class="nf">as.character</span><span class="p">(</span><span class="n">edges_w_names</span><span class="o">$</span><span class="n">target</span><span class="p">)</span>
+<span class="n">edges_w_names</span><span class="o">$</span><span class="n">value</span> <span class="o">&lt;-</span> <span class="nf">as.numeric</span><span class="p">(</span><span class="n">edges_w_names</span><span class="o">$</span><span class="n">value</span><span class="p">)</span>
+</pre></div>
+<p><code>edges_w_names</code> is a three column data.frame that looks as follows:</p>
+<div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="nf">head</span><span class="p">(</span><span class="n">edges_w_names</span><span class="p">)</span>
+           <span class="n">source</span>          <span class="n">target</span> <span class="n">value</span>
+<span class="m">1</span>        <span class="n">Napoleon</span>          <span class="n">Myriel</span>     <span class="m">1</span>
+<span class="m">2</span> <span class="n">Mlle.Baptistine</span>          <span class="n">Myriel</span>     <span class="m">8</span>
+<span class="m">3</span>    <span class="n">Mme.Magloire</span>          <span class="n">Myriel</span>    <span class="m">10</span>
+<span class="m">4</span>    <span class="n">Mme.Magloire</span> <span class="n">Mlle.Baptistine</span>     <span class="m">6</span>
+<span class="m">5</span>    <span class="n">CountessdeLo</span>          <span class="n">Myriel</span>     <span class="m">1</span>
+<span class="m">6</span>        <span class="n">Geborand</span>          <span class="n">Myriel</span>     <span class="m">1</span>
+</pre></div>
+<p>Now we convert from the character name matrix in Triplet representation into a fully dense matrix object. In order to do this we make use of the <code>graph.data.frame</code> object from the igraph package. The <code>get.adjacency</code> function is builds a dense matrix from the igraph object. Because the edges in our network are un-directed the adjacency matrix will be a symmetric matrix</p>
+<div class="highlight"><pre><span></span><span class="n">gdf</span> <span class="o">&lt;-</span> <span class="nf">graph.data.frame</span><span class="p">(</span><span class="n">edges_w_names</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="bp">F</span><span class="p">)</span>
+<span class="n">adj_mat</span> <span class="o">&lt;-</span> <span class="nf">get.adjacency</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="bp">F</span><span class="p">,</span> <span class="n">attr</span><span class="o">=</span><span class="s">&quot;value&quot;</span><span class="p">)</span>
+</pre></div>
+<p>Now we have the igraph <code>gdf</code> object, we can use it to detect communities in our network. There are several clustering routines built into igraph. Here we use the <code>cluster_infomap</code> function which returns amongst other things an object containing membership attributes for each node in the graph</p>
+<div class="highlight"><pre><span></span><span class="c1"># cluster graph</span>
+<span class="n">members</span> <span class="o">&lt;-</span> <span class="n">igraph</span><span class="o">::</span><span class="nf">cluster_infomap</span><span class="p">(</span><span class="n">gdf</span><span class="p">)</span><span class="o">$</span><span class="n">membership</span>
+<span class="c1"># how many communities are there</span>
+<span class="n">n_cluster</span> <span class="o">&lt;-</span> <span class="nf">length</span><span class="p">(</span><span class="nf">unique</span><span class="p">(</span><span class="n">members</span><span class="p">))</span>
+
+<span class="c1"># reorder accordign to cluster memberships</span>
+<span class="n">adj_mat</span> <span class="o">&lt;-</span> <span class="n">adj_mat</span><span class="nf">[order</span><span class="p">(</span><span class="n">members</span><span class="p">),</span> <span class="nf">order</span><span class="p">(</span><span class="n">members</span><span class="p">)</span><span class="n">]</span>
+</pre></div>
+<p>Now we're ready to create the actual plot. I've added comments into the code below to try and better explain what's happening</p>
+<div class="highlight"><pre><span></span><span class="c1"># open a png handle</span>
+<span class="nf">png</span><span class="p">(</span><span class="s">&quot;lesmis.png&quot;</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="m">7000</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="m">7000</span><span class="p">)</span>
+
+<span class="c1"># set up plot parameters</span>
+<span class="nf">par</span><span class="p">(</span><span class="n">bg</span> <span class="o">=</span> <span class="s">&#39;black&#39;</span><span class="p">,</span>
+    <span class="n">mar</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">50</span><span class="p">,</span> <span class="m">50</span><span class="p">,</span> <span class="m">50</span><span class="p">,</span> <span class="m">50</span><span class="p">),</span>
+    <span class="n">family</span> <span class="o">=</span> <span class="s">&#39;Roboto Light&#39;</span><span class="p">,</span>
+    <span class="n">col</span> <span class="o">=</span> <span class="s">&#39;white&#39;</span><span class="p">,</span>
+    <span class="n">col.main</span> <span class="o">=</span> <span class="s">&#39;white&#39;</span><span class="p">,</span>
+    <span class="n">ps</span> <span class="o">=</span> <span class="m">300</span><span class="p">)</span>
+
+<span class="c1"># create an empty plot (use axis=F so we can customise axis later)</span>
+<span class="nf">plot</span><span class="p">(</span><span class="n">axes</span> <span class="o">=</span> <span class="bp">F</span><span class="p">,</span>
+     <span class="m">0</span><span class="p">,</span>
+     <span class="n">type</span> <span class="o">=</span> <span class="s">&#39;n&#39;</span><span class="p">,</span>
+     <span class="n">xlim</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="nf">ncol</span><span class="p">(</span><span class="n">adj_mat</span><span class="p">)),</span>
+     <span class="n">ylim</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="nf">ncol</span><span class="p">(</span><span class="n">adj_mat</span><span class="p">)),</span>
+     <span class="n">main</span> <span class="o">=</span> <span class="s">&quot;Les Misérables Co-occurance Matrix&quot;</span><span class="p">)</span>
+
+<span class="c1"># define community colours</span>
+<span class="n">cluster_cols</span> <span class="o">&lt;-</span> <span class="nf">categorical_pal</span><span class="p">(</span><span class="n">n_cluster</span><span class="p">)</span>
+
+<span class="c1"># iterate over each row and column of adjacency matrix and draw rectangles onto the plot</span>
+<span class="nf">lapply</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="nf">nrow</span><span class="p">(</span><span class="n">adj_mat</span><span class="p">),</span> <span class="nf">function</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nf">lapply</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="nf">ncol</span><span class="p">(</span><span class="n">adj_mat</span><span class="p">),</span> <span class="nf">function</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1"># each entry in matrix is an edge so if communities differ pick the smallest</span>
+    <span class="n">cluster_no</span> <span class="o">&lt;-</span> <span class="nf">min</span><span class="p">(</span><span class="nf">sort</span><span class="p">(</span><span class="n">members</span><span class="p">)</span><span class="n">[j]</span><span class="p">,</span> <span class="nf">sort</span><span class="p">(</span><span class="n">members</span><span class="p">)</span><span class="n">[i]</span><span class="p">)</span>
+
+    <span class="c1"># draw squares on the plot</span>
+    <span class="nf">rect</span><span class="p">(</span>
+      <span class="n">xleft</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="m">.5</span><span class="p">,</span>
+      <span class="n">xright</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="m">.5</span><span class="p">,</span>
+      <span class="n">ytop</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="m">.5</span><span class="p">,</span>
+      <span class="n">ybottom</span> <span class="o">=</span> <span class="n">j</span> <span class="o">-</span> <span class="m">.5</span><span class="p">,</span>
+      <span class="n">pch</span> <span class="o">=</span> <span class="s">&#39;+&#39;</span><span class="p">,</span>
+      <span class="n">cex</span> <span class="o">=</span> <span class="m">.5</span><span class="p">,</span>
+      <span class="n">col</span><span class="o">=</span><span class="nf">ifelse</span><span class="p">(</span><span class="n">adj_mat[i</span><span class="p">,</span><span class="n">j]</span><span class="o">==</span><span class="m">0</span><span class="p">,</span> <span class="s">&#39;black&#39;</span><span class="p">,</span> <span class="n">cluster_cols[cluster_no]</span><span class="p">)</span>
+    <span class="p">)})</span>
+<span class="p">})</span>
+
+<span class="c1"># draw the x and y axis with the character names</span>
+<span class="nf">axis</span><span class="p">(</span><span class="n">tick</span><span class="o">=</span><span class="bp">T</span><span class="p">,</span> <span class="n">side</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="nf">colnames</span><span class="p">(</span><span class="n">adj_mat</span><span class="p">),</span> <span class="n">at</span> <span class="o">=</span> <span class="m">1</span><span class="o">:</span><span class="nf">nrow</span><span class="p">(</span><span class="n">adj_mat</span><span class="p">),</span> <span class="n">col</span> <span class="o">=</span> <span class="s">&quot;white&quot;</span><span class="p">,</span> <span class="n">col.ticks</span> <span class="o">=</span> <span class="s">&quot;white&quot;</span><span class="p">,</span> <span class="n">col.axis</span><span class="o">=</span><span class="s">&quot;white&quot;</span><span class="p">,</span> <span class="n">las</span><span class="o">=</span><span class="m">2</span><span class="p">,</span> <span class="n">cex.axis</span><span class="o">=</span><span class="m">0.2</span><span class="p">)</span>
+<span class="nf">axis</span><span class="p">(</span><span class="n">tick</span><span class="o">=</span><span class="bp">T</span><span class="p">,</span> <span class="n">side</span> <span class="o">=</span> <span class="m">2</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="nf">rownames</span><span class="p">(</span><span class="n">adj_mat</span><span class="p">),</span> <span class="n">at</span> <span class="o">=</span> <span class="m">1</span><span class="o">:</span><span class="nf">ncol</span><span class="p">(</span><span class="n">adj_mat</span><span class="p">),</span> <span class="n">col</span> <span class="o">=</span> <span class="s">&quot;white&quot;</span><span class="p">,</span> <span class="n">col.ticks</span> <span class="o">=</span> <span class="s">&quot;white&quot;</span><span class="p">,</span> <span class="n">col.axis</span><span class="o">=</span><span class="s">&quot;white&quot;</span><span class="p">,</span> <span class="n">las</span><span class="o">=</span><span class="m">1</span><span class="p">,</span> <span class="n">cex.axis</span><span class="o">=</span><span class="m">0.2</span><span class="p">)</span>
+
+<span class="c1"># add a grid to the plot</span>
+<span class="nf">abline</span><span class="p">(</span><span class="n">h</span><span class="o">=</span><span class="m">1</span><span class="o">:</span><span class="nf">ncol</span><span class="p">(</span><span class="n">adj_mat</span><span class="p">),</span> <span class="n">v</span><span class="o">=</span><span class="m">1</span><span class="o">:</span><span class="nf">ncol</span><span class="p">(</span><span class="n">adj_mat</span><span class="p">),</span> <span class="n">lty</span><span class="o">=</span><span class="m">3</span><span class="p">)</span>
+
+<span class="c1"># close the plot device (i.e. write the png to disk)</span>
+<span class="nf">dev.off</span><span class="p">()</span>
+</pre></div>
+<p>We have shown how using the atomic plot functions in R we can create some nice looking visualisations of network data. The full code is available at <a class="reference external" href="https://github.com/pwwooldridge/les-mis-adjacency-vis">this github repo</a></p>
+<script type='text/javascript'>if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        fonts: [['STIX', 'TeX']]," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script></div>
+	<hr>
+	<h2>Comments</h2>
+</div>
+		</div>
+	</div> 	<!-- <hr> -->
+</div> <!-- /container -->
+<footer class="aw-footer bg-danger">
+	<div class="container"> <!-- footer -->
+		<div class="row">
+			<div class="col-md-10 col-md-offset-1">
+				<div class="row">
+					<div class="col-md-3">
+						<h4>Navigation</h4>
+						<ul class="list-unstyled my-list-style">
+							<li><a href="">Peter Wooldridge's Blog</a></li>
+							<li><a href="/pages/about.html"><i class="fa fa-About "></i> About</a></li>
+						</ul>
+					</div>
+					<div class="col-md-3">
+						<h4>Author</h4>
+						<ul class="list-unstyled my-list-style">
+						</ul>
+					</div>
+					<div class="col-md-3">
+						<h4>Categories</h4>
+						<ul class="list-unstyled my-list-style">
+							<li><a href="/category/misc.html">misc (3)</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+<div class="container">
+	<div class="row">
+		<div class="col-md-12 text-center center-block aw-bottom">
+			<p>&copy; Peter Wooldridge 2016</p>
+			<p>Powered by Pelican</p>
+		</div>
+	</div>
+</div>
+<!-- JavaScript -->
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+	$("div.collapseheader").click(function () {
+		$header = $(this).children("span").first();
+		$codearea = $(this).children(".input_area");
+		$codearea.slideToggle(500, function () {
+			$header.text(function () {
+				return $codearea.is(":visible") ? "Collapse Code" : "Expand Code";
+			});
+		});
+	});
+});
+</script>
+</body>
+</html>
