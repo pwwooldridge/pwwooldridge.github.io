@@ -1,57 +1,87 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<title>Linear Regression from first principles — Peter Wooldridge's Blog</title>
-	<meta name="description" content="Title: Linear Regression from first principles; Date: 2017-09-12; Author: Peter Wooldridge">
-	<meta name="author" content="Peter Wooldridge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
-	<!--[if lt IE 9]>
-		<script src="/theme/html5.js"></script>
-		<![endif]-->
-	<link href="/theme/css/ipython.css" rel="stylesheet">
-	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
-	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/simplex/bootstrap.min.css" rel="stylesheet">
-	<link href="/theme/css/local.css" rel="stylesheet">
-	<link href="/theme/css/pygments.css" rel="stylesheet">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="" />
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro|Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="/theme/stylesheet/style.min.css">
+
+  <link rel="stylesheet" type="text/css" href="/theme/pygments/github.min.css">
+  <link rel="stylesheet" type="text/css" href="/theme/font-awesome/css/font-awesome.min.css">
+
+
+
+
+
+
+
+<meta name="author" content="Peter Wooldridge" />
+<meta name="description" content="Derivation of parameter estimates for simple linear regression from first principles" />
+<meta name="keywords" content="machine learning, linear models, R">
+
+<meta property="og:site_name" content="Peter Wooldridge's Blog"/>
+<meta property="og:title" content="Linear Regression from first principles"/>
+<meta property="og:description" content="Derivation of parameter estimates for simple linear regression from first principles"/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:url" content="/linear-regression.html"/>
+<meta property="og:type" content="article"/>
+<meta property="article:published_time" content="2017-09-12 21:46:00+01:00"/>
+<meta property="article:modified_time" content=""/>
+<meta property="article:author" content="/author/peter-wooldridge.html">
+<meta property="article:section" content="misc"/>
+<meta property="article:tag" content="machine learning"/>
+<meta property="article:tag" content="linear models"/>
+<meta property="article:tag" content="R"/>
+<meta property="og:image" content="">
+
+  <title>Peter Wooldridge's Blog &ndash; Linear Regression from first principles</title>
+
 </head>
 <body>
-<div class="container">
-	<div class="page-header">
-		<h1><a href="/">Peter Wooldridge's Blog</a>
-			<br>	</div>
-	<div class="row">
-		<div class="col-md-8 col-md-offset-2">
-<div class="article" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="text-center article-header">
-		<h1 itemprop="name headline" class="article-title">Linear Regression from first principles</h1>
-		<span itemprop="author" itemscope itemtype="http://schema.org/Person">
-			<h4 itemprop="name">Peter Wooldridge</h4>
-		</span>
-		<time datetime="2017-09-12T21:46:00+01:00" itemprop="datePublished">Tue 12 September 2017</time>
-	</div>
-	<div>
-		Category:
-		<span itemprop="articleSection">
-			<a href="/category/misc.html" rel="category">misc</a>
-		</span>
-	</div>
- 
-	<div>
-		Tags:
-		<span itemprop="keywords">
-			<a href="/tag/machine-learning.html" rel="tag">machine learning</a>
-		</span>
-		<span itemprop="keywords">
-			<a href="/tag/linear-models.html" rel="tag">linear models</a>
-		</span>
-		<span itemprop="keywords">
-			<a href="/tag/r.html" rel="tag">R</a>
-		</span>
-	</div>
-	<div itemprop="articleBody" class="article-body"><p>Linear regression allows one to model a dependent variable with the best straight line fit to a set of predictor variables. In the simplest scenario we have a single predictor variable. This is called simple linear regression.</p>
+  <aside>
+    <div>
+      <a href="">
+        <img src="/theme/img/profile.png" alt="" title="">
+      </a>
+      <h1><a href=""></a></h1>
+
+
+      <nav>
+        <ul class="list">
+          <li><a href="/pages/about.html#about">About</a></li>
+
+        </ul>
+      </nav>
+
+      <ul class="social">
+      </ul>
+    </div>
+
+
+  </aside>
+  <main>
+
+
+<article class="single">
+  <header>
+      
+    <h1 id="linear-regression">Linear Regression from first principles</h1>
+    <p>
+          Posted on Tue 12 September 2017 in <a href="/category/misc.html">misc</a>
+
+
+    </p>
+  </header>
+
+
+  <div>
+    <p>Linear regression allows one to model a dependent variable with the best straight line fit to a set of predictor variables. In the simplest scenario we have a single predictor variable. This is called simple linear regression.</p>
 <p>As an example let's take the trees dataset provided by the datasets package in R. The data consists of measurements of girth, height and volume of 31 felled black cherry trees. Suppose we wish to try and predict the volume of a black cherry tree from its girth. To begin with we can plot the two variables using the following command:</p>
 <div class="highlight"><pre><span></span><span class="nf">plot</span><span class="p">(</span><span class="n">trees</span><span class="o">$</span><span class="n">Girth</span><span class="p">,</span> <span class="n">trees</span><span class="o">$</span><span class="n">Volume</span><span class="p">,</span> <span class="n">xlab</span><span class="o">=</span><span class="s">&quot;Girth (inches)&quot;</span><span class="p">,</span> <span class="n">ylab</span><span class="o">=</span><span class="s">&quot;Volume (cubic feet)&quot;</span><span class="p">)</span>
 </pre></div>
@@ -203,64 +233,41 @@
     (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
-</script></div>
-	<hr>
-	<h2>Comments</h2>
-</div>
-		</div>
-	</div> 	<!-- <hr> -->
-</div> <!-- /container -->
-<footer class="aw-footer bg-danger">
-	<div class="container"> <!-- footer -->
-		<div class="row">
-			<div class="col-md-10 col-md-offset-1">
-				<div class="row">
-					<div class="col-md-3">
-						<h4>Navigation</h4>
-						<ul class="list-unstyled my-list-style">
-							<li><a href="">Peter Wooldridge's Blog</a></li>
-							<li><a href="/pages/about.html"><i class="fa fa-About "></i> About</a></li>
-						</ul>
-					</div>
-					<div class="col-md-3">
-						<h4>Author</h4>
-						<ul class="list-unstyled my-list-style">
-						</ul>
-					</div>
-					<div class="col-md-3">
-						<h4>Categories</h4>
-						<ul class="list-unstyled my-list-style">
-							<li><a href="/category/misc.html">misc (2)</a></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</footer>
-<div class="container">
-	<div class="row">
-		<div class="col-md-12 text-center center-block aw-bottom">
-			<p>&copy; Peter Wooldridge 2016</p>
-			<p>Powered by Pelican</p>
-		</div>
-	</div>
-</div>
-<!-- JavaScript -->
-<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-<script type="text/javascript">
-jQuery(document).ready(function($) {
-	$("div.collapseheader").click(function () {
-		$header = $(this).children("span").first();
-		$codearea = $(this).children(".input_area");
-		$codearea.slideToggle(500, function () {
-			$header.text(function () {
-				return $codearea.is(":visible") ? "Collapse Code" : "Expand Code";
-			});
-		});
-	});
-});
 </script>
+  </div>
+  <div class="tag-cloud">
+    <p>
+      <a href="/tag/machine-learning.html">machine learning</a>
+      <a href="/tag/linear-models.html">linear models</a>
+      <a href="/tag/r.html">R</a>
+    </p>
+  </div>
+
+
+
+
+
+</article>
+
+    <footer>
+<p>&copy;  </p>
+<p>    Powered by <a href="http://getpelican.com" target="_blank">Pelican</a> - <a href="https://github.com/alexandrevicenzi/flex" target="_blank">Flex</a> theme by <a href="http://alexandrevicenzi.com" target="_blank">Alexandre Vicenzi</a>
+</p>    </footer>
+  </main>
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " Peter Wooldridge's Blog ",
+  "url" : "",
+  "image": "",
+  "description": ""
+}
+</script>
+
 </body>
 </html>
