@@ -67,20 +67,28 @@
 
 <article>
   <header>
-    <h2><a href="./reshape_images_numpy.html#reshape_images_numpy">Handy command for manipulating images in numpy</a></h2>
+    <h2><a href="./python_images.html#python_images">Handy commands for manipulating images in Python</a></h2>
     <p>
-          Posted on Tue 03 September 2019 in <a href="./category/misc.html">misc</a>
+          Posted on Tue 03 September 2019 in <a href="./category/python.html">Python</a>
 
 
           &#8226;     Tagged with
 
-              <a href="./tag/numpy.html">numpy</a>,              <a href="./tag/images.html">images</a>
+              <a href="./tag/images.html">images</a>,              <a href="./tag/numpy.html">numpy</a>
     </p>
   </header>
   <div>
-      
+      <p>In this post I show some handy commands for working with image data in Python. The following imports are useful when working with images:</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+</pre></div>
+
+
+<h2>1. Read multiple image files in a directory</h2>
+<div class="highlight"><pre><span></span><span class="n">images</span> <span class="o">=</span> <span class="p">[</span><span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span> <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;images …</span></pre></div>
       <br>
-      <a class="btn" href="./reshape_images_numpy.html#reshape_images_numpy">    Continue reading
+      <a class="btn" href="./python_images.html#python_images">    Continue reading
 </a>
   </div>
   <hr />
