@@ -87,13 +87,14 @@
     <p>When loading multiple images into numpy arrays, usually an array of dimension:</p>
 <div class="highlight"><pre><span></span><span class="p">(</span><span class="n">num_images</span><span class="p">,</span> <span class="n">num_pixels</span><span class="p">,</span> <span class="n">num_pixels</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 </pre></div>
-<p>will be created. Quite often, for machine learning purposes, we need to reshape this into an array with dimensions:</p>
+<p>will be created.</p>
+<p>Quite often, for machine learning purposes, we need to reshape this into an array with dimensions:</p>
 <div class="highlight"><pre><span></span><span class="p">(</span><span class="n">num_images</span><span class="p">,</span> <span class="n">num_pixels</span> <span class="o">*</span> <span class="n">num_pixels</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span>
 </pre></div>
 <p>This can be achieved with the following one-liner</p>
 <div class="highlight"><pre><span></span><span class="n">images_arr</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">images_arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
-<p>Which keeps returns an array with the first dimension the same as before and all remaining dimensions unravelled into a single dimension.</p>
+<p>which returns an array with the first dimension the same as before and all remaining dimensions unravelled into a single dimension. Simple!</p>
 
   </div>
   <div class="tag-cloud">
