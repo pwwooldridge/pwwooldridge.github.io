@@ -1,0 +1,243 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="" />
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro|Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="./theme/stylesheet/style.min.css">
+
+  <link rel="stylesheet" type="text/css" href="./theme/pygments/github.min.css">
+  <link rel="stylesheet" type="text/css" href="./theme/font-awesome/css/font-awesome.min.css">
+
+
+
+
+
+
+
+<meta name="author" content="Peter Wooldridge" />
+<meta name="description" content="Support Vector Machines (SVMs) are a versatile classification algorithm that should be a staple in every data scientists toolbox. In this first of a series of posts, my goal is to describe the intuition behind SVMs what makes them such a powerful technique for classification. Suppose we want to classify …" />
+<meta name="keywords" content="svm">
+
+<meta property="og:site_name" content="Peter Wooldridge's Blog"/>
+<meta property="og:title" content="Support Vector Machines (Part 1)"/>
+<meta property="og:description" content="Support Vector Machines (SVMs) are a versatile classification algorithm that should be a staple in every data scientists toolbox. In this first of a series of posts, my goal is to describe the intuition behind SVMs what makes them such a powerful technique for classification. Suppose we want to classify …"/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:url" content="./svm_1.html"/>
+<meta property="og:type" content="article"/>
+<meta property="article:published_time" content="2019-09-04 11:56:00+01:00"/>
+<meta property="article:modified_time" content=""/>
+<meta property="article:author" content="./author/peter-wooldridge.html">
+<meta property="article:section" content="ml"/>
+<meta property="article:tag" content="svm"/>
+<meta property="og:image" content="/images/profile.JPG">
+
+  <title>Peter Wooldridge's Blog &ndash; Support Vector Machines (Part 1)</title>
+
+</head>
+<body>
+  <aside>
+    <div>
+      <a href=".">
+        <img src="/images/profile.JPG" alt="Peter Wooldridge" title="Peter Wooldridge">
+      </a>
+      <h1><a href=".">Peter Wooldridge</a></h1>
+
+<p>I'm a Machine Learning Engineer with Type 1 Diabetes. Most of the time I'll write about one or the other.</p>
+
+      <ul class="social">
+      </ul>
+    </div>
+
+
+  </aside>
+  <main>
+
+    <nav>
+      <a href=".">    Home
+</a>
+
+      <a href="/pages/about.html">About</a>
+      <a href="/categories">Categories</a>
+      <a href="/tags">Tags</a>
+
+
+    </nav>
+
+<article class="single">
+  <header>
+      
+    <h1 id="svm_1">Support Vector Machines (Part 1)</h1>
+    <p>
+          Posted on Wed 04 September 2019 in <a href="./category/ml.html">ml</a>
+
+
+    </p>
+  </header>
+
+
+  <div>
+    <p>Support Vector Machines (SVMs) are a versatile classification algorithm that should be a staple in every data scientists toolbox. In this first of a series of posts, my goal is to describe the intuition behind SVMs what makes them such a powerful technique for classification. </p>
+<p>Suppose we want to classify the red dots from the blue in the figure below. Plotted on the axes are an orange, black and green hyperplane. All three perfectly serperate the red and blue classes. So which one is the best choice to split our data?</p>
+<p align="center">
+   <img src="images/multiple_hyperplanes.png" alt="drawing" width="500"/>  
+</p>
+
+<p>The hardest points to classify are those sat closest to the hyperplane. Therefore, a decision boundary that creates a large gap between the classes is preferable because new data points are more likely to be correctly classified. The SVM defines this criterion as finding a decision boundary that is maximally far away from any data point. The distance between the decision boundary and the closest data point determines the margin of the classfier. </p>
+<p>The figure below shows the data being seperated by the largest margin decision boundary. The maximum margin decision boundary is defined by two paralllel hyperplanes, one that goes through the positive data points closest to the decision boundary and one that goes through the negative points closest to the decision boudary. These are known as the support vectors. </p>
+<p align="center">
+   <img src="images/maximal_margin.png" alt="Drawing" width="500"/>
+</p>
+
+<p>Mathematically, we can summarise what we have described so far. </p>
+<p>Suppose we are given <span class="math">\(N\)</span> training vectors <span class="math">\(\{(x^{(i)}, y^{(i)}); i=0, \dots, N\}, \text{ where } x ∈ \mathbb{R}^{D}, y ∈ \{−1, 1\}\)</span>. We want to learn a set of weights <span class="math">\(w\)</span> and <span class="math">\(b\)</span> such that the linear combination of weights and input data predicts the value of y. </p>
+<p><span class="math">\(h_{w,b}(x) = 
+     <div class="math">\begin{cases}
+       1 &amp;\quad\text{if }w^{T} x + b &gt;= 0\\
+       -1 &amp;\quad\text{otherwise}
+     \end{cases}</div>\)</span></p>
+<p>In the two dimensional case, our decision boundary <span class="math">\(w^{T} x + b = 0\)</span> is simply a line with the regions above and below it represented by <span class="math">\(w^{T}x + b &gt; 0\)</span> and <span class="math">\(w^{T}x + b &lt; 0\)</span>.</p>
+<p align="center">
+   <img src="images/decision_boundary.png" alt="Drawing" width="500"/>
+</p>
+
+<h3>Distance between points and the hyperplane</h3>
+<p>We know that we want to find the values of <span class="math">\(w\)</span> and <span class="math">\(b\)</span> that provide the widest margin. Therefore, we need a way to measure the distance between a given point and the hyperplane. Let's define <span class="math">\(\gamma^{(i)}\)</span> to be the distance between the <span class="math">\(i^{th}\)</span> training observation <span class="math">\(x^{(i)}\)</span> and our hyperplane. </p>
+<p>Consider the decision boundary shown in the figure below. If we define <span class="math">\(x_{0}\)</span> to be a vector on the hyperplane. Then the <span class="math">\(x^{(i)} - x_{0}\)</span> represents a vector from <span class="math">\(x^{(i)}\)</span> to the hyperplane. The dotted black line from <span class="math">\(x^{(i)}\)</span> to the hyperplane represents the vector whose distance is the shortest to the hyperplane. This dotted line forms a right-angled triangle with the hyperplane and we can label the unknown angle at the top of our triangle <span class="math">\(\theta\)</span>. The vector <span class="math">\(w^{*}\)</span> represents the unit vector perpendicular to the hyperplane. </p>
+<p align="center">
+   <img src="images/svm_distance_to_hyperplane.png" alt="Drawing" width="500"/>
+</p>
+
+<p>Using trigonometry, and setting <span class="math">\(f = x^{(i)} - x_{0}\)</span>: </p>
+<p><span class="math">\(\cos{\theta} = \dfrac{\text{adjacent}}{\text{hypothenuse}}\\
+\implies \cos{\theta} = \dfrac{\gamma^{(i)}}{\|f\|}\\
+\implies \|f\|\cos{\theta} = \gamma^{(i)}\\
+\implies \dfrac{\|w^{*}\|}{\|w^{*}\|}\|f\|\cos{\theta} = \gamma^{(i)}\\
+\implies fw^{*} = \gamma^{(i)}\\
+\implies \dfrac{(x^{(i)} - x_{0})w}{\|w\|} = \gamma^{(i)}\)</span></p>
+<p>and then using <span class="math">\(wx_{0} = -b\)</span>, since <span class="math">\(x_{0}\)</span> lies on the hyperplane, we have: </p>
+<p><span class="math">\(\implies \dfrac{wx^{(i)} + b}{\|w\|} = \gamma^{(i)}\)</span></p>
+<p>We will see below how this distance is used in the definitions of the Functional and Gemetric margins defined below.</p>
+<h3>Functional and Geometric Margins</h3>
+<p>Given a training example <span class="math">\((x^{(i)}, y^{(i)})\)</span>, we define the functional margin of <span class="math">\((w, b)\)</span> with
+respect to a training example as:</p>
+<p><span class="math">\(\hat{\gamma}^{(i)} = y^{(i)}(w^{T} x^{(i)} + b)\)</span></p>
+<p>The functional margin serves as a test function to determine whether a given training point is classified correctly. For a training example to be correctly classified <span class="math">\(\hat{\gamma}^{(i)} \geq 0\)</span>. </p>
+<p>One problem with the functional margin is that it can be affected by an arbirtrary scaling of <span class="math">\(w\)</span> and <span class="math">\(b\)</span>. That brings us onto the definition of the geometric margin: </p>
+<p><span class="math">\(\gamma^{(i)} = \hat{\gamma}^{(i)}/\|w\|\)</span></p>
+<p>The geometric margin is telling you not only if a point is properly classified or not, but the magnitude of that distance in term of units of |w|. It is invariant to any scaling of <span class="math">\(w\)</span> or <span class="math">\(b\)</span> which will be important later. The geometric margin should look familiar as the distance between a training point and our hyperplane that we derived in the previous section multiplied by the label <span class="math">\(y^{(i)}\)</span>.</p>
+<p>Given a training set </p>
+<p><span class="math">\(S = \{(x^{(i)}, y^{(i)}); i=1 \dotsc n\}\)</span> </p>
+<p>we define the geometric margin of <span class="math">\((w,b)\)</span> with respect to <span class="math">\(S\)</span> to be the smallest of the geometric margins on the individual training examples:</p>
+<p><span class="math">\(\gamma = \min_{i=1 \dotsc n} \gamma ^ {(i)}\)</span></p>
+<h3>The optimal margin classifier</h3>
+<p>In order to find the widest margin classifier, we want to maximise the geometric margin whilst still correctly classifying all our training examples. This can be formulated as the following optimisation problem:</p>
+<p><span class="math">\(\max_{w, b} \gamma \quad\)</span> s.t. <span class="math">\(\quad \dfrac{y^{(i)}(w^{T} x^{(i)} + b)}{\|w\|}\geq \gamma \text{ for } i=1 \dotsc n\)</span></p>
+<p>It turns out that the above problem is hard to optimise. Therefore, we convert it to any equivalent problem that happends to be easier to solve. For any solution to satisfy the above equation, any positively scaled multiple will also, due to the fact that the geometric margin is invariant to scaling of <span class="math">\(w\)</span>. </p>
+<p>Therefore, we can scale <span class="math">\(w\)</span> in such a way that <span class="math">\(\|w\| = \dfrac{1}{\gamma}\)</span>. Also note that maximising <span class="math">\(\dfrac{1}{\|w\|}\)</span> is the same as minimising <span class="math">\(\|w\|\)</span> which is the same as minimising <span class="math">\(\dfrac{1}{2}\|w\|^{2}\)</span>.</p>
+<p>Thus, we can reformulate the optimisation problem as:  </p>
+<p><span class="math">\(\min_{w, b} \dfrac{1}{2}\|w\|^{2} \quad\)</span> s.t. <span class="math">\(\quad y^{(i)}(w^{T} x^{(i)} + b)\geq 1 \text{ for } i=1 \dotsc n\)</span></p>
+<p>This optimisation problem is known as a quadratic optimisation problem which is easier to solve. The solution to this optimisation problem will be the topic for a future post.</p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+  </div>
+  <div class="tag-cloud">
+    <p>
+      <a href="./tag/svm.html">svm</a>
+    </p>
+  </div>
+
+
+
+
+
+</article>
+
+    <footer>
+<p>&copy;  </p>
+<p>    Powered by <a href="http://getpelican.com" target="_blank">Pelican</a> - <a href="https://github.com/alexandrevicenzi/flex" target="_blank">Flex</a> theme by <a href="http://alexandrevicenzi.com" target="_blank">Alexandre Vicenzi</a>
+</p>    </footer>
+  </main>
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " Peter Wooldridge's Blog ",
+  "url" : ".",
+  "image": "/images/profile.JPG",
+  "description": "Personal Blog"
+}
+</script>
+
+</body>
+</html>
