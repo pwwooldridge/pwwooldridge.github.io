@@ -83,22 +83,22 @@
 
 
   <div>
-    <p>Support Vector Machines (SVMs) are a versatile classification algorithm that should be a staple in every data scientists toolbox. In this first of a series of posts, my goal is to describe the intuition behind SVMs what makes them such a powerful technique for classification. </p>
-<p>Suppose we want to classify the red dots from the blue in the figure below. Plotted on the axes are an orange, black and green hyperplane. All three perfectly serperate the red and blue classes. So which one is the best choice to split our data?</p>
+    <p>Support Vector Machines (SVMs) are a versatile classification algorithm that should be a staple in every data scientists toolbox. In this first of a series of posts, my goal is to describe the intuition behind SVMs what makes them such a powerful technique for classification.</p>
+<p>Suppose we want to classify the red dots from the blue in the figure below. Plotted on the axes are an orange, black and green hyperplane. All three perfectly separate the red and blue classes. So which one is the best choice to split our data?</p>
 <p align="center">
    <img src="images/multiple_hyperplanes.png" alt="drawing" width="500"/>  
 </p>
 
-<p>The hardest points to classify are those sat closest to the hyperplane. Therefore, a decision boundary that creates a large gap between the classes is preferable because new data points are more likely to be correctly classified. The SVM defines this criterion as finding a decision boundary that is maximally far away from any data point. The distance between the decision boundary and the closest data point determines the margin of the classfier. </p>
-<p>The figure below shows the data being seperated by the largest margin decision boundary. The maximum margin decision boundary is defined by two paralllel hyperplanes, one that goes through the positive data points closest to the decision boundary and one that goes through the negative points closest to the decision boudary. These are known as the support vectors. </p>
+<p>The hardest points to classify are those sat closest to the hyperplane. Therefore, a decision boundary that creates a large gap between the classes is preferable because new data points are more likely to be correctly classified. The SVM defines this criterion as finding a decision boundary that is maximally far away from any data point. The distance between the decision boundary and the closest data point determines the margin of the classifier.</p>
+<p>The figure below shows the data being separated by the largest margin decision boundary. The maximum margin decision boundary is defined by two parallel hyperplanes, one that goes through the positive data points closest to the decision boundary and one that goes through the negative points closest to the decision boundary. These are known as the support vectors.</p>
 <p align="center">
    <img src="images/maximal_margin.png" alt="Drawing" width="500"/>
 </p>
 
-<p>Mathematically, we can summarise what we have described so far. </p>
-<p>Suppose we are given <span class="math">\(N\)</span> training vectors <span class="math">\(\{(x^{(i)}, y^{(i)}); i=0, \dots, N\}, \text{ where } x ∈ \mathbb{R}^{D}, y ∈ \{−1, 1\}\)</span>. We want to learn a set of weights <span class="math">\(w\)</span> and <span class="math">\(b\)</span> such that the linear combination of weights and input data predicts the value of y. </p>
+<p>Mathematically, we can summarise what we have described so far.</p>
+<p>Suppose we are given <span class="math">\(N\)</span> training vectors <span class="math">\(\{(x^{(i)}, y^{(i)}); i=0, \dots, N\}, \text{ where } x ∈ \mathbb{R}^{D}, y ∈ \{−1, 1\}\)</span>. We want to learn a set of weights <span class="math">\(w\)</span> and <span class="math">\(b\)</span> such that the linear combination of weights and input data predicts the value of y.</p>
 <div class="math">$$
-h_{w,b}(x) = 
+h_{w,b}(x) =
      \begin{cases}
        1 &amp;\quad\text{if }w^{T} x + b &gt;= 0\\
        -1 &amp;\quad\text{otherwise}
@@ -110,38 +110,38 @@ $$</div>
 </p>
 
 <h3>Distance between points and the hyperplane</h3>
-<p>We know that we want to find the values of <span class="math">\(w\)</span> and <span class="math">\(b\)</span> that provide the widest margin. Therefore, we need a way to measure the distance between a given point and the hyperplane. Let's define <span class="math">\(\gamma^{(i)}\)</span> to be the distance between the <span class="math">\(i^{th}\)</span> training observation <span class="math">\(x^{(i)}\)</span> and our hyperplane. </p>
-<p>Consider the decision boundary shown in the figure below. If we define <span class="math">\(x_{0}\)</span> to be a vector on the hyperplane. Then the <span class="math">\(x^{(i)} - x_{0}\)</span> represents a vector from <span class="math">\(x^{(i)}\)</span> to the hyperplane. The dotted black line from <span class="math">\(x^{(i)}\)</span> to the hyperplane represents the vector whose distance is the shortest to the hyperplane. This dotted line forms a right-angled triangle with the hyperplane and we can label the unknown angle at the top of our triangle <span class="math">\(\theta\)</span>. The vector <span class="math">\(w^{*}\)</span> represents the unit vector perpendicular to the hyperplane. </p>
+<p>We know that we want to find the values of <span class="math">\(w\)</span> and <span class="math">\(b\)</span> that provide the widest margin. Therefore, we need a way to measure the distance between a given point and the hyperplane. Let's define <span class="math">\(\gamma^{(i)}\)</span> to be the distance between the <span class="math">\(i^{th}\)</span> training observation <span class="math">\(x^{(i)}\)</span> and our hyperplane.</p>
+<p>Consider the decision boundary shown in the figure below. If we define <span class="math">\(x_{0}\)</span> to be a vector on the hyperplane. Then the <span class="math">\(x^{(i)} - x_{0}\)</span> represents a vector from <span class="math">\(x^{(i)}\)</span> to the hyperplane. The dotted black line from <span class="math">\(x^{(i)}\)</span> to the hyperplane represents the vector whose distance is the shortest to the hyperplane. This dotted line forms a right-angled triangle with the hyperplane and we can label the unknown angle at the top of our triangle <span class="math">\(\theta\)</span>. The vector <span class="math">\(w^{*}\)</span> represents the unit vector perpendicular to the hyperplane.</p>
 <p align="center">
    <img src="images/svm_distance_to_hyperplane.png" alt="Drawing" width="500"/>
 </p>
 
-<p>Using trigonometry, and setting <span class="math">\(f = x^{(i)} - x_{0}\)</span>: </p>
+<p>Using trigonometry, and setting <span class="math">\(f = x^{(i)} - x_{0}\)</span>:</p>
 <p><span class="math">\(\cos{\theta} = \dfrac{\text{adjacent}}{\text{hypothenuse}}\\
 \implies \cos{\theta} = \dfrac{\gamma^{(i)}}{\|f\|}\\
 \implies \|f\|\cos{\theta} = \gamma^{(i)}\\
 \implies \dfrac{\|w^{*}\|}{\|w^{*}\|}\|f\|\cos{\theta} = \gamma^{(i)}\\
 \implies fw^{*} = \gamma^{(i)}\\
 \implies \dfrac{(x^{(i)} - x_{0})w}{\|w\|} = \gamma^{(i)}\)</span></p>
-<p>and then using <span class="math">\(wx_{0} = -b\)</span>, since <span class="math">\(x_{0}\)</span> lies on the hyperplane, we have: </p>
+<p>and then using <span class="math">\(wx_{0} = -b\)</span>, since <span class="math">\(x_{0}\)</span> lies on the hyperplane, we have:</p>
 <p><span class="math">\(\implies \dfrac{wx^{(i)} + b}{\|w\|} = \gamma^{(i)}\)</span></p>
-<p>We will see below how this distance is used in the definitions of the Functional and Gemetric margins defined below.</p>
+<p>We will see below how this distance is used in the definitions of the Functional and Geometric margins defined below.</p>
 <h3>Functional and Geometric Margins</h3>
 <p>Given a training example <span class="math">\((x^{(i)}, y^{(i)})\)</span>, we define the functional margin of <span class="math">\((w, b)\)</span> with
 respect to a training example as:</p>
 <p><span class="math">\(\hat{\gamma}^{(i)} = y^{(i)}(w^{T} x^{(i)} + b)\)</span></p>
-<p>The functional margin serves as a test function to determine whether a given training point is classified correctly. For a training example to be correctly classified <span class="math">\(\hat{\gamma}^{(i)} \geq 0\)</span>. </p>
-<p>One problem with the functional margin is that it can be affected by an arbirtrary scaling of <span class="math">\(w\)</span> and <span class="math">\(b\)</span>. That brings us onto the definition of the geometric margin: </p>
+<p>The functional margin serves as a test function to determine whether a given training point is classified correctly. For a training example to be correctly classified <span class="math">\(\hat{\gamma}^{(i)} \geq 0\)</span>.</p>
+<p>One problem with the functional margin is that it can be affected by an arbitrary scaling of <span class="math">\(w\)</span> and <span class="math">\(b\)</span>. That brings us onto the definition of the geometric margin:</p>
 <p><span class="math">\(\gamma^{(i)} = \hat{\gamma}^{(i)}/\|w\|\)</span></p>
 <p>The geometric margin is telling you not only if a point is properly classified or not, but the magnitude of that distance in term of units of |w|. It is invariant to any scaling of <span class="math">\(w\)</span> or <span class="math">\(b\)</span> which will be important later. The geometric margin should look familiar as the distance between a training point and our hyperplane that we derived in the previous section multiplied by the label <span class="math">\(y^{(i)}\)</span>.</p>
-<p>Given a training set </p>
-<p><span class="math">\(S = \{(x^{(i)}, y^{(i)}); i=1 \dotsc n\}\)</span> </p>
+<p>Given a training set</p>
+<p><span class="math">\(S = \{(x^{(i)}, y^{(i)}); i=1 \dotsc n\}\)</span></p>
 <p>we define the geometric margin of <span class="math">\((w,b)\)</span> with respect to <span class="math">\(S\)</span> to be the smallest of the geometric margins on the individual training examples:</p>
 <p><span class="math">\(\gamma = \min_{i=1 \dotsc n} \gamma ^ {(i)}\)</span></p>
 <h3>The optimal margin classifier</h3>
 <p>In order to find the widest margin classifier, we want to maximise the geometric margin whilst still correctly classifying all our training examples. This can be formulated as the following optimisation problem:</p>
 <p><span class="math">\(\max_{w, b} \gamma \quad\)</span> s.t. <span class="math">\(\quad \dfrac{y^{(i)}(w^{T} x^{(i)} + b)}{\|w\|}\geq \gamma \text{ for } i=1 \dotsc n\)</span></p>
-<p>It turns out that the above problem is hard to optimise. Therefore, we convert it to any equivalent problem that happends to be easier to solve. For any solution to satisfy the above equation, any positively scaled multiple will also, due to the fact that the geometric margin is invariant to scaling of <span class="math">\(w\)</span>. </p>
+<p>It turns out that the above problem is hard to optimise. Therefore, we convert it to any equivalent problem that happends to be easier to solve. For any solution to satisfy the above equation, any positively scaled multiple will also, due to the fact that the geometric margin is invariant to scaling of <span class="math">\(w\)</span>.</p>
 <p>Therefore, we can scale <span class="math">\(w\)</span> in such a way that <span class="math">\(\|w\| = \dfrac{1}{\gamma}\)</span>. Also note that maximising <span class="math">\(\dfrac{1}{\|w\|}\)</span> is the same as minimising <span class="math">\(\|w\|\)</span> which is the same as minimising <span class="math">\(\dfrac{1}{2}\|w\|^{2}\)</span>.</p>
 <p>Thus, we can reformulate the optimisation problem as:  </p>
 <p><span class="math">\(\min_{w, b} \dfrac{1}{2}\|w\|^{2} \quad\)</span> s.t. <span class="math">\(\quad y^{(i)}(w^{T} x^{(i)} + b)\geq 1 \text{ for } i=1 \dotsc n\)</span></p>
