@@ -97,11 +97,13 @@
 
 <p>Mathematically, we can summarise what we have described so far. </p>
 <p>Suppose we are given <span class="math">\(N\)</span> training vectors <span class="math">\(\{(x^{(i)}, y^{(i)}); i=0, \dots, N\}, \text{ where } x ∈ \mathbb{R}^{D}, y ∈ \{−1, 1\}\)</span>. We want to learn a set of weights <span class="math">\(w\)</span> and <span class="math">\(b\)</span> such that the linear combination of weights and input data predicts the value of y. </p>
-<p><span class="math">\(h_{w,b}(x) = 
-     <div class="math">\begin{cases}
+<div class="math">$$
+h_{w,b}(x) = 
+     \begin{cases}
        1 &amp;\quad\text{if }w^{T} x + b &gt;= 0\\
        -1 &amp;\quad\text{otherwise}
-     \end{cases}</div>\)</span></p>
+     \end{cases}
+$$</div>
 <p>In the two dimensional case, our decision boundary <span class="math">\(w^{T} x + b = 0\)</span> is simply a line with the regions above and below it represented by <span class="math">\(w^{T}x + b &gt; 0\)</span> and <span class="math">\(w^{T}x + b &lt; 0\)</span>.</p>
 <p align="center">
    <img src="images/decision_boundary.png" alt="Drawing" width="500"/>
