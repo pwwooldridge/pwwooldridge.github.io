@@ -1,73 +1,100 @@
-<!doctype html>
-<html class="no-js" lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Peter Wooldridge's Blog - misc category</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=9" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Source+Serif+Pro:400,700">
-    <link rel="stylesheet" type="text/css" href="../theme/css/main.css">
-</head>
-<body itemscope itemtype="http://schema.org/Blog">
-<header class="site-header">
-    <a href="..">
-        <img src="/images/profile.jpg" alt="Peter Wooldridge" title="Peter Wooldridge">
-    </a>
-    <h1 itemprop="name"><a href="..">Peter Wooldridge</a></h1>
-<p>I'm a Machine Learning Engineer with Type 1 Diabetes. Most of the time I'll write about one or the other.</p></header>
-    <section class="main-content">
-    <article>
-        <header>
-            <h2>
-                <a href="../heatmaps_in_r.html#heatmaps_in_r">Visualising networks in R using atomic plot functions</a>
-            </h2>
-            <p>
-                <meta itemprop="datePublished" content="2017-09-28T21:13:00+01:00">
-                <meta itemprop="dateModified" content="2017-09-28T21:13:00+01:00">
-                Posted on 28 September 2017 in <a href="../category/misc.html">misc</a>
-            </p>
-        </header>
-
+        <title>Peter Wooldridge's Blog</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta charset="utf-8" />
+        <!-- twitter card metadata -->
+        <!-- OG Tags -->
+<meta property="og:url" content="../category/misc"/>
+<meta property="og:title" content="Peter Wooldridge's Blog | misc" />
+        <!-- favicon -->
+        <!-- moment.js for date formatting -->
+        <script src="../theme/js/moment.js"></script>
+        <!-- css -->
+        <link rel="stylesheet" type="text/css" href="../theme/css/main.css" />
+		<script>
+			
+                /*! grunt-grunticon Stylesheet Loader - v2.1.2 | https://github.com/filamentgroup/grunticon | (c) 2015 Scott Jehl, Filament Group, Inc. | MIT license. */
+    
+    (function(e){function t(t,n,r,o){"use strict";function a(){for(var e,n=0;u.length>n;n++)u[n].href&&u[n].href.indexOf(t)>-1&&(e=!0);e?i.media=r||"all":setTimeout(a)}var i=e.document.createElement("link"),l=n||e.document.getElementsByTagName("script")[0],u=e.document.styleSheets;return i.rel="stylesheet",i.href=t,i.media="only x",i.onload=o||null,l.parentNode.insertBefore(i,l),a(),i}var n=function(r,o){"use strict";if(r&&3===r.length){var a=e.navigator,i=e.Image,l=!(!document.createElementNS||!document.createElementNS("http://www.w3.org/2000/svg","svg").createSVGRect||!document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#Image","1.1")||e.opera&&-1===a.userAgent.indexOf("Chrome")||-1!==a.userAgent.indexOf("Series40")),u=new i;u.onerror=function(){n.method="png",n.href=r[2],t(r[2])},u.onload=function(){var e=1===u.width&&1===u.height,a=r[e&&l?0:e?1:2];n.method=e&&l?"svg":e?"datapng":"png",n.href=a,t(a,null,null,o)},u.src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==",document.documentElement.className+=" grunticon"}};n.loadCSS=t,e.grunticon=n})(this);(function(e,t){"use strict";var n=t.document,r="grunticon:",o=function(e){if(n.attachEvent?"complete"===n.readyState:"loading"!==n.readyState)e();else{var t=!1;n.addEventListener("readystatechange",function(){t||(t=!0,e())},!1)}},a=function(e){return t.document.querySelector('link[href$="'+e+'"]')},c=function(e){var t,n,o,a,c,i,u={};if(t=e.sheet,!t)return u;n=t.cssRules?t.cssRules:t.rules;for(var l=0;n.length>l;l++)o=n[l].cssText,a=r+n[l].selectorText,c=o.split(");")[0].match(/US\-ASCII\,([^"']+)/),c&&c[1]&&(i=decodeURIComponent(c[1]),u[a]=i);return u},i=function(e){var t,o,a;o="data-grunticon-embed";for(var c in e)if(a=c.slice(r.length),t=n.querySelectorAll(a+"["+o+"]"),t.length)for(var i=0;t.length>i;i++)t[i].innerHTML=e[c],t[i].style.backgroundImage="none",t[i].removeAttribute(o);return t},u=function(t){"svg"===e.method&&o(function(){i(c(a(e.href))),"function"==typeof t&&t()})};e.embedIcons=i,e.getCSS=a,e.getIcons=c,e.ready=o,e.svgLoadedCallback=u,e.embedSVG=u})(grunticon,this);
+                
+                grunticon(["../theme/css/icons.data.svg.css", "../theme/css/icons.data.png.css", "../theme/css/icons.fallback.css"]);
+            </script>
+        <noscript><link href="../theme/css/icons.fallback.css" rel="stylesheet"></noscript>
+        <!-- menu toggle javascript -->
+        <script type="text/javascript">
+            document.addEventListener("DOMContentLoaded", initMenu);
             
-            <a class="button" href="../heatmaps_in_r.html#heatmaps_in_r">Continue reading</a>
-    </article>
-    <article>
+            function initMenu(){
+                var menu = document.getElementById("menu");
+                var menulink = document.getElementById("menu-link");
+                menulink.addEventListener("click", function toggleMenu(){
+                        window.event.preventDefault();
+                        menulink.classList.toggle('active');
+                        menu.classList.toggle('active');              
+                    });
+            };
+        </script>
+</head>
+<body>
+    <div role="banner" id="masthead">
         <header>
-            <h2>
-                <a href="../linear_regression.html#linear_regression">Linear Regression from first principles</a>
-            </h2>
-            <p>
-                <meta itemprop="datePublished" content="2017-09-12T21:46:00+01:00">
-                <meta itemprop="dateModified" content="2017-09-12T21:46:00+01:00">
-                Posted on 12 September 2017 in <a href="../category/misc.html">misc</a>
-            </p>
+            <a href="/"><img src="../images/profile.jpg" alt="Home"></a>
+            <a href="#menu" id="menu-link">more stuff</a>
+            <nav id="menu">
+                <ul>
+                        <li><a href="/pages/about.html">About</a></li>
+                        <li><a href="/categories">Categories</a></li>
+                        <li><a href="/tags">Tags</a></li>
+                            <li><a href="../category/machine-learning.html">Machine Learning</a></li>
+                            <li><a href="../category/sport.html">Sport</a></li>
+                </ul>
+            </nav>
         </header>
-
-            <p class="first last">Derivation of parameter estimates for simple linear regression from first principles</p>
-
-            <a class="button" href="../linear_regression.html#linear_regression">Continue reading</a>
-    </article>
-    <article>
-        <header>
-            <h2>
-                <a href="../jogle_in_106.html#jogle_in_106">JOGLE in 106 hours</a>
-            </h2>
-            <p>
-                <meta itemprop="datePublished" content="2016-11-03T11:41:00+00:00">
-                <meta itemprop="dateModified" content="2016-11-03T11:41:00+00:00">
-                Posted on 03 November 2016 in <a href="../category/misc.html">misc</a>
-            </p>
-        </header>
-
-            <p class="first last">On the 16th October 2016, Jon Reilly, myself along with Jon's parents in the support vehicle embarked on an 850 mile cycling mission from the most north-easterly tip of Scotland to the most south-westerly tip of Cornwall known as JOGLE in as little time as possible. This is an account of our adventure</p>
-
-            <a class="button" href="../jogle_in_106.html#jogle_in_106">Continue reading</a>
-    </article>
-    </section>
-
-<footer class="site-footer">
-    <p>&copy; Peter Wooldridge </p>
-</footer></body>
+    </div>
+        <div class="page" role="main">
+<div class="page-title">
+    <h1>misc</h1>
+</div>
+<div class="articles">
+        <ol>
+            <li>
+                <article>
+                    <footer>
+                         <p>
+                            <time datetime="2017-09-12 21:46:00+01:00">
+                                <script>document.write(moment('2017-09-12 21:46:00+01:00').format('LL'));</script>
+                            </time>
+                        </p>
+                    </footer>
+                    <header>
+                        <a href="../linear_regression.html">
+                            <h2>Linear Regression from first principles</h2>
+                        </a>
+                    </header>
+                    <div class="summary">Derivation of parameter estimates for simple linear regression from first principles </div>
+                    <div class="tags">
+                        <ul class="tags">
+                            <li><a href="../tag/machine-learning.html" class="tag">machine learning</a></li>
+                            <li><a href="../tag/linear-models.html" class="tag">linear models</a></li>
+                            <li><a href="../tag/r.html" class="tag">R</a></li>
+                        </ul>
+                    </div>
+                    <a href="../linear_regression.html">
+                        <p class="readmore">Read more...</p>
+                    </a>
+                </article>
+            </li>
+        </ol>
+        
+</div>                <footer>
+                    <div class="icons">
+                        <a href="https://github.com/mamcmanus" target="_blank"><div class="icon-github icon"></div></a>
+                        <a href="https://www.strava.com/athletes/1691795" target="_blank"><div class="icon-strava icon"></div></a>
+                    </div>
+                    <p>© <script>document.write(moment().format('YYYY'));</script> Peter Wooldridge</p>
+                </footer>
+        </div>
+</body>
 </html>
