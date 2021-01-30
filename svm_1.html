@@ -1,89 +1,34 @@
-
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html class="no-js" lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="robots" content="" />
-
-  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro|Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
-
-    <link rel="stylesheet" type="text/css" href="./theme/stylesheet/style.min.css">
-
-  <link rel="stylesheet" type="text/css" href="./theme/pygments/github.min.css">
-  <link rel="stylesheet" type="text/css" href="./theme/font-awesome/css/font-awesome.min.css">
-
-
-
-
-
-
-
-<meta name="author" content="Peter Wooldridge" />
-<meta name="description" content="Support Vector Machines (SVMs) are a versatile classification algorithm that should be a staple in every data scientists toolbox. In this first of a series of posts, my goal is to describe the intuition behind SVMs what makes them such a powerful technique for classification. Suppose we want to classify …" />
-<meta name="keywords" content="svm">
-
-<meta property="og:site_name" content="Peter Wooldridge's Blog"/>
-<meta property="og:title" content="Support Vector Machines (Part 1)"/>
-<meta property="og:description" content="Support Vector Machines (SVMs) are a versatile classification algorithm that should be a staple in every data scientists toolbox. In this first of a series of posts, my goal is to describe the intuition behind SVMs what makes them such a powerful technique for classification. Suppose we want to classify …"/>
-<meta property="og:locale" content="en_US"/>
-<meta property="og:url" content="./svm_1.html"/>
-<meta property="og:type" content="article"/>
-<meta property="article:published_time" content="2019-09-04 11:56:00+01:00"/>
-<meta property="article:modified_time" content=""/>
-<meta property="article:author" content="./author/peter-wooldridge.html">
-<meta property="article:section" content="ml"/>
-<meta property="article:tag" content="svm"/>
-<meta property="og:image" content="/images/profile.JPG">
-
-  <title>Peter Wooldridge's Blog &ndash; Support Vector Machines (Part 1)</title>
-
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Support Vector Machines (Part 1)</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=9" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Source+Serif+Pro:400,700">
+    <link rel="stylesheet" type="text/css" href="./theme/css/main.css">
 </head>
-<body>
-  <aside>
-    <div>
-      <a href=".">
-        <img src="/images/profile.JPG" alt="Peter Wooldridge" title="Peter Wooldridge">
-      </a>
-      <h1><a href=".">Peter Wooldridge</a></h1>
-
-<p>I'm a Machine Learning Engineer with Type 1 Diabetes. Most of the time I'll write about one or the other.</p>
-
-      <ul class="social">
-      </ul>
-    </div>
-
-
-  </aside>
-  <main>
-
-    <nav>
-      <a href=".">    Home
-</a>
-
-      <a href="/pages/about.html">About</a>
-      <a href="/categories">Categories</a>
-      <a href="/tags">Tags</a>
-
-
-    </nav>
-
-<article class="single">
-  <header>
-      
-    <h1 id="svm_1">Support Vector Machines (Part 1)</h1>
-    <p>
-          Posted on Wed 04 September 2019 in <a href="./category/ml.html">ml</a>
-
-
-    </p>
-  </header>
-
-
-  <div>
-    <p>Support Vector Machines (SVMs) are a versatile classification algorithm that should be a staple in every data scientists toolbox. In this first of a series of posts, my goal is to describe the intuition behind SVMs what makes them such a powerful technique for classification.</p>
+<body itemscope itemtype="http://schema.org/Blog">
+<header class="site-header">
+    <a href=".">
+        <img src="/images/profile.jpg" alt="Peter Wooldridge" title="Peter Wooldridge">
+    </a>
+    <h1 itemprop="name"><a href=".">Peter Wooldridge</a></h1>
+<p>I'm a Machine Learning Engineer with Type 1 Diabetes. Most of the time I'll write about one or the other.</p></header>
+    <section class="main-content">
+<article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+    <header>
+        <h1 itemprop="headline" id="svm_1">Support Vector Machines (Part 1)</h1>
+        <p>
+            <meta itemprop="datePublished" content="2019-09-04T11:56:00+01:00">
+            <meta itemprop="dateModified" content="2019-09-04T11:56:00+01:00">
+            Posted on 04 September 2019 in <a href="./category/ml.html">ml</a>
+        </p>
+    </header>
+    <section id="content" itemprop="mainEntityOfPage">
+        <p>Support Vector Machines (SVMs) are a versatile classification algorithm that should be a staple in every data scientists toolbox. In this first of a series of posts, my goal is to describe the intuition behind SVMs what makes them such a powerful technique for classification.</p>
 <p>Suppose we want to classify the red dots from the blue in the figure below. Plotted on the axes are an orange, black and green hyperplane. All three perfectly separate the red and blue classes. So which one is the best choice to split our data?</p>
 <p align="center">
    <img src="images/multiple_hyperplanes.png" alt="drawing" width="500"/>  
@@ -208,38 +153,21 @@ respect to a training example as:</p>
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
 </script>
-  </div>
-  <div class="tag-cloud">
-    <p>
-      <a href="./tag/svm.html">svm</a>
-    </p>
-  </div>
-
-
-
-
-
-</article>
-
+    </section>
     <footer>
-<p>&copy;  </p>
-<p>    Powered by <a href="http://getpelican.com" target="_blank">Pelican</a> - <a href="https://github.com/alexandrevicenzi/flex" target="_blank">Flex</a> theme by <a href="http://alexandrevicenzi.com" target="_blank">Alexandre Vicenzi</a>
-</p>    </footer>
-  </main>
+        <div class="tags">
+                <a href="./tag/svm.html">svm</a>
+        </div>
+<div class="vcard author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <a href="./author/peter-wooldridge.html">
+        <img class="photo circle" itemprop="image" content="" src=""/>
+        <strong class="fn name" itemprop="name">Peter Wooldridge</strong>
+    </a>
+</div>    </footer>
+</article>
+    </section>
 
-
-
-
-<script type="application/ld+json">
-{
-  "@context" : "http://schema.org",
-  "@type" : "Blog",
-  "name": " Peter Wooldridge's Blog ",
-  "url" : ".",
-  "image": "/images/profile.JPG",
-  "description": "Personal Blog"
-}
-</script>
-
-</body>
+<footer class="site-footer">
+    <p>&copy; Peter Wooldridge </p>
+</footer></body>
 </html>
