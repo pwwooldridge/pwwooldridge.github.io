@@ -1,13 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-        <title>Peter Wooldridge's Blog</title>
+          <title>Peter Wooldridge's Blog</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta charset="utf-8" />
         <!-- twitter card metadata -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="../images/profile.jpg">
+<meta name="twitter:site" content="">
+<meta name="twitter:title" content="The one unix setting that improves efficiency">
+<meta name="twitter:description" content="">
         <!-- OG Tags -->
-<meta property="og:url" content="../category/Sport"/>
-<meta property="og:title" content="Peter Wooldridge's Blog | Sport" />
+<meta property="og:url" content="../drafts/the-one-unix-setting-that-improves-efficiency.html"/>
+<meta property="og:title" content="Peter Wooldridge's Blog | The one unix setting that improves efficiency" />
+<meta property="og:description" content="" />
         <!-- favicon -->
         <!-- moment.js for date formatting -->
         <script src="../theme/js/moment.js"></script>
@@ -36,6 +42,9 @@
                     });
             };
         </script>
+
+
+
 </head>
 <body>
     <div role="banner" id="masthead">
@@ -48,47 +57,41 @@
                         <li><a href="/categories">Categories</a></li>
                         <li><a href="/tags">Tags</a></li>
                             <li><a href="../category/machine-learning.html">Machine Learning</a></li>
-                            <li class="active"><a href="../category/sport.html">Sport</a></li>
-                            <li><a href="../category/tech.html">Tech</a></li>
+                            <li><a href="../category/sport.html">Sport</a></li>
                 </ul>
             </nav>
         </header>
     </div>
         <div class="page" role="main">
-<div class="page-title">
-    <h1>Sport</h1>
-</div>
-<div class="articles">
-        <ol>
-            <li>
-                <article>
-                    <footer>
-                         <p>
-                            <time datetime="2016-11-03 11:41:00+00:00">
-                                <script>document.write(moment('2016-11-03 11:41:00+00:00').format('LL'));</script>
-                            </time>
-                                    in <a href="../category/sport.html"><span class="category-tag">Sport</span></a>
-                        </p>
-                    </footer>
-                    <header>
-                        <a href="../jogle_in_106.html">
-                            <h2>JOGLE in 106 hours</h2>
-                        </a>
-                    </header>
-                    <div class="summary">On the 16th October 2016, Jon Reilly, myself along with Jon's parents in the support vehicle embarked on an 850 mile cycling mission from the most north-easterly tip of Scotland to the most south-westerly tip of Cornwall known as JOGLE in as little time as possible. This is an account of our adventure </div>
-                    <div class="tags">
-                        <ul class="tags">
-                            <li><a href="../tag/endurance.html" class="tag">endurance</a></li>
-                        </ul>
-                    </div>
-                    <a href="../jogle_in_106.html">
-                        <p class="readmore">Read more...</p>
-                    </a>
-                </article>
-            </li>
-        </ol>
-        
-</div>                <footer>
+  <div class="article" role="article">
+    <article>
+        <footer>
+            <a name="top"></a>
+            <p>
+              <time datetime=" 2021-01-31 11:55:00+00:00">
+                <script>document.write(moment('2021-01-31 11:55:00+00:00').format('LL'));</script>
+              </time>
+            </p>
+        </footer>
+        <header>
+          <h2>
+            The one unix setting that improves efficiency
+          </h2>
+        </header>
+      <div class="content">
+         <p>Anyone who spends a lot of time on the command line will know that often you're looking for a previous command to reuse or repurpose. The following configuration allows me to easily search through their bash history using the up and down arrows. Instead of searching a substring anywhere in the command it will search the history with the text to the left of the cursor. This aspect I find especially useful. To set it up add the following lines to ~/.inputrc:</p>
+<p>.. code-block:: sh</p>
+<div class="highlight"><pre><span></span><span class="ss">&quot;\e[A&quot;</span><span class="p">:</span> <span class="n">history</span><span class="o">-</span><span class="k">search</span><span class="o">-</span><span class="k">backward</span>
+<span class="ss">&quot;\e[B&quot;</span><span class="p">:</span> <span class="n">history</span><span class="o">-</span><span class="k">search</span><span class="o">-</span><span class="k">forward</span>
+</pre></div>
+      </div>
+      <div class="back-to-top">
+          <a href="#top">back to top</a>
+      </div>
+    </article>
+  </div>
+<!-- end article -->
+                <footer>
                     <div class="icons">
                         <a href="https://www.strava.com/athletes/1691795" target="_blank"><div class="icon-strava icon"></div></a>
                     </div>
