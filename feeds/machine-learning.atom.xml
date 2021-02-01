@@ -13,56 +13,118 @@
 &lt;/p&gt;
 
 &lt;p&gt;Mathematically, we can summarise what we have described so far.&lt;/p&gt;
-&lt;p&gt;Suppose we are given $N$ training vectors ${(x^{(i)}, y^{(i)}); i=0, \dots, N}, \text{ where } x ∈ \mathbb{R}^{D}, y ∈ {−1, 1}$. We want to learn a set of weights $w$ and $b$ such that the linear combination of weights and input data predicts the value of y.&lt;/p&gt;
-&lt;p&gt;$$
+&lt;p&gt;Suppose we are given &lt;span class="math"&gt;\(N\)&lt;/span&gt; training vectors &lt;span class="math"&gt;\(\{(x^{(i)}, y^{(i)}); i=0, \dots, N\}, \text{ where } x ∈ \mathbb{R}^{D}, y ∈ \{−1, 1\}\)&lt;/span&gt;. We want to learn a set of weights &lt;span class="math"&gt;\(w\)&lt;/span&gt; and &lt;span class="math"&gt;\(b\)&lt;/span&gt; such that the linear combination of weights and input data predicts the value of y.&lt;/p&gt;
+&lt;div class="math"&gt;$$
 h_{w,b}(x) =
      \begin{cases}
-       1 &amp;amp;\quad\text{if }w^{T} x + b &amp;gt;= 0\
+       1 &amp;amp;\quad\text{if }w^{T} x + b &amp;gt;= 0\\
        -1 &amp;amp;\quad\text{otherwise}
      \end{cases}
-$$&lt;/p&gt;
-&lt;p&gt;In the two dimensional case, our decision boundary $w^{T} x + b = 0$ is simply a line with the regions above and below it represented by $w^{T}x + b &amp;gt; 0$ and $w^{T}x + b &amp;lt; 0$.&lt;/p&gt;
+$$&lt;/div&gt;
+&lt;p&gt;In the two dimensional case, our decision boundary &lt;span class="math"&gt;\(w^{T} x + b = 0\)&lt;/span&gt; is simply a line with the regions above and below it represented by &lt;span class="math"&gt;\(w^{T}x + b &amp;gt; 0\)&lt;/span&gt; and &lt;span class="math"&gt;\(w^{T}x + b &amp;lt; 0\)&lt;/span&gt;.&lt;/p&gt;
 &lt;p align="center"&gt;
    &lt;img src="images/decision_boundary.png" alt="Drawing" width="500"/&gt;
 &lt;/p&gt;
 
 &lt;h3&gt;Distance between points and the hyperplane&lt;/h3&gt;
-&lt;p&gt;We know that we want to find the values of $w$ and $b$ that provide the widest margin. Therefore, we need a way to measure the distance between a given point and the hyperplane. Let's define $\gamma^{(i)}$ to be the distance between the $i^{th}$ training observation $x^{(i)}$ and our hyperplane.&lt;/p&gt;
-&lt;p&gt;Consider the decision boundary shown in the figure below. If we define $x_{0}$ to be a vector on the hyperplane. Then the $x^{(i)} - x_{0}$ represents a vector from $x^{(i)}$ to the hyperplane. The dotted black line from $x^{(i)}$ to the hyperplane represents the vector whose distance is the shortest to the hyperplane. This dotted line forms a right-angled triangle with the hyperplane and we can label the unknown angle at the top of our triangle $\theta$. The vector $w^{*}$ represents the unit vector perpendicular to the hyperplane.&lt;/p&gt;
+&lt;p&gt;We know that we want to find the values of &lt;span class="math"&gt;\(w\)&lt;/span&gt; and &lt;span class="math"&gt;\(b\)&lt;/span&gt; that provide the widest margin. Therefore, we need a way to measure the distance between a given point and the hyperplane. Let's define &lt;span class="math"&gt;\(\gamma^{(i)}\)&lt;/span&gt; to be the distance between the &lt;span class="math"&gt;\(i^{th}\)&lt;/span&gt; training observation &lt;span class="math"&gt;\(x^{(i)}\)&lt;/span&gt; and our hyperplane.&lt;/p&gt;
+&lt;p&gt;Consider the decision boundary shown in the figure below. If we define &lt;span class="math"&gt;\(x_{0}\)&lt;/span&gt; to be a vector on the hyperplane. Then the &lt;span class="math"&gt;\(x^{(i)} - x_{0}\)&lt;/span&gt; represents a vector from &lt;span class="math"&gt;\(x^{(i)}\)&lt;/span&gt; to the hyperplane. The dotted black line from &lt;span class="math"&gt;\(x^{(i)}\)&lt;/span&gt; to the hyperplane represents the vector whose distance is the shortest to the hyperplane. This dotted line forms a right-angled triangle with the hyperplane and we can label the unknown angle at the top of our triangle &lt;span class="math"&gt;\(\theta\)&lt;/span&gt;. The vector &lt;span class="math"&gt;\(w^{*}\)&lt;/span&gt; represents the unit vector perpendicular to the hyperplane.&lt;/p&gt;
 &lt;p align="center"&gt;
    &lt;img src="images/svm_distance_to_hyperplane.png" alt="Drawing" width="500"/&gt;
 &lt;/p&gt;
 
-&lt;p&gt;Using trigonometry, and setting $f = x^{(i)} - x_{0}$:&lt;/p&gt;
-&lt;p&gt;$\cos{\theta} = \dfrac{\text{adjacent}}{\text{hypothenuse}}\
-\implies \cos{\theta} = \dfrac{\gamma^{(i)}}{|f|}\
-\implies |f|\cos{\theta} = \gamma^{(i)}\
-\implies \dfrac{|w^{&lt;em&gt;}|}{|w^{&lt;/em&gt;}|}|f|\cos{\theta} = \gamma^{(i)}\
-\implies fw^{*} = \gamma^{(i)}\
-\implies \dfrac{(x^{(i)} - x_{0})w}{|w|} = \gamma^{(i)}$&lt;/p&gt;
-&lt;p&gt;and then using $wx_{0} = -b$, since $x_{0}$ lies on the hyperplane, we have:&lt;/p&gt;
-&lt;p&gt;$\implies \dfrac{wx^{(i)} + b}{|w|} = \gamma^{(i)}$&lt;/p&gt;
+&lt;p&gt;Using trigonometry, and setting &lt;span class="math"&gt;\(f = x^{(i)} - x_{0}\)&lt;/span&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\cos{\theta} = \dfrac{\text{adjacent}}{\text{hypothenuse}}\\
+\implies \cos{\theta} = \dfrac{\gamma^{(i)}}{\|f\|}\\
+\implies \|f\|\cos{\theta} = \gamma^{(i)}\\
+\implies \dfrac{\|w^{*}\|}{\|w^{*}\|}\|f\|\cos{\theta} = \gamma^{(i)}\\
+\implies fw^{*} = \gamma^{(i)}\\
+\implies \dfrac{(x^{(i)} - x_{0})w}{\|w\|} = \gamma^{(i)}\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;and then using &lt;span class="math"&gt;\(wx_{0} = -b\)&lt;/span&gt;, since &lt;span class="math"&gt;\(x_{0}\)&lt;/span&gt; lies on the hyperplane, we have:&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\implies \dfrac{wx^{(i)} + b}{\|w\|} = \gamma^{(i)}\)&lt;/span&gt;&lt;/p&gt;
 &lt;p&gt;We will see below how this distance is used in the definitions of the Functional and Geometric margins defined below.&lt;/p&gt;
 &lt;h3&gt;Functional and Geometric Margins&lt;/h3&gt;
-&lt;p&gt;Given a training example $(x^{(i)}, y^{(i)})$, we define the functional margin of $(w, b)$ with
+&lt;p&gt;Given a training example &lt;span class="math"&gt;\((x^{(i)}, y^{(i)})\)&lt;/span&gt;, we define the functional margin of &lt;span class="math"&gt;\((w, b)\)&lt;/span&gt; with
 respect to a training example as:&lt;/p&gt;
-&lt;p&gt;$\hat{\gamma}^{(i)} = y^{(i)}(w^{T} x^{(i)} + b)$&lt;/p&gt;
-&lt;p&gt;The functional margin serves as a test function to determine whether a given training point is classified correctly. For a training example to be correctly classified $\hat{\gamma}^{(i)} \geq 0$.&lt;/p&gt;
-&lt;p&gt;One problem with the functional margin is that it can be affected by an arbitrary scaling of $w$ and $b$. That brings us onto the definition of the geometric margin:&lt;/p&gt;
-&lt;p&gt;$\gamma^{(i)} = \hat{\gamma}^{(i)}/|w|$&lt;/p&gt;
-&lt;p&gt;The geometric margin is telling you not only if a point is properly classified or not, but the magnitude of that distance in term of units of |w|. It is invariant to any scaling of $w$ or $b$ which will be important later. The geometric margin should look familiar as the distance between a training point and our hyperplane that we derived in the previous section multiplied by the label $y^{(i)}$.&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\hat{\gamma}^{(i)} = y^{(i)}(w^{T} x^{(i)} + b)\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;The functional margin serves as a test function to determine whether a given training point is classified correctly. For a training example to be correctly classified &lt;span class="math"&gt;\(\hat{\gamma}^{(i)} \geq 0\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;One problem with the functional margin is that it can be affected by an arbitrary scaling of &lt;span class="math"&gt;\(w\)&lt;/span&gt; and &lt;span class="math"&gt;\(b\)&lt;/span&gt;. That brings us onto the definition of the geometric margin:&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\gamma^{(i)} = \hat{\gamma}^{(i)}/\|w\|\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;The geometric margin is telling you not only if a point is properly classified or not, but the magnitude of that distance in term of units of |w|. It is invariant to any scaling of &lt;span class="math"&gt;\(w\)&lt;/span&gt; or &lt;span class="math"&gt;\(b\)&lt;/span&gt; which will be important later. The geometric margin should look familiar as the distance between a training point and our hyperplane that we derived in the previous section multiplied by the label &lt;span class="math"&gt;\(y^{(i)}\)&lt;/span&gt;.&lt;/p&gt;
 &lt;p&gt;Given a training set&lt;/p&gt;
-&lt;p&gt;$S = {(x^{(i)}, y^{(i)}); i=1 \dotsc n}$&lt;/p&gt;
-&lt;p&gt;we define the geometric margin of $(w,b)$ with respect to $S$ to be the smallest of the geometric margins on the individual training examples:&lt;/p&gt;
-&lt;p&gt;$\gamma = \min_{i=1 \dotsc n} \gamma ^ {(i)}$&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(S = \{(x^{(i)}, y^{(i)}); i=1 \dotsc n\}\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;we define the geometric margin of &lt;span class="math"&gt;\((w,b)\)&lt;/span&gt; with respect to &lt;span class="math"&gt;\(S\)&lt;/span&gt; to be the smallest of the geometric margins on the individual training examples:&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\gamma = \min_{i=1 \dotsc n} \gamma ^ {(i)}\)&lt;/span&gt;&lt;/p&gt;
 &lt;h3&gt;The optimal margin classifier&lt;/h3&gt;
 &lt;p&gt;In order to find the widest margin classifier, we want to maximise the geometric margin whilst still correctly classifying all our training examples. This can be formulated as the following optimisation problem:&lt;/p&gt;
-&lt;p&gt;$\max_{w, b} \gamma \quad$ s.t. $\quad \dfrac{y^{(i)}(w^{T} x^{(i)} + b)}{|w|}\geq \gamma \text{ for } i=1 \dotsc n$&lt;/p&gt;
-&lt;p&gt;It turns out that the above problem is hard to optimise. Therefore, we convert it to any equivalent problem that happends to be easier to solve. For any solution to satisfy the above equation, any positively scaled multiple will also, due to the fact that the geometric margin is invariant to scaling of $w$.&lt;/p&gt;
-&lt;p&gt;Therefore, we can scale $w$ in such a way that $|w| = \dfrac{1}{\gamma}$. Also note that maximising $\dfrac{1}{|w|}$ is the same as minimising $|w|$ which is the same as minimising $\dfrac{1}{2}|w|^{2}$.&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\max_{w, b} \gamma \quad\)&lt;/span&gt; s.t. &lt;span class="math"&gt;\(\quad \dfrac{y^{(i)}(w^{T} x^{(i)} + b)}{\|w\|}\geq \gamma \text{ for } i=1 \dotsc n\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;It turns out that the above problem is hard to optimise. Therefore, we convert it to any equivalent problem that happends to be easier to solve. For any solution to satisfy the above equation, any positively scaled multiple will also, due to the fact that the geometric margin is invariant to scaling of &lt;span class="math"&gt;\(w\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;Therefore, we can scale &lt;span class="math"&gt;\(w\)&lt;/span&gt; in such a way that &lt;span class="math"&gt;\(\|w\| = \dfrac{1}{\gamma}\)&lt;/span&gt;. Also note that maximising &lt;span class="math"&gt;\(\dfrac{1}{\|w\|}\)&lt;/span&gt; is the same as minimising &lt;span class="math"&gt;\(\|w\|\)&lt;/span&gt; which is the same as minimising &lt;span class="math"&gt;\(\dfrac{1}{2}\|w\|^{2}\)&lt;/span&gt;.&lt;/p&gt;
 &lt;p&gt;Thus, we can reformulate the optimisation problem as:  &lt;/p&gt;
-&lt;p&gt;$\min_{w, b} \dfrac{1}{2}|w|^{2} \quad$ s.t. $\quad y^{(i)}(w^{T} x^{(i)} + b)\geq 1 \text{ for } i=1 \dotsc n$&lt;/p&gt;
-&lt;p&gt;This optimisation problem is known as a quadratic optimisation problem which is easier to solve. The solution to this optimisation problem will be the topic for a future post.&lt;/p&gt;</content></entry><entry><title>Visualising networks in R using atomic plot functions</title><link href="https://peterwooldridge.me/heatmaps_in_r.html" rel="alternate"></link><published>2017-09-28T21:13:00+01:00</published><updated>2017-09-28T21:13:00+01:00</updated><author><name>Peter Wooldridge</name></author><id>tag:peterwooldridge.me,2017-09-28:/heatmaps_in_r.html</id><summary type="html">&lt;p&gt;One of the most natural ways to visualise a social network is a network diagram which consists of a series of dots representing the entity in the network and lines representing the relationships between the entities. This type of visualisation looks as follows:&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\min_{w, b} \dfrac{1}{2}\|w\|^{2} \quad\)&lt;/span&gt; s.t. &lt;span class="math"&gt;\(\quad y^{(i)}(w^{T} x^{(i)} + b)\geq 1 \text{ for } i=1 \dotsc n\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;This optimisation problem is known as a quadratic optimisation problem which is easier to solve. The solution to this optimisation problem will be the topic for a future post.&lt;/p&gt;
+&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width &lt; 768) ? "left" : align;
+        indent = (screen.width &lt; 768) ? "0em" : indent;
+        linebreak = (screen.width &lt; 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+&lt;/script&gt;</content></entry><entry><title>Visualising networks in R using atomic plot functions</title><link href="https://peterwooldridge.me/heatmaps_in_r.html" rel="alternate"></link><published>2017-09-28T21:13:00+01:00</published><updated>2017-09-28T21:13:00+01:00</updated><author><name>Peter Wooldridge</name></author><id>tag:peterwooldridge.me,2017-09-28:/heatmaps_in_r.html</id><summary type="html">&lt;p&gt;One of the most natural ways to visualise a social network is a network diagram which consists of a series of dots representing the entity in the network and lines representing the relationships between the entities. This type of visualisation looks as follows:&lt;/p&gt;
 &lt;div class="figure"&gt;
 &lt;img alt="" src="images/standard-network-plot.png" /&gt;
 &lt;/div&gt;
@@ -72,35 +134,15 @@ respect to a training example as:&lt;/p&gt;
 &lt;/div&gt;
 &lt;p&gt;We can encode community information to this type of plot by colouring the nodes according to the communitiy memberships.&lt;/p&gt;
 &lt;p&gt;As Mike Bostock &lt;a class="reference external" href="https://bost.ocks.org/mike/miserables/"&gt;showed&lt;/a&gt;, another interesting way to visualise a network is with the adjacency matrix. As a reminder the Adjacency matrix is defined as follows:&lt;/p&gt;
-&lt;div class="formula"&gt;
-&lt;i&gt;A&lt;/i&gt;&lt;sub&gt;&lt;i&gt;ij&lt;/i&gt;&lt;/sub&gt; = &lt;span class="array"&gt;&lt;span class="arrayrow"&gt;&lt;span class="bracket align-left"&gt;⎧&lt;/span&gt;&lt;/span&gt;&lt;span class="arrayrow"&gt;&lt;span class="bracket align-left"&gt;⎨&lt;/span&gt;&lt;/span&gt;&lt;span class="arrayrow"&gt;&lt;span class="bracket align-left"&gt;⎩&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="array"&gt;&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-l"&gt;
-1
-&lt;/span&gt;
-&lt;span class="arraycell align-r"&gt;
- : &lt;span class="text"&gt; if &lt;/span&gt;&lt;i&gt;i&lt;/i&gt;&lt;span class="text"&gt; connected to &lt;/span&gt;&lt;i&gt;j&lt;/i&gt;
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-l"&gt;
- 
-&lt;/span&gt;
-&lt;span class="arraycell align-r"&gt;
- 
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-l"&gt;
-0
-&lt;/span&gt;
-&lt;span class="arraycell align-r"&gt;
- : &lt;span class="text"&gt; otherwise&lt;/span&gt;
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;/span&gt;&lt;span class="emptydot"&gt;&lt;/span&gt;
+&lt;div class="math"&gt;
+\begin{equation*}
+A_{ij} = \left\{
+\begin{array}{lr}
+1 &amp;amp; : \text{if }i\text{ connected to }j\\
+0 &amp;amp; : \text{otherwise}
+\end{array}
+\right.
+\end{equation*}
 &lt;/div&gt;
 &lt;p&gt;The usefullness of the visualisation of the adjacency matrix depends largely on the order of the rows and columns in the plot. By finding communities in the network, we can reorder the rows and columns of the adjacency matrix accordingly to produce a plot that looks as follows:&lt;/p&gt;
 &lt;div class="figure"&gt;
@@ -220,7 +262,68 @@ respect to a training example as:&lt;/p&gt;
 &lt;span class="nf"&gt;dev.off&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;We have shown how using the atomic plot functions in R we can create some nice looking visualisations of network data. The full code is available at &lt;a class="reference external" href="https://github.com/pwwooldridge/les-mis-adjacency-vis"&gt;this github repo&lt;/a&gt;&lt;/p&gt;
-</content><category term="R"></category><category term="networks"></category><category term="visualisation"></category></entry><entry><title>Linear Regression from first principles</title><link href="https://peterwooldridge.me/linear_regression.html" rel="alternate"></link><published>2017-09-12T21:46:00+01:00</published><updated>2017-09-12T21:46:00+01:00</updated><author><name>Peter Wooldridge</name></author><id>tag:peterwooldridge.me,2017-09-12:/linear_regression.html</id><summary type="html">&lt;p&gt;Linear regression allows one to model a dependent variable with the best straight line fit to a set of predictor variables. In the simplest scenario we have a single predictor variable. This is called simple linear regression.&lt;/p&gt;
+&lt;script type='text/javascript'&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width &lt; 768) ? "left" : align;
+        indent = (screen.width &lt; 768) ? "0em" : indent;
+        linebreak = (screen.width &lt; 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+&lt;/script&gt;</content><category term="R"></category><category term="networks"></category><category term="visualisation"></category></entry><entry><title>Linear Regression from first principles</title><link href="https://peterwooldridge.me/linear_regression.html" rel="alternate"></link><published>2017-09-12T21:46:00+01:00</published><updated>2017-09-12T21:46:00+01:00</updated><author><name>Peter Wooldridge</name></author><id>tag:peterwooldridge.me,2017-09-12:/linear_regression.html</id><summary type="html">&lt;p&gt;Linear regression allows one to model a dependent variable with the best straight line fit to a set of predictor variables. In the simplest scenario we have a single predictor variable. This is called simple linear regression.&lt;/p&gt;
 &lt;p&gt;As an example let's take the trees dataset provided by the datasets package …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Linear regression allows one to model a dependent variable with the best straight line fit to a set of predictor variables. In the simplest scenario we have a single predictor variable. This is called simple linear regression.&lt;/p&gt;
 &lt;p&gt;As an example let's take the trees dataset provided by the datasets package in R. The data consists of measurements of girth, height and volume of 31 felled black cherry trees. Suppose we wish to try and predict the volume of a black cherry tree from its girth. To begin with we can plot the two variables using the following command:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nf"&gt;plot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;trees&lt;/span&gt;&lt;span class="o"&gt;$&lt;/span&gt;&lt;span class="n"&gt;Girth&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;trees&lt;/span&gt;&lt;span class="o"&gt;$&lt;/span&gt;&lt;span class="n"&gt;Volume&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;xlab&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Girth (inches)&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ylab&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Volume (cubic feet)&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
@@ -233,327 +336,65 @@ respect to a training example as:&lt;/p&gt;
 &lt;img alt="" src="https://peterwooldridge.me/possible_linear_fits.png" /&gt;
 &lt;/div&gt;
 &lt;p&gt;The left hand figure above shows linear fits with varying slopes and a fixed intercept. The right hand figure shows linear fits with varying intercepts and constant slopes. We want to find the combination of parameters for which our line best fits the data.&lt;/p&gt;
-&lt;p&gt;We'll return back to the trees example but suppose that in general we observe &lt;span class="formula"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/span&gt; pairs of data points &lt;span class="formula"&gt;(&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;, &lt;i&gt;y&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;), (&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;2&lt;/sub&gt;, &lt;i&gt;y&lt;/i&gt;&lt;sub&gt;2&lt;/sub&gt;), …, (&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sub&gt;, &lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sub&gt;)&lt;/span&gt; for &lt;span class="formula"&gt;&lt;i&gt;i&lt;/i&gt; = 1, 2, …&lt;i&gt;n&lt;/i&gt;&lt;/span&gt;. We can define a linear relationship by writing each observation pair as follows:&lt;/p&gt;
-&lt;p&gt;&lt;span class="formula"&gt;&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; = &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; + &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt; + &lt;i&gt;ϵ&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;  &lt;i&gt;i&lt;/i&gt; = 1, 2, …&lt;i&gt;n&lt;/i&gt;&lt;span class="unknown"&gt;\tag&lt;/span&gt;2 &lt;a class="eqnumber" name="2"&gt; &lt;/a&gt;&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span class="formula"&gt;&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt;&lt;/span&gt; and &lt;span class="formula"&gt;&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;/span&gt; represent the slope and intercept respectively of our straight line fit. The &lt;span class="formula"&gt;&lt;i&gt;ϵ&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;/span&gt; are called residuals and represent the random variation of the &lt;span class="formula"&gt;&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;/span&gt; around the straight line fit. Thought of another way each &lt;span class="formula"&gt;&lt;i&gt;ϵ&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;/span&gt; is the error between the true value of our response variable &lt;span class="formula"&gt;&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;/span&gt; and the prediction given by our linear regression.&lt;/p&gt;
-&lt;p&gt;We wish to find an intercept/slope &lt;span class="formula"&gt;(&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt;, &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;)&lt;/span&gt; combination that minimises the &lt;span class="formula"&gt;&lt;i&gt;ϵ&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;/span&gt; for &lt;span class="formula"&gt;&lt;i&gt;i&lt;/i&gt; = 1, 2, …&lt;i&gt;n&lt;/i&gt;&lt;/span&gt; meaning that our prediction errors are small. The most popular method of achieving this is to compute the sum of the squares of the residuals for &lt;span class="formula"&gt;&lt;i&gt;i&lt;/i&gt; = 1, 2, …&lt;i&gt;n&lt;/i&gt;&lt;/span&gt; and choose values of &lt;span class="formula"&gt;&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt;&lt;span class="text"&gt;  and &lt;/span&gt;&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;/span&gt; that minimise this quanity. Mathematically we can write the residual sum of square (RSS) as follows:&lt;/p&gt;
-&lt;p&gt;&lt;span class="formula"&gt;&lt;i&gt;RSS&lt;/i&gt; = &lt;span class="limits"&gt;&lt;span class="limit"&gt;∑&lt;/span&gt;&lt;/span&gt;&lt;span class="scripts"&gt;&lt;sup class="script"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;sub class="script"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;ϵ&lt;/i&gt;&lt;span class="scripts"&gt;&lt;sup class="script"&gt;2&lt;/sup&gt;&lt;sub class="script"&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;/span&gt;&lt;span class="unknown"&gt;\tag&lt;/span&gt;3 &lt;a class="eqnumber" name="3"&gt; &lt;/a&gt;&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;rearranging &lt;span class="formula"&gt;&lt;span class="unknown"&gt;\eqref&lt;/span&gt;2&lt;/span&gt; to make &lt;span class="formula"&gt;&lt;i&gt;ϵ&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;/span&gt; the subject:&lt;/p&gt;
-&lt;p&gt;&lt;span class="formula"&gt;&lt;i&gt;ϵ&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; = &lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt;&lt;span class="unknown"&gt;\tag&lt;/span&gt;4 &lt;a class="eqnumber" name="4"&gt; &lt;/a&gt;&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;substituting &lt;span class="formula"&gt;&lt;span class="unknown"&gt;\eqref&lt;/span&gt;4&lt;/span&gt; into &lt;span class="formula"&gt;&lt;span class="unknown"&gt;\eqref&lt;/span&gt;3&lt;/span&gt; we get:&lt;/p&gt;
-&lt;p&gt;&lt;span class="formula"&gt;&lt;i&gt;RSS&lt;/i&gt; = &lt;span class="limits"&gt;&lt;span class="limit"&gt;∑&lt;/span&gt;&lt;/span&gt;&lt;span class="scripts"&gt;&lt;sup class="script"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;sub class="script"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;(&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt;)&lt;sup&gt;2&lt;/sup&gt;&lt;span class="unknown"&gt;\tag&lt;/span&gt;5 &lt;a class="eqnumber" name="5"&gt; &lt;/a&gt;&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;To minimise &lt;span class="formula"&gt;&lt;span class="unknown"&gt;\eqref&lt;/span&gt;5&lt;/span&gt; we differentiate &lt;span class="formula"&gt;&lt;i&gt;RSS&lt;/i&gt;&lt;/span&gt; with respect to both &lt;span class="formula"&gt;&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt;&lt;/span&gt; and &lt;span class="formula"&gt;&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;/span&gt; set the resulting quantity equal to zero and solve the two equations.&lt;/p&gt;
+&lt;p&gt;We'll return back to the trees example but suppose that in general we observe &lt;span class="math"&gt;\(n\)&lt;/span&gt; pairs of data points &lt;span class="math"&gt;\((x_1, y_1), (x_2, y_2),\ldots, (x_n, y_n)\)&lt;/span&gt; for &lt;span class="math"&gt;\(i = 1,2,\ldots n\)&lt;/span&gt;. We can define a linear relationship by writing each observation pair as follows:&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(y_i = \beta_1 x_i + \beta_0 + \epsilon_i \qquad i = 1,2,\ldots n \tag{2}\label{2}\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\beta_0\)&lt;/span&gt; and &lt;span class="math"&gt;\(\beta_1\)&lt;/span&gt; represent the slope and intercept respectively of our straight line fit. The &lt;span class="math"&gt;\(\epsilon_i\)&lt;/span&gt; are called residuals and represent the random variation of the &lt;span class="math"&gt;\(y_i\)&lt;/span&gt; around the straight line fit. Thought of another way each &lt;span class="math"&gt;\(\epsilon_i\)&lt;/span&gt; is the error between the true value of our response variable &lt;span class="math"&gt;\(y_i\)&lt;/span&gt; and the prediction given by our linear regression.&lt;/p&gt;
+&lt;p&gt;We wish to find an intercept/slope &lt;span class="math"&gt;\((\beta_0, \beta_1)\)&lt;/span&gt; combination that minimises the &lt;span class="math"&gt;\(\epsilon_i\)&lt;/span&gt; for &lt;span class="math"&gt;\(i = 1,2,\ldots n\)&lt;/span&gt; meaning that our prediction errors are small. The most popular method of achieving this is to compute the sum of the squares of the residuals for &lt;span class="math"&gt;\(i = 1,2,\ldots n\)&lt;/span&gt; and choose values of &lt;span class="math"&gt;\(\beta_0\text{ and }\beta_1\)&lt;/span&gt; that minimise this quanity. Mathematically we can write the residual sum of square (RSS) as follows:&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(RSS = \sum_{i=1}^n \epsilon_i^2 \tag{3}\label{3}\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;rearranging &lt;span class="math"&gt;\(\eqref{2}\)&lt;/span&gt; to make &lt;span class="math"&gt;\(\epsilon_i\)&lt;/span&gt; the subject:&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\epsilon_i = y_i - \beta_1 x_i - \beta_0 \tag{4}\label{4}\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;substituting &lt;span class="math"&gt;\(\eqref{4}\)&lt;/span&gt; into &lt;span class="math"&gt;\(\eqref{3}\)&lt;/span&gt; we get:&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(RSS = \sum_{i=1}^n (y_i - \beta_1 x_i - \beta_0)^2 \tag{5}\label{5}\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;To minimise &lt;span class="math"&gt;\(\eqref{5}\)&lt;/span&gt; we differentiate &lt;span class="math"&gt;\(RSS\)&lt;/span&gt; with respect to both &lt;span class="math"&gt;\(\beta_0\)&lt;/span&gt; and &lt;span class="math"&gt;\(\beta_1\)&lt;/span&gt; set the resulting quantity equal to zero and solve the two equations.&lt;/p&gt;
 &lt;p&gt;We can make use of the chain rule which states that for a composite function of the form:&lt;/p&gt;
-&lt;div class="formula"&gt;
-&lt;span class="environment"&gt;&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-r"&gt;
-
-&lt;/span&gt;
-&lt;span class="arraycell align-l"&gt;
-&lt;i&gt;F&lt;/i&gt;(&lt;i&gt;x&lt;/i&gt;) = &lt;i&gt;f&lt;/i&gt;(&lt;i&gt;g&lt;/i&gt;(&lt;i&gt;x&lt;/i&gt;))
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-r"&gt;
- 
-&lt;/span&gt;
-&lt;span class="arraycell align-l"&gt;
- 
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-r"&gt;
-
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;/span&gt;
+&lt;div class="math"&gt;
+\begin{align*}
+&amp;amp; F(x) = f(g(x)) \\
+\end{align*}
 &lt;/div&gt;
 &lt;p&gt;the deriviate is given by&lt;/p&gt;
-&lt;p&gt;&lt;span class="formula"&gt;&lt;i&gt;F&lt;/i&gt;’(&lt;i&gt;x&lt;/i&gt;) = &lt;i&gt;f&lt;/i&gt;’(&lt;i&gt;g&lt;/i&gt;(&lt;i&gt;x&lt;/i&gt;))&lt;i&gt;g&lt;/i&gt;’(&lt;i&gt;x&lt;/i&gt;)&lt;span class="unknown"&gt;\tag&lt;/span&gt;6 &lt;a class="eqnumber" name="6"&gt; &lt;/a&gt;&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;Applying &lt;span class="formula"&gt;&lt;span class="unknown"&gt;\eqref&lt;/span&gt;6&lt;/span&gt; to &lt;span class="formula"&gt;&lt;span class="unknown"&gt;\eqref&lt;/span&gt;5&lt;/span&gt; we get:&lt;/p&gt;
-&lt;p&gt;&lt;span class="formula"&gt;&lt;span class="fraction"&gt;&lt;span class="ignored"&gt;(&lt;/span&gt;&lt;span class="numerator"&gt;∂&lt;i&gt;RSS&lt;/i&gt;&lt;/span&gt;&lt;span class="ignored"&gt;)/(&lt;/span&gt;&lt;span class="denominator"&gt;∂&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt;&lt;/span&gt;&lt;span class="ignored"&gt;)&lt;/span&gt;&lt;/span&gt; =  − 2&lt;span class="limits"&gt;&lt;span class="limit"&gt;∑&lt;/span&gt;&lt;/span&gt;&lt;span class="scripts"&gt;&lt;sup class="script"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;sub class="script"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;(&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt;) &lt;a class="eqnumber" name="7"&gt; &lt;/a&gt;&lt;span class="unknown"&gt;\tag&lt;/span&gt;7&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span class="formula"&gt;&lt;span class="fraction"&gt;&lt;span class="ignored"&gt;(&lt;/span&gt;&lt;span class="numerator"&gt;∂&lt;i&gt;RSS&lt;/i&gt;&lt;/span&gt;&lt;span class="ignored"&gt;)/(&lt;/span&gt;&lt;span class="denominator"&gt;∂&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;/span&gt;&lt;span class="ignored"&gt;)&lt;/span&gt;&lt;/span&gt; =  − 2&lt;span class="limits"&gt;&lt;span class="limit"&gt;∑&lt;/span&gt;&lt;/span&gt;&lt;span class="scripts"&gt;&lt;sup class="script"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;sub class="script"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;(&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt;) &lt;a class="eqnumber" name="8"&gt; &lt;/a&gt;&lt;span class="unknown"&gt;\tag&lt;/span&gt;8&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;We set the above equations equal to zero and solve for &lt;span class="formula"&gt;&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt;&lt;/span&gt; and &lt;span class="formula"&gt;&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;/span&gt; to find the minima. Starting with &lt;span class="formula"&gt;&lt;span class="unknown"&gt;\eqref&lt;/span&gt;7&lt;/span&gt;:&lt;/p&gt;
-&lt;div class="formula"&gt;
-&lt;span class="environment"&gt;&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-r"&gt;
-
-&lt;/span&gt;
-&lt;span class="arraycell align-l"&gt;
-0 =  − 2&lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;(&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt;)
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-r"&gt;
- 
-&lt;/span&gt;
-&lt;span class="arraycell align-l"&gt;
- 
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-r"&gt;
-
-&lt;/span&gt;
-&lt;span class="arraycell align-l"&gt;
-0 = &lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;(&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt;)
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-r"&gt;
- 
-&lt;/span&gt;
-&lt;span class="arraycell align-l"&gt;
- 
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-r"&gt;
-
-&lt;/span&gt;
-&lt;span class="arraycell align-l"&gt;
-0 = &lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 0&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;n&lt;/i&gt;&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt;
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-r"&gt;
- 
-&lt;/span&gt;
-&lt;span class="arraycell align-l"&gt;
- 
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-r"&gt;
-
-&lt;/span&gt;
-&lt;span class="arraycell align-l"&gt;
-&lt;i&gt;n&lt;/i&gt;&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt; = &lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;/span&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(F'(x) = f'(g(x)) g'(x) \tag{6}\label{6}\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Applying &lt;span class="math"&gt;\(\eqref{6}\)&lt;/span&gt; to &lt;span class="math"&gt;\(\eqref{5}\)&lt;/span&gt; we get:&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\frac{\partial RSS}{\partial \beta_0} = -2 \sum_{i=1}^n (y_i - \beta_1 x_i - \beta_0) \label{7}\tag{7}\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\frac{\partial RSS}{\partial \beta_1} = -2 \sum_{i=1}^n x_i (y_i - \beta_1 x_i - \beta_0) \label{8}\tag{8}\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;We set the above equations equal to zero and solve for &lt;span class="math"&gt;\(\beta_0\)&lt;/span&gt; and &lt;span class="math"&gt;\(\beta_1\)&lt;/span&gt; to find the minima. Starting with &lt;span class="math"&gt;\(\eqref{7}\)&lt;/span&gt;:&lt;/p&gt;
+&lt;div class="math"&gt;
+\begin{align*}
+&amp;amp; 0 = -2 \sum_{i=1}^n (y_i - \beta_1 x_i - \beta_0) \\
+&amp;amp; 0 = \sum_{i=1}^n (y_i - \beta_1 x_i - \beta_0) \\
+&amp;amp; 0 = \sum_{i=1}^n y_i - \beta_1 \sum_{i=0}^n x_i -n \beta_0 \\
+&amp;amp; n \beta_0 = \sum_{i=1}^n y_i - \beta_1 \sum_{i=1}^n x_i
+\end{align*}
 &lt;/div&gt;
-&lt;p&gt;making use of &lt;span class="formula"&gt;&lt;span class="bar"&gt;&lt;i&gt;x&lt;/i&gt;&lt;/span&gt; = &lt;span class="fraction"&gt;&lt;span class="ignored"&gt;(&lt;/span&gt;&lt;span class="numerator"&gt;&lt;span class="limits"&gt;&lt;span class="limit"&gt;∑&lt;/span&gt;&lt;/span&gt;&lt;span class="scripts"&gt;&lt;sup class="script"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;sub class="script"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;/span&gt;&lt;span class="ignored"&gt;)/(&lt;/span&gt;&lt;span class="denominator"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/span&gt;&lt;span class="ignored"&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; and &lt;span class="formula"&gt;&lt;span class="bar"&gt;&lt;i&gt;y&lt;/i&gt;&lt;/span&gt; = &lt;span class="fraction"&gt;&lt;span class="ignored"&gt;(&lt;/span&gt;&lt;span class="numerator"&gt;&lt;span class="limits"&gt;&lt;span class="limit"&gt;∑&lt;/span&gt;&lt;/span&gt;&lt;span class="scripts"&gt;&lt;sup class="script"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;sub class="script"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;/span&gt;&lt;span class="ignored"&gt;)/(&lt;/span&gt;&lt;span class="denominator"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/span&gt;&lt;span class="ignored"&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;:&lt;/p&gt;
-&lt;div class="formula"&gt;
-&lt;span class="environment"&gt;&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-r"&gt;
-
-&lt;/span&gt;
-&lt;span class="arraycell align-l"&gt;
-&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt; = &lt;span class="bar"&gt;&lt;i&gt;y&lt;/i&gt;&lt;/span&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;span class="bar"&gt;&lt;i&gt;x&lt;/i&gt;&lt;/span&gt;&lt;a class="eqnumber" name="9"&gt; &lt;/a&gt;&lt;span class="unknown"&gt;\tag&lt;/span&gt;9
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-r"&gt;
- 
-&lt;/span&gt;
-&lt;span class="arraycell align-l"&gt;
- 
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-r"&gt;
-
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;/span&gt;
+&lt;p&gt;making use of &lt;span class="math"&gt;\(\bar{x} = \frac{\sum_{i=1}^n x_i}{n}\)&lt;/span&gt; and &lt;span class="math"&gt;\(\bar{y} = \frac{\sum_{i=1}^n y_i}{n}\)&lt;/span&gt;:&lt;/p&gt;
+&lt;div class="math"&gt;
+\begin{align*}
+&amp;amp; \beta_0 = \bar{y} - \beta_1 \bar{x} \label{9}\tag{9} \\
+\end{align*}
 &lt;/div&gt;
-&lt;p&gt;Now we repeat the same process for &lt;span class="formula"&gt;&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;/span&gt;:&lt;/p&gt;
-&lt;div class="formula"&gt;
-&lt;span class="environment"&gt;&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-r"&gt;
-
-&lt;/span&gt;
-&lt;span class="arraycell align-l"&gt;
-0 =  − 2&lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;(&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt;)
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-r"&gt;
- 
-&lt;/span&gt;
-&lt;span class="arraycell align-l"&gt;
- 
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-r"&gt;
-
-&lt;/span&gt;
-&lt;span class="arraycell align-l"&gt;
-0 = &lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;(&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt;)
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;/span&gt;
+&lt;p&gt;Now we repeat the same process for &lt;span class="math"&gt;\(\beta_{1}\)&lt;/span&gt;:&lt;/p&gt;
+&lt;div class="math"&gt;
+\begin{align*}
+&amp;amp; 0 = -2 \sum_{i=1}^n x_i (y_i - \beta_1 x_i - \beta_0) \\
+&amp;amp; 0 = \sum_{i=1}^n x_i (y_i - \beta_1 x_i - \beta_0)
+\end{align*}
 &lt;/div&gt;
-&lt;p&gt;substituting in the value for &lt;span class="formula"&gt;&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt;&lt;/span&gt; obtained in &lt;span class="formula"&gt;&lt;span class="unknown"&gt;\eqref&lt;/span&gt;9&lt;/span&gt;:&lt;/p&gt;
-&lt;div class="formula"&gt;
-&lt;span class="environment"&gt;&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-r"&gt;
-
-&lt;/span&gt;
-&lt;span class="arraycell align-l"&gt;
-0 =  − 2&lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;(&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;span class="bar"&gt;&lt;i&gt;y&lt;/i&gt;&lt;/span&gt; + &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;span class="bar"&gt;&lt;i&gt;x&lt;/i&gt;&lt;/span&gt;)
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-r"&gt;
- 
-&lt;/span&gt;
-&lt;span class="arraycell align-l"&gt;
- 
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-r"&gt;
-
-&lt;/span&gt;
-&lt;span class="arraycell align-l"&gt;
-0 = &lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;(&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;span class="bar"&gt;&lt;i&gt;y&lt;/i&gt;&lt;/span&gt;) + &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;(&lt;span class="bar"&gt;&lt;i&gt;x&lt;/i&gt;&lt;/span&gt; − &lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;)
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-r"&gt;
- 
-&lt;/span&gt;
-&lt;span class="arraycell align-l"&gt;
- 
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-r"&gt;
-
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-r"&gt;
- 
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-r"&gt;
-
-&lt;/span&gt;
-&lt;span class="arraycell align-l"&gt;
-&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt; = &lt;span class="fraction"&gt;&lt;span class="ignored"&gt;(&lt;/span&gt;&lt;span class="numerator"&gt; − &lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;(&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;span class="bar"&gt;&lt;i&gt;y&lt;/i&gt;&lt;/span&gt;)&lt;/span&gt;&lt;span class="ignored"&gt;)/(&lt;/span&gt;&lt;span class="denominator"&gt;&lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;(&lt;span class="bar"&gt;&lt;i&gt;x&lt;/i&gt;&lt;/span&gt; − &lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;)&lt;/span&gt;&lt;span class="ignored"&gt;)&lt;/span&gt;&lt;/span&gt;
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-r"&gt;
- 
-&lt;/span&gt;
-&lt;span class="arraycell align-l"&gt;
- 
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-r"&gt;
-
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-r"&gt;
- 
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-r"&gt;
-
-&lt;/span&gt;
-&lt;span class="arraycell align-l"&gt;
-&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt; = &lt;span class="fraction"&gt;&lt;span class="ignored"&gt;(&lt;/span&gt;&lt;span class="numerator"&gt; − &lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;(&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;span class="bar"&gt;&lt;i&gt;y&lt;/i&gt;&lt;/span&gt;)&lt;/span&gt;&lt;span class="ignored"&gt;)/(&lt;/span&gt;&lt;span class="denominator"&gt;&lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;(&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;span class="bar"&gt;&lt;i&gt;x&lt;/i&gt;&lt;/span&gt; − &lt;i&gt;x&lt;/i&gt;&lt;span class="scripts"&gt;&lt;sup class="script"&gt;2&lt;/sup&gt;&lt;sub class="script"&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;/span&gt;)&lt;/span&gt;&lt;span class="ignored"&gt;)&lt;/span&gt;&lt;/span&gt;
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-r"&gt;
- 
-&lt;/span&gt;
-&lt;span class="arraycell align-l"&gt;
- 
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-r"&gt;
-
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-r"&gt;
- 
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-r"&gt;
-
-&lt;/span&gt;
-&lt;span class="arraycell align-l"&gt;
-&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt; = &lt;span class="fraction"&gt;&lt;span class="ignored"&gt;(&lt;/span&gt;&lt;span class="numerator"&gt;&lt;span class="bar"&gt;&lt;i&gt;y&lt;/i&gt;&lt;/span&gt;&lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;N&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;/span&gt;&lt;span class="ignored"&gt;)/(&lt;/span&gt;&lt;span class="denominator"&gt;&lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;x&lt;/i&gt;&lt;span class="scripts"&gt;&lt;sup class="script"&gt;2&lt;/sup&gt;&lt;sub class="script"&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="ignored"&gt;)&lt;/span&gt;&lt;/span&gt;
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-r"&gt;
- 
-&lt;/span&gt;
-&lt;span class="arraycell align-l"&gt;
- 
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-r"&gt;
-
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-r"&gt;
- 
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;span class="arrayrow"&gt;
-&lt;span class="arraycell align-r"&gt;
-
-&lt;/span&gt;
-&lt;span class="arraycell align-l"&gt;
-&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt; = &lt;span class="fraction"&gt;&lt;span class="ignored"&gt;(&lt;/span&gt;&lt;span class="numerator"&gt;&lt;i&gt;n&lt;/i&gt;&lt;span class="bar"&gt;&lt;i&gt;x&lt;/i&gt;&lt;/span&gt;&lt;span class="bar"&gt;&lt;i&gt;y&lt;/i&gt;&lt;/span&gt; − &lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;/span&gt;&lt;span class="ignored"&gt;)/(&lt;/span&gt;&lt;span class="denominator"&gt;&lt;i&gt;n&lt;/i&gt;&lt;span class="bar"&gt;&lt;i&gt;x&lt;/i&gt;&lt;/span&gt;&lt;sup&gt;2&lt;/sup&gt; − &lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;x&lt;/i&gt;&lt;span class="scripts"&gt;&lt;sup class="script"&gt;2&lt;/sup&gt;&lt;sub class="script"&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="ignored"&gt;)&lt;/span&gt;&lt;/span&gt;
-&lt;/span&gt;
-
-&lt;/span&gt;
-&lt;/span&gt;
+&lt;p&gt;substituting in the value for &lt;span class="math"&gt;\(\beta_0\)&lt;/span&gt; obtained in &lt;span class="math"&gt;\(\eqref{9}\)&lt;/span&gt;:&lt;/p&gt;
+&lt;div class="math"&gt;
+\begin{align*}
+&amp;amp; 0 = -2 \sum_{i=1}^n x_i (y_i - \beta_1 x_i - \bar{y} + \beta_1 \bar{x}) \\
+&amp;amp; 0 = \sum_{i=1}^n x_i (y_i - \bar{y}) + \beta_1 \sum_{i=1}^n x_i (\bar{x} - x_i) \\
+\\
+&amp;amp; \beta_1 = \frac{-\sum_{i=1}^n x_i(y_i - \bar{y})}{\sum_{i=1}^n x_i(\bar{x} - x_i)} \\
+\\
+&amp;amp; \beta_1 = \frac{-\sum_{i=1}^n (x_i y_i - x_i \bar{y})}{\sum_{i=1}^n (x_i \bar{x} - x_i^2)} \\
+\\
+&amp;amp; \beta_1 = \frac{\bar{y} \sum_{i=1}^n x_i - \sum_{i=1}^N x_i y_i}{\sum_{i=1}^n x_i - \sum_{i=1}^n x_i^2} \\
+\\
+&amp;amp; \beta_1 = \frac{n \bar{x} \bar{y} - \sum_{i=1}^n x_i y_i}{n \bar{x}^2 - \sum_{i=1}^n x_i^2}
+\end{align*}
 &lt;/div&gt;
-&lt;p&gt;We have now derived least squares estimates for &lt;span class="formula"&gt;&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt;&lt;/span&gt; and &lt;span class="formula"&gt;&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;/span&gt; using simple linear regression. Armed with these we can generate parameter estimates for the cherry tree regression:&lt;/p&gt;
+&lt;p&gt;We have now derived least squares estimates for &lt;span class="math"&gt;\(\beta_0\)&lt;/span&gt; and &lt;span class="math"&gt;\(\beta_1\)&lt;/span&gt; using simple linear regression. Armed with these we can generate parameter estimates for the cherry tree regression:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="nf"&gt;nrow&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;trees&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="n"&gt;x_bar&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="nf"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;trees&lt;/span&gt;&lt;span class="o"&gt;$&lt;/span&gt;&lt;span class="n"&gt;Girth&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="n"&gt;y_bar&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="nf"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;trees&lt;/span&gt;&lt;span class="o"&gt;$&lt;/span&gt;&lt;span class="n"&gt;Volume&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
@@ -575,4 +416,65 @@ respect to a training example as:&lt;/p&gt;
 &lt;span class="m"&gt;-36.943459&lt;/span&gt;    &lt;span class="m"&gt;5.065856&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;which match our derived estimates.&lt;/p&gt;
-</content><category term="linear models"></category><category term="R"></category></entry></feed>
+&lt;script type='text/javascript'&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width &lt; 768) ? "left" : align;
+        indent = (screen.width &lt; 768) ? "0em" : indent;
+        linebreak = (screen.width &lt; 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+&lt;/script&gt;</content><category term="linear models"></category><category term="R"></category></entry></feed>

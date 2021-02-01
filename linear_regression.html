@@ -104,327 +104,65 @@
 <img alt="" src="https://peterwooldridge.me/possible_linear_fits.png" />
 </div>
 <p>The left hand figure above shows linear fits with varying slopes and a fixed intercept. The right hand figure shows linear fits with varying intercepts and constant slopes. We want to find the combination of parameters for which our line best fits the data.</p>
-<p>We'll return back to the trees example but suppose that in general we observe <span class="formula"><i>n</i></span> pairs of data points <span class="formula">(<i>x</i><sub>1</sub>, <i>y</i><sub>1</sub>), (<i>x</i><sub>2</sub>, <i>y</i><sub>2</sub>), …, (<i>x</i><sub><i>n</i></sub>, <i>y</i><sub><i>n</i></sub>)</span> for <span class="formula"><i>i</i> = 1, 2, …<i>n</i></span>. We can define a linear relationship by writing each observation pair as follows:</p>
-<p><span class="formula"><i>y</i><sub><i>i</i></sub> = <i>β</i><sub>1</sub><i>x</i><sub><i>i</i></sub> + <i>β</i><sub>0</sub> + <i>ϵ</i><sub><i>i</i></sub>  <i>i</i> = 1, 2, …<i>n</i><span class="unknown">\tag</span>2 <a class="eqnumber" name="2"> </a></span></p>
-<p><span class="formula"><i>β</i><sub>0</sub></span> and <span class="formula"><i>β</i><sub>1</sub></span> represent the slope and intercept respectively of our straight line fit. The <span class="formula"><i>ϵ</i><sub><i>i</i></sub></span> are called residuals and represent the random variation of the <span class="formula"><i>y</i><sub><i>i</i></sub></span> around the straight line fit. Thought of another way each <span class="formula"><i>ϵ</i><sub><i>i</i></sub></span> is the error between the true value of our response variable <span class="formula"><i>y</i><sub><i>i</i></sub></span> and the prediction given by our linear regression.</p>
-<p>We wish to find an intercept/slope <span class="formula">(<i>β</i><sub>0</sub>, <i>β</i><sub>1</sub>)</span> combination that minimises the <span class="formula"><i>ϵ</i><sub><i>i</i></sub></span> for <span class="formula"><i>i</i> = 1, 2, …<i>n</i></span> meaning that our prediction errors are small. The most popular method of achieving this is to compute the sum of the squares of the residuals for <span class="formula"><i>i</i> = 1, 2, …<i>n</i></span> and choose values of <span class="formula"><i>β</i><sub>0</sub><span class="text">  and </span><i>β</i><sub>1</sub></span> that minimise this quanity. Mathematically we can write the residual sum of square (RSS) as follows:</p>
-<p><span class="formula"><i>RSS</i> = <span class="limits"><span class="limit">∑</span></span><span class="scripts"><sup class="script"><i>n</i></sup><sub class="script"><i>i</i> = 1</sub></span><i>ϵ</i><span class="scripts"><sup class="script">2</sup><sub class="script"><i>i</i></sub></span><span class="unknown">\tag</span>3 <a class="eqnumber" name="3"> </a></span></p>
-<p>rearranging <span class="formula"><span class="unknown">\eqref</span>2</span> to make <span class="formula"><i>ϵ</i><sub><i>i</i></sub></span> the subject:</p>
-<p><span class="formula"><i>ϵ</i><sub><i>i</i></sub> = <i>y</i><sub><i>i</i></sub> − <i>β</i><sub>1</sub><i>x</i><sub><i>i</i></sub> − <i>β</i><sub>0</sub><span class="unknown">\tag</span>4 <a class="eqnumber" name="4"> </a></span></p>
-<p>substituting <span class="formula"><span class="unknown">\eqref</span>4</span> into <span class="formula"><span class="unknown">\eqref</span>3</span> we get:</p>
-<p><span class="formula"><i>RSS</i> = <span class="limits"><span class="limit">∑</span></span><span class="scripts"><sup class="script"><i>n</i></sup><sub class="script"><i>i</i> = 1</sub></span>(<i>y</i><sub><i>i</i></sub> − <i>β</i><sub>1</sub><i>x</i><sub><i>i</i></sub> − <i>β</i><sub>0</sub>)<sup>2</sup><span class="unknown">\tag</span>5 <a class="eqnumber" name="5"> </a></span></p>
-<p>To minimise <span class="formula"><span class="unknown">\eqref</span>5</span> we differentiate <span class="formula"><i>RSS</i></span> with respect to both <span class="formula"><i>β</i><sub>0</sub></span> and <span class="formula"><i>β</i><sub>1</sub></span> set the resulting quantity equal to zero and solve the two equations.</p>
+<p>We'll return back to the trees example but suppose that in general we observe <span class="math">\(n\)</span> pairs of data points <span class="math">\((x_1, y_1), (x_2, y_2),\ldots, (x_n, y_n)\)</span> for <span class="math">\(i = 1,2,\ldots n\)</span>. We can define a linear relationship by writing each observation pair as follows:</p>
+<p><span class="math">\(y_i = \beta_1 x_i + \beta_0 + \epsilon_i \qquad i = 1,2,\ldots n \tag{2}\label{2}\)</span></p>
+<p><span class="math">\(\beta_0\)</span> and <span class="math">\(\beta_1\)</span> represent the slope and intercept respectively of our straight line fit. The <span class="math">\(\epsilon_i\)</span> are called residuals and represent the random variation of the <span class="math">\(y_i\)</span> around the straight line fit. Thought of another way each <span class="math">\(\epsilon_i\)</span> is the error between the true value of our response variable <span class="math">\(y_i\)</span> and the prediction given by our linear regression.</p>
+<p>We wish to find an intercept/slope <span class="math">\((\beta_0, \beta_1)\)</span> combination that minimises the <span class="math">\(\epsilon_i\)</span> for <span class="math">\(i = 1,2,\ldots n\)</span> meaning that our prediction errors are small. The most popular method of achieving this is to compute the sum of the squares of the residuals for <span class="math">\(i = 1,2,\ldots n\)</span> and choose values of <span class="math">\(\beta_0\text{ and }\beta_1\)</span> that minimise this quanity. Mathematically we can write the residual sum of square (RSS) as follows:</p>
+<p><span class="math">\(RSS = \sum_{i=1}^n \epsilon_i^2 \tag{3}\label{3}\)</span></p>
+<p>rearranging <span class="math">\(\eqref{2}\)</span> to make <span class="math">\(\epsilon_i\)</span> the subject:</p>
+<p><span class="math">\(\epsilon_i = y_i - \beta_1 x_i - \beta_0 \tag{4}\label{4}\)</span></p>
+<p>substituting <span class="math">\(\eqref{4}\)</span> into <span class="math">\(\eqref{3}\)</span> we get:</p>
+<p><span class="math">\(RSS = \sum_{i=1}^n (y_i - \beta_1 x_i - \beta_0)^2 \tag{5}\label{5}\)</span></p>
+<p>To minimise <span class="math">\(\eqref{5}\)</span> we differentiate <span class="math">\(RSS\)</span> with respect to both <span class="math">\(\beta_0\)</span> and <span class="math">\(\beta_1\)</span> set the resulting quantity equal to zero and solve the two equations.</p>
 <p>We can make use of the chain rule which states that for a composite function of the form:</p>
-<div class="formula">
-<span class="environment"><span class="arrayrow">
-<span class="arraycell align-r">
-
-</span>
-<span class="arraycell align-l">
-<i>F</i>(<i>x</i>) = <i>f</i>(<i>g</i>(<i>x</i>))
-</span>
-
-</span>
-<span class="arrayrow">
-<span class="arraycell align-r">
- 
-</span>
-<span class="arraycell align-l">
- 
-</span>
-
-</span>
-<span class="arrayrow">
-<span class="arraycell align-r">
-
-</span>
-
-</span>
-</span>
+<div class="math">
+\begin{align*}
+&amp; F(x) = f(g(x)) \\
+\end{align*}
 </div>
 <p>the deriviate is given by</p>
-<p><span class="formula"><i>F</i>’(<i>x</i>) = <i>f</i>’(<i>g</i>(<i>x</i>))<i>g</i>’(<i>x</i>)<span class="unknown">\tag</span>6 <a class="eqnumber" name="6"> </a></span></p>
-<p>Applying <span class="formula"><span class="unknown">\eqref</span>6</span> to <span class="formula"><span class="unknown">\eqref</span>5</span> we get:</p>
-<p><span class="formula"><span class="fraction"><span class="ignored">(</span><span class="numerator">∂<i>RSS</i></span><span class="ignored">)/(</span><span class="denominator">∂<i>β</i><sub>0</sub></span><span class="ignored">)</span></span> =  − 2<span class="limits"><span class="limit">∑</span></span><span class="scripts"><sup class="script"><i>n</i></sup><sub class="script"><i>i</i> = 1</sub></span>(<i>y</i><sub><i>i</i></sub> − <i>β</i><sub>1</sub><i>x</i><sub><i>i</i></sub> − <i>β</i><sub>0</sub>) <a class="eqnumber" name="7"> </a><span class="unknown">\tag</span>7</span></p>
-<p><span class="formula"><span class="fraction"><span class="ignored">(</span><span class="numerator">∂<i>RSS</i></span><span class="ignored">)/(</span><span class="denominator">∂<i>β</i><sub>1</sub></span><span class="ignored">)</span></span> =  − 2<span class="limits"><span class="limit">∑</span></span><span class="scripts"><sup class="script"><i>n</i></sup><sub class="script"><i>i</i> = 1</sub></span><i>x</i><sub><i>i</i></sub>(<i>y</i><sub><i>i</i></sub> − <i>β</i><sub>1</sub><i>x</i><sub><i>i</i></sub> − <i>β</i><sub>0</sub>) <a class="eqnumber" name="8"> </a><span class="unknown">\tag</span>8</span></p>
-<p>We set the above equations equal to zero and solve for <span class="formula"><i>β</i><sub>0</sub></span> and <span class="formula"><i>β</i><sub>1</sub></span> to find the minima. Starting with <span class="formula"><span class="unknown">\eqref</span>7</span>:</p>
-<div class="formula">
-<span class="environment"><span class="arrayrow">
-<span class="arraycell align-r">
-
-</span>
-<span class="arraycell align-l">
-0 =  − 2<span class="limits"><sup class="limit"><i>n</i></sup><span class="limit">⎲</span><span class="limit">⎳</span><sub class="limit"><i>i</i> = 1</sub></span>(<i>y</i><sub><i>i</i></sub> − <i>β</i><sub>1</sub><i>x</i><sub><i>i</i></sub> − <i>β</i><sub>0</sub>)
-</span>
-
-</span>
-<span class="arrayrow">
-<span class="arraycell align-r">
- 
-</span>
-<span class="arraycell align-l">
- 
-</span>
-
-</span>
-<span class="arrayrow">
-<span class="arraycell align-r">
-
-</span>
-<span class="arraycell align-l">
-0 = <span class="limits"><sup class="limit"><i>n</i></sup><span class="limit">⎲</span><span class="limit">⎳</span><sub class="limit"><i>i</i> = 1</sub></span>(<i>y</i><sub><i>i</i></sub> − <i>β</i><sub>1</sub><i>x</i><sub><i>i</i></sub> − <i>β</i><sub>0</sub>)
-</span>
-
-</span>
-<span class="arrayrow">
-<span class="arraycell align-r">
- 
-</span>
-<span class="arraycell align-l">
- 
-</span>
-
-</span>
-<span class="arrayrow">
-<span class="arraycell align-r">
-
-</span>
-<span class="arraycell align-l">
-0 = <span class="limits"><sup class="limit"><i>n</i></sup><span class="limit">⎲</span><span class="limit">⎳</span><sub class="limit"><i>i</i> = 1</sub></span><i>y</i><sub><i>i</i></sub> − <i>β</i><sub>1</sub><span class="limits"><sup class="limit"><i>n</i></sup><span class="limit">⎲</span><span class="limit">⎳</span><sub class="limit"><i>i</i> = 0</sub></span><i>x</i><sub><i>i</i></sub> − <i>n</i><i>β</i><sub>0</sub>
-</span>
-
-</span>
-<span class="arrayrow">
-<span class="arraycell align-r">
- 
-</span>
-<span class="arraycell align-l">
- 
-</span>
-
-</span>
-<span class="arrayrow">
-<span class="arraycell align-r">
-
-</span>
-<span class="arraycell align-l">
-<i>n</i><i>β</i><sub>0</sub> = <span class="limits"><sup class="limit"><i>n</i></sup><span class="limit">⎲</span><span class="limit">⎳</span><sub class="limit"><i>i</i> = 1</sub></span><i>y</i><sub><i>i</i></sub> − <i>β</i><sub>1</sub><span class="limits"><sup class="limit"><i>n</i></sup><span class="limit">⎲</span><span class="limit">⎳</span><sub class="limit"><i>i</i> = 1</sub></span><i>x</i><sub><i>i</i></sub>
-</span>
-
-</span>
-</span>
+<p><span class="math">\(F'(x) = f'(g(x)) g'(x) \tag{6}\label{6}\)</span></p>
+<p>Applying <span class="math">\(\eqref{6}\)</span> to <span class="math">\(\eqref{5}\)</span> we get:</p>
+<p><span class="math">\(\frac{\partial RSS}{\partial \beta_0} = -2 \sum_{i=1}^n (y_i - \beta_1 x_i - \beta_0) \label{7}\tag{7}\)</span></p>
+<p><span class="math">\(\frac{\partial RSS}{\partial \beta_1} = -2 \sum_{i=1}^n x_i (y_i - \beta_1 x_i - \beta_0) \label{8}\tag{8}\)</span></p>
+<p>We set the above equations equal to zero and solve for <span class="math">\(\beta_0\)</span> and <span class="math">\(\beta_1\)</span> to find the minima. Starting with <span class="math">\(\eqref{7}\)</span>:</p>
+<div class="math">
+\begin{align*}
+&amp; 0 = -2 \sum_{i=1}^n (y_i - \beta_1 x_i - \beta_0) \\
+&amp; 0 = \sum_{i=1}^n (y_i - \beta_1 x_i - \beta_0) \\
+&amp; 0 = \sum_{i=1}^n y_i - \beta_1 \sum_{i=0}^n x_i -n \beta_0 \\
+&amp; n \beta_0 = \sum_{i=1}^n y_i - \beta_1 \sum_{i=1}^n x_i
+\end{align*}
 </div>
-<p>making use of <span class="formula"><span class="bar"><i>x</i></span> = <span class="fraction"><span class="ignored">(</span><span class="numerator"><span class="limits"><span class="limit">∑</span></span><span class="scripts"><sup class="script"><i>n</i></sup><sub class="script"><i>i</i> = 1</sub></span><i>x</i><sub><i>i</i></sub></span><span class="ignored">)/(</span><span class="denominator"><i>n</i></span><span class="ignored">)</span></span></span> and <span class="formula"><span class="bar"><i>y</i></span> = <span class="fraction"><span class="ignored">(</span><span class="numerator"><span class="limits"><span class="limit">∑</span></span><span class="scripts"><sup class="script"><i>n</i></sup><sub class="script"><i>i</i> = 1</sub></span><i>y</i><sub><i>i</i></sub></span><span class="ignored">)/(</span><span class="denominator"><i>n</i></span><span class="ignored">)</span></span></span>:</p>
-<div class="formula">
-<span class="environment"><span class="arrayrow">
-<span class="arraycell align-r">
-
-</span>
-<span class="arraycell align-l">
-<i>β</i><sub>0</sub> = <span class="bar"><i>y</i></span> − <i>β</i><sub>1</sub><span class="bar"><i>x</i></span><a class="eqnumber" name="9"> </a><span class="unknown">\tag</span>9
-</span>
-
-</span>
-<span class="arrayrow">
-<span class="arraycell align-r">
- 
-</span>
-<span class="arraycell align-l">
- 
-</span>
-
-</span>
-<span class="arrayrow">
-<span class="arraycell align-r">
-
-</span>
-
-</span>
-</span>
+<p>making use of <span class="math">\(\bar{x} = \frac{\sum_{i=1}^n x_i}{n}\)</span> and <span class="math">\(\bar{y} = \frac{\sum_{i=1}^n y_i}{n}\)</span>:</p>
+<div class="math">
+\begin{align*}
+&amp; \beta_0 = \bar{y} - \beta_1 \bar{x} \label{9}\tag{9} \\
+\end{align*}
 </div>
-<p>Now we repeat the same process for <span class="formula"><i>β</i><sub>1</sub></span>:</p>
-<div class="formula">
-<span class="environment"><span class="arrayrow">
-<span class="arraycell align-r">
-
-</span>
-<span class="arraycell align-l">
-0 =  − 2<span class="limits"><sup class="limit"><i>n</i></sup><span class="limit">⎲</span><span class="limit">⎳</span><sub class="limit"><i>i</i> = 1</sub></span><i>x</i><sub><i>i</i></sub>(<i>y</i><sub><i>i</i></sub> − <i>β</i><sub>1</sub><i>x</i><sub><i>i</i></sub> − <i>β</i><sub>0</sub>)
-</span>
-
-</span>
-<span class="arrayrow">
-<span class="arraycell align-r">
- 
-</span>
-<span class="arraycell align-l">
- 
-</span>
-
-</span>
-<span class="arrayrow">
-<span class="arraycell align-r">
-
-</span>
-<span class="arraycell align-l">
-0 = <span class="limits"><sup class="limit"><i>n</i></sup><span class="limit">⎲</span><span class="limit">⎳</span><sub class="limit"><i>i</i> = 1</sub></span><i>x</i><sub><i>i</i></sub>(<i>y</i><sub><i>i</i></sub> − <i>β</i><sub>1</sub><i>x</i><sub><i>i</i></sub> − <i>β</i><sub>0</sub>)
-</span>
-
-</span>
-</span>
+<p>Now we repeat the same process for <span class="math">\(\beta_{1}\)</span>:</p>
+<div class="math">
+\begin{align*}
+&amp; 0 = -2 \sum_{i=1}^n x_i (y_i - \beta_1 x_i - \beta_0) \\
+&amp; 0 = \sum_{i=1}^n x_i (y_i - \beta_1 x_i - \beta_0)
+\end{align*}
 </div>
-<p>substituting in the value for <span class="formula"><i>β</i><sub>0</sub></span> obtained in <span class="formula"><span class="unknown">\eqref</span>9</span>:</p>
-<div class="formula">
-<span class="environment"><span class="arrayrow">
-<span class="arraycell align-r">
-
-</span>
-<span class="arraycell align-l">
-0 =  − 2<span class="limits"><sup class="limit"><i>n</i></sup><span class="limit">⎲</span><span class="limit">⎳</span><sub class="limit"><i>i</i> = 1</sub></span><i>x</i><sub><i>i</i></sub>(<i>y</i><sub><i>i</i></sub> − <i>β</i><sub>1</sub><i>x</i><sub><i>i</i></sub> − <span class="bar"><i>y</i></span> + <i>β</i><sub>1</sub><span class="bar"><i>x</i></span>)
-</span>
-
-</span>
-<span class="arrayrow">
-<span class="arraycell align-r">
- 
-</span>
-<span class="arraycell align-l">
- 
-</span>
-
-</span>
-<span class="arrayrow">
-<span class="arraycell align-r">
-
-</span>
-<span class="arraycell align-l">
-0 = <span class="limits"><sup class="limit"><i>n</i></sup><span class="limit">⎲</span><span class="limit">⎳</span><sub class="limit"><i>i</i> = 1</sub></span><i>x</i><sub><i>i</i></sub>(<i>y</i><sub><i>i</i></sub> − <span class="bar"><i>y</i></span>) + <i>β</i><sub>1</sub><span class="limits"><sup class="limit"><i>n</i></sup><span class="limit">⎲</span><span class="limit">⎳</span><sub class="limit"><i>i</i> = 1</sub></span><i>x</i><sub><i>i</i></sub>(<span class="bar"><i>x</i></span> − <i>x</i><sub><i>i</i></sub>)
-</span>
-
-</span>
-<span class="arrayrow">
-<span class="arraycell align-r">
- 
-</span>
-<span class="arraycell align-l">
- 
-</span>
-
-</span>
-<span class="arrayrow">
-<span class="arraycell align-r">
-
-</span>
-
-</span>
-<span class="arrayrow">
-<span class="arraycell align-r">
- 
-</span>
-
-</span>
-<span class="arrayrow">
-<span class="arraycell align-r">
-
-</span>
-<span class="arraycell align-l">
-<i>β</i><sub>1</sub> = <span class="fraction"><span class="ignored">(</span><span class="numerator"> − <span class="limits"><sup class="limit"><i>n</i></sup><span class="limit">⎲</span><span class="limit">⎳</span><sub class="limit"><i>i</i> = 1</sub></span><i>x</i><sub><i>i</i></sub>(<i>y</i><sub><i>i</i></sub> − <span class="bar"><i>y</i></span>)</span><span class="ignored">)/(</span><span class="denominator"><span class="limits"><sup class="limit"><i>n</i></sup><span class="limit">⎲</span><span class="limit">⎳</span><sub class="limit"><i>i</i> = 1</sub></span><i>x</i><sub><i>i</i></sub>(<span class="bar"><i>x</i></span> − <i>x</i><sub><i>i</i></sub>)</span><span class="ignored">)</span></span>
-</span>
-
-</span>
-<span class="arrayrow">
-<span class="arraycell align-r">
- 
-</span>
-<span class="arraycell align-l">
- 
-</span>
-
-</span>
-<span class="arrayrow">
-<span class="arraycell align-r">
-
-</span>
-
-</span>
-<span class="arrayrow">
-<span class="arraycell align-r">
- 
-</span>
-
-</span>
-<span class="arrayrow">
-<span class="arraycell align-r">
-
-</span>
-<span class="arraycell align-l">
-<i>β</i><sub>1</sub> = <span class="fraction"><span class="ignored">(</span><span class="numerator"> − <span class="limits"><sup class="limit"><i>n</i></sup><span class="limit">⎲</span><span class="limit">⎳</span><sub class="limit"><i>i</i> = 1</sub></span>(<i>x</i><sub><i>i</i></sub><i>y</i><sub><i>i</i></sub> − <i>x</i><sub><i>i</i></sub><span class="bar"><i>y</i></span>)</span><span class="ignored">)/(</span><span class="denominator"><span class="limits"><sup class="limit"><i>n</i></sup><span class="limit">⎲</span><span class="limit">⎳</span><sub class="limit"><i>i</i> = 1</sub></span>(<i>x</i><sub><i>i</i></sub><span class="bar"><i>x</i></span> − <i>x</i><span class="scripts"><sup class="script">2</sup><sub class="script"><i>i</i></sub></span>)</span><span class="ignored">)</span></span>
-</span>
-
-</span>
-<span class="arrayrow">
-<span class="arraycell align-r">
- 
-</span>
-<span class="arraycell align-l">
- 
-</span>
-
-</span>
-<span class="arrayrow">
-<span class="arraycell align-r">
-
-</span>
-
-</span>
-<span class="arrayrow">
-<span class="arraycell align-r">
- 
-</span>
-
-</span>
-<span class="arrayrow">
-<span class="arraycell align-r">
-
-</span>
-<span class="arraycell align-l">
-<i>β</i><sub>1</sub> = <span class="fraction"><span class="ignored">(</span><span class="numerator"><span class="bar"><i>y</i></span><span class="limits"><sup class="limit"><i>n</i></sup><span class="limit">⎲</span><span class="limit">⎳</span><sub class="limit"><i>i</i> = 1</sub></span><i>x</i><sub><i>i</i></sub> − <span class="limits"><sup class="limit"><i>N</i></sup><span class="limit">⎲</span><span class="limit">⎳</span><sub class="limit"><i>i</i> = 1</sub></span><i>x</i><sub><i>i</i></sub><i>y</i><sub><i>i</i></sub></span><span class="ignored">)/(</span><span class="denominator"><span class="limits"><sup class="limit"><i>n</i></sup><span class="limit">⎲</span><span class="limit">⎳</span><sub class="limit"><i>i</i> = 1</sub></span><i>x</i><sub><i>i</i></sub> − <span class="limits"><sup class="limit"><i>n</i></sup><span class="limit">⎲</span><span class="limit">⎳</span><sub class="limit"><i>i</i> = 1</sub></span><i>x</i><span class="scripts"><sup class="script">2</sup><sub class="script"><i>i</i></sub></span></span><span class="ignored">)</span></span>
-</span>
-
-</span>
-<span class="arrayrow">
-<span class="arraycell align-r">
- 
-</span>
-<span class="arraycell align-l">
- 
-</span>
-
-</span>
-<span class="arrayrow">
-<span class="arraycell align-r">
-
-</span>
-
-</span>
-<span class="arrayrow">
-<span class="arraycell align-r">
- 
-</span>
-
-</span>
-<span class="arrayrow">
-<span class="arraycell align-r">
-
-</span>
-<span class="arraycell align-l">
-<i>β</i><sub>1</sub> = <span class="fraction"><span class="ignored">(</span><span class="numerator"><i>n</i><span class="bar"><i>x</i></span><span class="bar"><i>y</i></span> − <span class="limits"><sup class="limit"><i>n</i></sup><span class="limit">⎲</span><span class="limit">⎳</span><sub class="limit"><i>i</i> = 1</sub></span><i>x</i><sub><i>i</i></sub><i>y</i><sub><i>i</i></sub></span><span class="ignored">)/(</span><span class="denominator"><i>n</i><span class="bar"><i>x</i></span><sup>2</sup> − <span class="limits"><sup class="limit"><i>n</i></sup><span class="limit">⎲</span><span class="limit">⎳</span><sub class="limit"><i>i</i> = 1</sub></span><i>x</i><span class="scripts"><sup class="script">2</sup><sub class="script"><i>i</i></sub></span></span><span class="ignored">)</span></span>
-</span>
-
-</span>
-</span>
+<p>substituting in the value for <span class="math">\(\beta_0\)</span> obtained in <span class="math">\(\eqref{9}\)</span>:</p>
+<div class="math">
+\begin{align*}
+&amp; 0 = -2 \sum_{i=1}^n x_i (y_i - \beta_1 x_i - \bar{y} + \beta_1 \bar{x}) \\
+&amp; 0 = \sum_{i=1}^n x_i (y_i - \bar{y}) + \beta_1 \sum_{i=1}^n x_i (\bar{x} - x_i) \\
+\\
+&amp; \beta_1 = \frac{-\sum_{i=1}^n x_i(y_i - \bar{y})}{\sum_{i=1}^n x_i(\bar{x} - x_i)} \\
+\\
+&amp; \beta_1 = \frac{-\sum_{i=1}^n (x_i y_i - x_i \bar{y})}{\sum_{i=1}^n (x_i \bar{x} - x_i^2)} \\
+\\
+&amp; \beta_1 = \frac{\bar{y} \sum_{i=1}^n x_i - \sum_{i=1}^N x_i y_i}{\sum_{i=1}^n x_i - \sum_{i=1}^n x_i^2} \\
+\\
+&amp; \beta_1 = \frac{n \bar{x} \bar{y} - \sum_{i=1}^n x_i y_i}{n \bar{x}^2 - \sum_{i=1}^n x_i^2}
+\end{align*}
 </div>
-<p>We have now derived least squares estimates for <span class="formula"><i>β</i><sub>0</sub></span> and <span class="formula"><i>β</i><sub>1</sub></span> using simple linear regression. Armed with these we can generate parameter estimates for the cherry tree regression:</p>
+<p>We have now derived least squares estimates for <span class="math">\(\beta_0\)</span> and <span class="math">\(\beta_1\)</span> using simple linear regression. Armed with these we can generate parameter estimates for the cherry tree regression:</p>
 <div class="highlight"><pre><span></span><span class="n">n</span> <span class="o">&lt;-</span> <span class="nf">nrow</span><span class="p">(</span><span class="n">trees</span><span class="p">)</span>
 <span class="n">x_bar</span> <span class="o">&lt;-</span> <span class="nf">mean</span><span class="p">(</span><span class="n">trees</span><span class="o">$</span><span class="n">Girth</span><span class="p">)</span>
 <span class="n">y_bar</span> <span class="o">&lt;-</span> <span class="nf">mean</span><span class="p">(</span><span class="n">trees</span><span class="o">$</span><span class="n">Volume</span><span class="p">)</span>
@@ -446,7 +184,68 @@
 <span class="m">-36.943459</span>    <span class="m">5.065856</span>
 </pre></div>
 <p>which match our derived estimates.</p>
+<script type='text/javascript'>if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
 
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
       </div>
       <div class="back-to-top">
           <a href="#top">back to top</a>

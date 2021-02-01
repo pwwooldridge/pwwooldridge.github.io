@@ -99,35 +99,15 @@
 </div>
 <p>We can encode community information to this type of plot by colouring the nodes according to the communitiy memberships.</p>
 <p>As Mike Bostock <a class="reference external" href="https://bost.ocks.org/mike/miserables/">showed</a>, another interesting way to visualise a network is with the adjacency matrix. As a reminder the Adjacency matrix is defined as follows:</p>
-<div class="formula">
-<i>A</i><sub><i>ij</i></sub> = <span class="array"><span class="arrayrow"><span class="bracket align-left">⎧</span></span><span class="arrayrow"><span class="bracket align-left">⎨</span></span><span class="arrayrow"><span class="bracket align-left">⎩</span></span></span><span class="array"><span class="arrayrow">
-<span class="arraycell align-l">
-1
-</span>
-<span class="arraycell align-r">
- : <span class="text"> if </span><i>i</i><span class="text"> connected to </span><i>j</i>
-</span>
-
-</span>
-<span class="arrayrow">
-<span class="arraycell align-l">
- 
-</span>
-<span class="arraycell align-r">
- 
-</span>
-
-</span>
-<span class="arrayrow">
-<span class="arraycell align-l">
-0
-</span>
-<span class="arraycell align-r">
- : <span class="text"> otherwise</span>
-</span>
-
-</span>
-</span><span class="emptydot"></span>
+<div class="math">
+\begin{equation*}
+A_{ij} = \left\{
+\begin{array}{lr}
+1 &amp; : \text{if }i\text{ connected to }j\\
+0 &amp; : \text{otherwise}
+\end{array}
+\right.
+\end{equation*}
 </div>
 <p>The usefullness of the visualisation of the adjacency matrix depends largely on the order of the rows and columns in the plot. By finding communities in the network, we can reorder the rows and columns of the adjacency matrix accordingly to produce a plot that looks as follows:</p>
 <div class="figure">
@@ -247,7 +227,68 @@
 <span class="nf">dev.off</span><span class="p">()</span>
 </pre></div>
 <p>We have shown how using the atomic plot functions in R we can create some nice looking visualisations of network data. The full code is available at <a class="reference external" href="https://github.com/pwwooldridge/les-mis-adjacency-vis">this github repo</a></p>
+<script type='text/javascript'>if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
 
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+
+    var configscript = document.createElement('script');
+    configscript.type = 'text/x-mathjax-config';
+    configscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        availableFonts: ['STIX', 'TeX']," +
+        "        preferredFont: 'STIX'," +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
       </div>
       <div class="back-to-top">
           <a href="#top">back to top</a>
