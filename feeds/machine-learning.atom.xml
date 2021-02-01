@@ -1,0 +1,578 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Peter Wooldridge's Blog - Machine Learning</title><link href="https://peterwooldridge.me/" rel="alternate"></link><link href="https://peterwooldridge.me/feeds/machine-learning.atom.xml" rel="self"></link><id>https://peterwooldridge.me/</id><updated>2019-09-04T11:56:00+01:00</updated><subtitle>I'm a Data Scientist with Type 1 Diabetes. Most of the time I'll write about one or the other.</subtitle><entry><title>Support Vector Machines (Part 1)</title><link href="https://peterwooldridge.me/svm_1.html" rel="alternate"></link><published>2019-09-04T11:56:00+01:00</published><updated>2019-09-04T11:56:00+01:00</updated><author><name>Peter Wooldridge</name></author><id>tag:peterwooldridge.me,2019-09-04:/svm_1.html</id><summary type="html">&lt;p&gt;Support Vector Machines (SVMs) are a versatile classification algorithm that should be a staple in every data scientists toolbox. In this first of a series of posts, my goal is to describe the intuition behind SVMs what makes them such a powerful technique for classification.&lt;/p&gt;
+&lt;p&gt;Suppose we want to classify …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Support Vector Machines (SVMs) are a versatile classification algorithm that should be a staple in every data scientists toolbox. In this first of a series of posts, my goal is to describe the intuition behind SVMs what makes them such a powerful technique for classification.&lt;/p&gt;
+&lt;p&gt;Suppose we want to classify the red dots from the blue in the figure below. Plotted on the axes are an orange, black and green hyperplane. All three perfectly separate the red and blue classes. So which one is the best choice to split our data?&lt;/p&gt;
+&lt;p align="center"&gt;
+   &lt;img src="images/multiple_hyperplanes.png" alt="drawing" width="500"/&gt;  
+&lt;/p&gt;
+
+&lt;p&gt;The hardest points to classify are those sat closest to the hyperplane. Therefore, a decision boundary that creates a large gap between the classes is preferable because new data points are more likely to be correctly classified. The SVM defines this criterion as finding a decision boundary that is maximally far away from any data point. The distance between the decision boundary and the closest data point determines the margin of the classifier.&lt;/p&gt;
+&lt;p&gt;The figure below shows the data being separated by the largest margin decision boundary. The maximum margin decision boundary is defined by two parallel hyperplanes, one that goes through the positive data points closest to the decision boundary and one that goes through the negative points closest to the decision boundary. These are known as the support vectors.&lt;/p&gt;
+&lt;p align="center"&gt;
+   &lt;img src="images/maximal_margin.png" alt="Drawing" width="500"/&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Mathematically, we can summarise what we have described so far.&lt;/p&gt;
+&lt;p&gt;Suppose we are given $N$ training vectors ${(x^{(i)}, y^{(i)}); i=0, \dots, N}, \text{ where } x ∈ \mathbb{R}^{D}, y ∈ {−1, 1}$. We want to learn a set of weights $w$ and $b$ such that the linear combination of weights and input data predicts the value of y.&lt;/p&gt;
+&lt;p&gt;$$
+h_{w,b}(x) =
+     \begin{cases}
+       1 &amp;amp;\quad\text{if }w^{T} x + b &amp;gt;= 0\
+       -1 &amp;amp;\quad\text{otherwise}
+     \end{cases}
+$$&lt;/p&gt;
+&lt;p&gt;In the two dimensional case, our decision boundary $w^{T} x + b = 0$ is simply a line with the regions above and below it represented by $w^{T}x + b &amp;gt; 0$ and $w^{T}x + b &amp;lt; 0$.&lt;/p&gt;
+&lt;p align="center"&gt;
+   &lt;img src="images/decision_boundary.png" alt="Drawing" width="500"/&gt;
+&lt;/p&gt;
+
+&lt;h3&gt;Distance between points and the hyperplane&lt;/h3&gt;
+&lt;p&gt;We know that we want to find the values of $w$ and $b$ that provide the widest margin. Therefore, we need a way to measure the distance between a given point and the hyperplane. Let's define $\gamma^{(i)}$ to be the distance between the $i^{th}$ training observation $x^{(i)}$ and our hyperplane.&lt;/p&gt;
+&lt;p&gt;Consider the decision boundary shown in the figure below. If we define $x_{0}$ to be a vector on the hyperplane. Then the $x^{(i)} - x_{0}$ represents a vector from $x^{(i)}$ to the hyperplane. The dotted black line from $x^{(i)}$ to the hyperplane represents the vector whose distance is the shortest to the hyperplane. This dotted line forms a right-angled triangle with the hyperplane and we can label the unknown angle at the top of our triangle $\theta$. The vector $w^{*}$ represents the unit vector perpendicular to the hyperplane.&lt;/p&gt;
+&lt;p align="center"&gt;
+   &lt;img src="images/svm_distance_to_hyperplane.png" alt="Drawing" width="500"/&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Using trigonometry, and setting $f = x^{(i)} - x_{0}$:&lt;/p&gt;
+&lt;p&gt;$\cos{\theta} = \dfrac{\text{adjacent}}{\text{hypothenuse}}\
+\implies \cos{\theta} = \dfrac{\gamma^{(i)}}{|f|}\
+\implies |f|\cos{\theta} = \gamma^{(i)}\
+\implies \dfrac{|w^{&lt;em&gt;}|}{|w^{&lt;/em&gt;}|}|f|\cos{\theta} = \gamma^{(i)}\
+\implies fw^{*} = \gamma^{(i)}\
+\implies \dfrac{(x^{(i)} - x_{0})w}{|w|} = \gamma^{(i)}$&lt;/p&gt;
+&lt;p&gt;and then using $wx_{0} = -b$, since $x_{0}$ lies on the hyperplane, we have:&lt;/p&gt;
+&lt;p&gt;$\implies \dfrac{wx^{(i)} + b}{|w|} = \gamma^{(i)}$&lt;/p&gt;
+&lt;p&gt;We will see below how this distance is used in the definitions of the Functional and Geometric margins defined below.&lt;/p&gt;
+&lt;h3&gt;Functional and Geometric Margins&lt;/h3&gt;
+&lt;p&gt;Given a training example $(x^{(i)}, y^{(i)})$, we define the functional margin of $(w, b)$ with
+respect to a training example as:&lt;/p&gt;
+&lt;p&gt;$\hat{\gamma}^{(i)} = y^{(i)}(w^{T} x^{(i)} + b)$&lt;/p&gt;
+&lt;p&gt;The functional margin serves as a test function to determine whether a given training point is classified correctly. For a training example to be correctly classified $\hat{\gamma}^{(i)} \geq 0$.&lt;/p&gt;
+&lt;p&gt;One problem with the functional margin is that it can be affected by an arbitrary scaling of $w$ and $b$. That brings us onto the definition of the geometric margin:&lt;/p&gt;
+&lt;p&gt;$\gamma^{(i)} = \hat{\gamma}^{(i)}/|w|$&lt;/p&gt;
+&lt;p&gt;The geometric margin is telling you not only if a point is properly classified or not, but the magnitude of that distance in term of units of |w|. It is invariant to any scaling of $w$ or $b$ which will be important later. The geometric margin should look familiar as the distance between a training point and our hyperplane that we derived in the previous section multiplied by the label $y^{(i)}$.&lt;/p&gt;
+&lt;p&gt;Given a training set&lt;/p&gt;
+&lt;p&gt;$S = {(x^{(i)}, y^{(i)}); i=1 \dotsc n}$&lt;/p&gt;
+&lt;p&gt;we define the geometric margin of $(w,b)$ with respect to $S$ to be the smallest of the geometric margins on the individual training examples:&lt;/p&gt;
+&lt;p&gt;$\gamma = \min_{i=1 \dotsc n} \gamma ^ {(i)}$&lt;/p&gt;
+&lt;h3&gt;The optimal margin classifier&lt;/h3&gt;
+&lt;p&gt;In order to find the widest margin classifier, we want to maximise the geometric margin whilst still correctly classifying all our training examples. This can be formulated as the following optimisation problem:&lt;/p&gt;
+&lt;p&gt;$\max_{w, b} \gamma \quad$ s.t. $\quad \dfrac{y^{(i)}(w^{T} x^{(i)} + b)}{|w|}\geq \gamma \text{ for } i=1 \dotsc n$&lt;/p&gt;
+&lt;p&gt;It turns out that the above problem is hard to optimise. Therefore, we convert it to any equivalent problem that happends to be easier to solve. For any solution to satisfy the above equation, any positively scaled multiple will also, due to the fact that the geometric margin is invariant to scaling of $w$.&lt;/p&gt;
+&lt;p&gt;Therefore, we can scale $w$ in such a way that $|w| = \dfrac{1}{\gamma}$. Also note that maximising $\dfrac{1}{|w|}$ is the same as minimising $|w|$ which is the same as minimising $\dfrac{1}{2}|w|^{2}$.&lt;/p&gt;
+&lt;p&gt;Thus, we can reformulate the optimisation problem as:  &lt;/p&gt;
+&lt;p&gt;$\min_{w, b} \dfrac{1}{2}|w|^{2} \quad$ s.t. $\quad y^{(i)}(w^{T} x^{(i)} + b)\geq 1 \text{ for } i=1 \dotsc n$&lt;/p&gt;
+&lt;p&gt;This optimisation problem is known as a quadratic optimisation problem which is easier to solve. The solution to this optimisation problem will be the topic for a future post.&lt;/p&gt;</content></entry><entry><title>Visualising networks in R using atomic plot functions</title><link href="https://peterwooldridge.me/heatmaps_in_r.html" rel="alternate"></link><published>2017-09-28T21:13:00+01:00</published><updated>2017-09-28T21:13:00+01:00</updated><author><name>Peter Wooldridge</name></author><id>tag:peterwooldridge.me,2017-09-28:/heatmaps_in_r.html</id><summary type="html">&lt;p&gt;One of the most natural ways to visualise a social network is a network diagram which consists of a series of dots representing the entity in the network and lines representing the relationships between the entities. This type of visualisation looks as follows:&lt;/p&gt;
+&lt;div class="figure"&gt;
+&lt;img alt="" src="images/standard-network-plot.png" /&gt;
+&lt;/div&gt;
+&lt;p&gt;We can encode community information to this …&lt;/p&gt;</summary><content type="html">&lt;p&gt;One of the most natural ways to visualise a social network is a network diagram which consists of a series of dots representing the entity in the network and lines representing the relationships between the entities. This type of visualisation looks as follows:&lt;/p&gt;
+&lt;div class="figure"&gt;
+&lt;img alt="" src="images/standard-network-plot.png" /&gt;
+&lt;/div&gt;
+&lt;p&gt;We can encode community information to this type of plot by colouring the nodes according to the communitiy memberships.&lt;/p&gt;
+&lt;p&gt;As Mike Bostock &lt;a class="reference external" href="https://bost.ocks.org/mike/miserables/"&gt;showed&lt;/a&gt;, another interesting way to visualise a network is with the adjacency matrix. As a reminder the Adjacency matrix is defined as follows:&lt;/p&gt;
+&lt;div class="formula"&gt;
+&lt;i&gt;A&lt;/i&gt;&lt;sub&gt;&lt;i&gt;ij&lt;/i&gt;&lt;/sub&gt; = &lt;span class="array"&gt;&lt;span class="arrayrow"&gt;&lt;span class="bracket align-left"&gt;⎧&lt;/span&gt;&lt;/span&gt;&lt;span class="arrayrow"&gt;&lt;span class="bracket align-left"&gt;⎨&lt;/span&gt;&lt;/span&gt;&lt;span class="arrayrow"&gt;&lt;span class="bracket align-left"&gt;⎩&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="array"&gt;&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-l"&gt;
+1
+&lt;/span&gt;
+&lt;span class="arraycell align-r"&gt;
+ : &lt;span class="text"&gt; if &lt;/span&gt;&lt;i&gt;i&lt;/i&gt;&lt;span class="text"&gt; connected to &lt;/span&gt;&lt;i&gt;j&lt;/i&gt;
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-l"&gt;
+ 
+&lt;/span&gt;
+&lt;span class="arraycell align-r"&gt;
+ 
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-l"&gt;
+0
+&lt;/span&gt;
+&lt;span class="arraycell align-r"&gt;
+ : &lt;span class="text"&gt; otherwise&lt;/span&gt;
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;/span&gt;&lt;span class="emptydot"&gt;&lt;/span&gt;
+&lt;/div&gt;
+&lt;p&gt;The usefullness of the visualisation of the adjacency matrix depends largely on the order of the rows and columns in the plot. By finding communities in the network, we can reorder the rows and columns of the adjacency matrix accordingly to produce a plot that looks as follows:&lt;/p&gt;
+&lt;div class="figure"&gt;
+&lt;img alt="" src="images/lesmis.png" /&gt;
+&lt;/div&gt;
+&lt;p&gt;In this post I show how to create the above plot using atomic plot functions in R. The coloured blocks down the diagonal of the plot represent the different communities in the network.&lt;/p&gt;
+&lt;p&gt;To get started, the first thing we need is some data in a matrix object. We load the same Les Misérables data as used for the visualisation &lt;a class="reference external" href="https://bost.ocks.org/mike/miserables/"&gt;here&lt;/a&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nf"&gt;library&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;jsonlite&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="nf"&gt;library&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;igraph&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="n"&gt;json_data&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="nf"&gt;fromJSON&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;https://bost.ocks.org/mike/miserables/miserables.json&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The &lt;code&gt;fromJSON&lt;/code&gt; function reads the les miserables data into a list containing information about the nodes and edges in the graph. We extract two fields from the list, a vector of character names and the edge data&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;characters&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="n"&gt;json_data[[1]]&lt;/span&gt;&lt;span class="o"&gt;$&lt;/span&gt;&lt;span class="n"&gt;name&lt;/span&gt;
+&lt;span class="n"&gt;edges&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="n"&gt;json_data[[2]]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;We can view these two objects:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nf"&gt;head&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;characters&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;[1]&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Myriel&amp;quot;&lt;/span&gt;          &lt;span class="s"&gt;&amp;quot;Napoleon&amp;quot;&lt;/span&gt;        &lt;span class="s"&gt;&amp;quot;Mlle.Baptistine&amp;quot;&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Mme.Magloire&amp;quot;&lt;/span&gt;
+&lt;span class="n"&gt;[5]&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;CountessdeLo&amp;quot;&lt;/span&gt;    &lt;span class="s"&gt;&amp;quot;Geborand&amp;quot;&lt;/span&gt;
+
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nf"&gt;head&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;edges&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+  &lt;span class="n"&gt;source&lt;/span&gt; &lt;span class="n"&gt;target&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt;
+&lt;span class="m"&gt;1&lt;/span&gt;      &lt;span class="m"&gt;1&lt;/span&gt;      &lt;span class="m"&gt;0&lt;/span&gt;     &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;span class="m"&gt;2&lt;/span&gt;      &lt;span class="m"&gt;2&lt;/span&gt;      &lt;span class="m"&gt;0&lt;/span&gt;     &lt;span class="m"&gt;8&lt;/span&gt;
+&lt;span class="m"&gt;3&lt;/span&gt;      &lt;span class="m"&gt;3&lt;/span&gt;      &lt;span class="m"&gt;0&lt;/span&gt;    &lt;span class="m"&gt;10&lt;/span&gt;
+&lt;span class="m"&gt;4&lt;/span&gt;      &lt;span class="m"&gt;3&lt;/span&gt;      &lt;span class="m"&gt;2&lt;/span&gt;     &lt;span class="m"&gt;6&lt;/span&gt;
+&lt;span class="m"&gt;5&lt;/span&gt;      &lt;span class="m"&gt;4&lt;/span&gt;      &lt;span class="m"&gt;0&lt;/span&gt;     &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;span class="m"&gt;6&lt;/span&gt;      &lt;span class="m"&gt;5&lt;/span&gt;      &lt;span class="m"&gt;0&lt;/span&gt;     &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The &lt;code&gt;edges&lt;/code&gt; object contains information about which node (source column) is connected to which (target column) and the co-occurence number (value column). This a succint way to represent a matrix as we only have rows for the non-zero matrix elements. Representing a matrix in this way is known as Triplet representation.&lt;/p&gt;
+&lt;p&gt;Next, we convert each of the numeric columns of &lt;code&gt;edges&lt;/code&gt; into character names by iterating through each row of &lt;code&gt;edges&lt;/code&gt; and replacing the &lt;code&gt;source&lt;/code&gt; and &lt;code&gt;target&lt;/code&gt; numbers with the name of the character at that index of the characters array. We add one to the index to account for the fact that R indexes from one not zero.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;edges_w_names&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="nf"&gt;t&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;apply&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;edges&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;MARGIN&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nf"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="n"&gt;src_idx&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="nf"&gt;as.numeric&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x[&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;source&amp;quot;&lt;/span&gt;&lt;span class="n"&gt;]&lt;/span&gt;&lt;span class="m"&gt;+1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+  &lt;span class="n"&gt;dest_idx&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="nf"&gt;as.numeric&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x[&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;target&amp;quot;&lt;/span&gt;&lt;span class="n"&gt;]&lt;/span&gt;&lt;span class="m"&gt;+1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+  &lt;span class="nf"&gt;c&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;characters[src_idx]&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;characters[dest_idx]&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;x[&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;value&amp;quot;&lt;/span&gt;&lt;span class="n"&gt;]&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;}))&lt;/span&gt;
+&lt;span class="n"&gt;edges_w_names&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="nf"&gt;as.data.frame&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;edges_w_names&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;stringsAsFactors&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;F&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="nf"&gt;colnames&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;edges_w_names&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="nf"&gt;c&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;source&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;target&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;value&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;edges_w_names&lt;/span&gt;&lt;span class="o"&gt;$&lt;/span&gt;&lt;span class="n"&gt;source&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="nf"&gt;as.character&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;edges_w_names&lt;/span&gt;&lt;span class="o"&gt;$&lt;/span&gt;&lt;span class="n"&gt;source&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;edges_w_names&lt;/span&gt;&lt;span class="o"&gt;$&lt;/span&gt;&lt;span class="n"&gt;target&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="nf"&gt;as.character&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;edges_w_names&lt;/span&gt;&lt;span class="o"&gt;$&lt;/span&gt;&lt;span class="n"&gt;target&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;edges_w_names&lt;/span&gt;&lt;span class="o"&gt;$&lt;/span&gt;&lt;span class="n"&gt;value&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="nf"&gt;as.numeric&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;edges_w_names&lt;/span&gt;&lt;span class="o"&gt;$&lt;/span&gt;&lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code&gt;edges_w_names&lt;/code&gt; is a three column data.frame that looks as follows:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nf"&gt;head&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;edges_w_names&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+           &lt;span class="n"&gt;source&lt;/span&gt;          &lt;span class="n"&gt;target&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt;
+&lt;span class="m"&gt;1&lt;/span&gt;        &lt;span class="n"&gt;Napoleon&lt;/span&gt;          &lt;span class="n"&gt;Myriel&lt;/span&gt;     &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;span class="m"&gt;2&lt;/span&gt; &lt;span class="n"&gt;Mlle.Baptistine&lt;/span&gt;          &lt;span class="n"&gt;Myriel&lt;/span&gt;     &lt;span class="m"&gt;8&lt;/span&gt;
+&lt;span class="m"&gt;3&lt;/span&gt;    &lt;span class="n"&gt;Mme.Magloire&lt;/span&gt;          &lt;span class="n"&gt;Myriel&lt;/span&gt;    &lt;span class="m"&gt;10&lt;/span&gt;
+&lt;span class="m"&gt;4&lt;/span&gt;    &lt;span class="n"&gt;Mme.Magloire&lt;/span&gt; &lt;span class="n"&gt;Mlle.Baptistine&lt;/span&gt;     &lt;span class="m"&gt;6&lt;/span&gt;
+&lt;span class="m"&gt;5&lt;/span&gt;    &lt;span class="n"&gt;CountessdeLo&lt;/span&gt;          &lt;span class="n"&gt;Myriel&lt;/span&gt;     &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;span class="m"&gt;6&lt;/span&gt;        &lt;span class="n"&gt;Geborand&lt;/span&gt;          &lt;span class="n"&gt;Myriel&lt;/span&gt;     &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Now we convert from the character name matrix in Triplet representation into a fully dense matrix object. In order to do this we make use of the &lt;code&gt;graph.data.frame&lt;/code&gt; object from the igraph package. The &lt;code&gt;get.adjacency&lt;/code&gt; function is builds a dense matrix from the igraph object. Because the edges in our network are un-directed the adjacency matrix will be a symmetric matrix&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;gdf&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="nf"&gt;graph.data.frame&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;edges_w_names&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;directed&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;F&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;adj_mat&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="nf"&gt;get.adjacency&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;gdf&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;sparse&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;F&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;attr&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;value&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Now we have the igraph &lt;code&gt;gdf&lt;/code&gt; object, we can use it to detect communities in our network. There are several clustering routines built into igraph. Here we use the &lt;code&gt;cluster_infomap&lt;/code&gt; function which returns amongst other things an object containing membership attributes for each node in the graph&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# cluster graph&lt;/span&gt;
+&lt;span class="n"&gt;members&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="n"&gt;igraph&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="nf"&gt;cluster_infomap&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;gdf&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;$&lt;/span&gt;&lt;span class="n"&gt;membership&lt;/span&gt;
+&lt;span class="c1"&gt;# how many communities are there&lt;/span&gt;
+&lt;span class="n"&gt;n_cluster&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="nf"&gt;length&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;unique&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;members&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+
+&lt;span class="c1"&gt;# reorder accordign to cluster memberships&lt;/span&gt;
+&lt;span class="n"&gt;adj_mat&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="n"&gt;adj_mat&lt;/span&gt;&lt;span class="nf"&gt;[order&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;members&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="nf"&gt;order&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;members&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="n"&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Now we're ready to create the actual plot. I've added comments into the code below to try and better explain what's happening&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# open a png handle&lt;/span&gt;
+&lt;span class="nf"&gt;png&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;lesmis.png&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;width&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;7000&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;height&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;7000&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c1"&gt;# set up plot parameters&lt;/span&gt;
+&lt;span class="nf"&gt;par&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;bg&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;black&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="n"&gt;mar&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nf"&gt;c&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="m"&gt;50&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="m"&gt;50&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="m"&gt;50&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="m"&gt;50&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+    &lt;span class="n"&gt;family&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;Roboto Light&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="n"&gt;col&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;white&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="n"&gt;col.main&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;white&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="n"&gt;ps&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;300&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c1"&gt;# create an empty plot (use axis=F so we can customise axis later)&lt;/span&gt;
+&lt;span class="nf"&gt;plot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;axes&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;F&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+     &lt;span class="m"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+     &lt;span class="n"&gt;type&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;n&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+     &lt;span class="n"&gt;xlim&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nf"&gt;c&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nf"&gt;ncol&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;adj_mat&lt;/span&gt;&lt;span class="p"&gt;)),&lt;/span&gt;
+     &lt;span class="n"&gt;ylim&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nf"&gt;c&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nf"&gt;ncol&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;adj_mat&lt;/span&gt;&lt;span class="p"&gt;)),&lt;/span&gt;
+     &lt;span class="n"&gt;main&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Les Misérables Co-occurance Matrix&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c1"&gt;# define community colours&lt;/span&gt;
+&lt;span class="n"&gt;cluster_cols&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="nf"&gt;categorical_pal&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n_cluster&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c1"&gt;# iterate over each row and column of adjacency matrix and draw rectangles onto the plot&lt;/span&gt;
+&lt;span class="nf"&gt;lapply&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="nf"&gt;nrow&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;adj_mat&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="nf"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="nf"&gt;lapply&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="nf"&gt;ncol&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;adj_mat&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="nf"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="c1"&gt;# each entry in matrix is an edge so if communities differ pick the smallest&lt;/span&gt;
+    &lt;span class="n"&gt;cluster_no&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="nf"&gt;min&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;sort&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;members&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="n"&gt;[j]&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nf"&gt;sort&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;members&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="n"&gt;[i]&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="c1"&gt;# draw squares on the plot&lt;/span&gt;
+    &lt;span class="nf"&gt;rect&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+      &lt;span class="n"&gt;xleft&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="m"&gt;.5&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="n"&gt;xright&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="m"&gt;.5&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="n"&gt;ytop&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="m"&gt;.5&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="n"&gt;ybottom&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="m"&gt;.5&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="n"&gt;pch&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;+&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="n"&gt;cex&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;.5&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="n"&gt;col&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nf"&gt;ifelse&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;adj_mat[i&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;j]&lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="m"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;black&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;cluster_cols[cluster_no]&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="p"&gt;)})&lt;/span&gt;
+&lt;span class="p"&gt;})&lt;/span&gt;
+
+&lt;span class="c1"&gt;# draw the x and y axis with the character names&lt;/span&gt;
+&lt;span class="nf"&gt;axis&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;tick&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;T&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;side&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;labels&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nf"&gt;colnames&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;adj_mat&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="n"&gt;at&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="nf"&gt;nrow&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;adj_mat&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="n"&gt;col&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;white&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;col.ticks&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;white&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;col.axis&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;white&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;las&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;cex.axis&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;0.2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="nf"&gt;axis&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;tick&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;T&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;side&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;labels&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nf"&gt;rownames&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;adj_mat&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="n"&gt;at&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="nf"&gt;ncol&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;adj_mat&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="n"&gt;col&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;white&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;col.ticks&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;white&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;col.axis&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;white&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;las&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;cex.axis&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;0.2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c1"&gt;# add a grid to the plot&lt;/span&gt;
+&lt;span class="nf"&gt;abline&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;h&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="nf"&gt;ncol&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;adj_mat&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="n"&gt;v&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="nf"&gt;ncol&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;adj_mat&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="n"&gt;lty&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;3&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c1"&gt;# close the plot device (i.e. write the png to disk)&lt;/span&gt;
+&lt;span class="nf"&gt;dev.off&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;We have shown how using the atomic plot functions in R we can create some nice looking visualisations of network data. The full code is available at &lt;a class="reference external" href="https://github.com/pwwooldridge/les-mis-adjacency-vis"&gt;this github repo&lt;/a&gt;&lt;/p&gt;
+</content><category term="R"></category><category term="networks"></category><category term="visualisation"></category></entry><entry><title>Linear Regression from first principles</title><link href="https://peterwooldridge.me/linear_regression.html" rel="alternate"></link><published>2017-09-12T21:46:00+01:00</published><updated>2017-09-12T21:46:00+01:00</updated><author><name>Peter Wooldridge</name></author><id>tag:peterwooldridge.me,2017-09-12:/linear_regression.html</id><summary type="html">&lt;p&gt;Linear regression allows one to model a dependent variable with the best straight line fit to a set of predictor variables. In the simplest scenario we have a single predictor variable. This is called simple linear regression.&lt;/p&gt;
+&lt;p&gt;As an example let's take the trees dataset provided by the datasets package …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Linear regression allows one to model a dependent variable with the best straight line fit to a set of predictor variables. In the simplest scenario we have a single predictor variable. This is called simple linear regression.&lt;/p&gt;
+&lt;p&gt;As an example let's take the trees dataset provided by the datasets package in R. The data consists of measurements of girth, height and volume of 31 felled black cherry trees. Suppose we wish to try and predict the volume of a black cherry tree from its girth. To begin with we can plot the two variables using the following command:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nf"&gt;plot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;trees&lt;/span&gt;&lt;span class="o"&gt;$&lt;/span&gt;&lt;span class="n"&gt;Girth&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;trees&lt;/span&gt;&lt;span class="o"&gt;$&lt;/span&gt;&lt;span class="n"&gt;Volume&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;xlab&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Girth (inches)&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ylab&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Volume (cubic feet)&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="figure"&gt;
+&lt;img alt="" src="https://peterwooldridge.me/tree_girths.png" /&gt;
+&lt;/div&gt;
+&lt;p&gt;The data certainly looks to have a linear relationship. A straight line equation in 2 dimensions can be defined by two variables namely the slope and intercept. Different choices for these parameters will produce different best fit lines as shown in the plot below:&lt;/p&gt;
+&lt;div class="figure"&gt;
+&lt;img alt="" src="https://peterwooldridge.me/possible_linear_fits.png" /&gt;
+&lt;/div&gt;
+&lt;p&gt;The left hand figure above shows linear fits with varying slopes and a fixed intercept. The right hand figure shows linear fits with varying intercepts and constant slopes. We want to find the combination of parameters for which our line best fits the data.&lt;/p&gt;
+&lt;p&gt;We'll return back to the trees example but suppose that in general we observe &lt;span class="formula"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/span&gt; pairs of data points &lt;span class="formula"&gt;(&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;, &lt;i&gt;y&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;), (&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;2&lt;/sub&gt;, &lt;i&gt;y&lt;/i&gt;&lt;sub&gt;2&lt;/sub&gt;), …, (&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sub&gt;, &lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sub&gt;)&lt;/span&gt; for &lt;span class="formula"&gt;&lt;i&gt;i&lt;/i&gt; = 1, 2, …&lt;i&gt;n&lt;/i&gt;&lt;/span&gt;. We can define a linear relationship by writing each observation pair as follows:&lt;/p&gt;
+&lt;p&gt;&lt;span class="formula"&gt;&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; = &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; + &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt; + &lt;i&gt;ϵ&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;  &lt;i&gt;i&lt;/i&gt; = 1, 2, …&lt;i&gt;n&lt;/i&gt;&lt;span class="unknown"&gt;\tag&lt;/span&gt;2 &lt;a class="eqnumber" name="2"&gt; &lt;/a&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span class="formula"&gt;&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt;&lt;/span&gt; and &lt;span class="formula"&gt;&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;/span&gt; represent the slope and intercept respectively of our straight line fit. The &lt;span class="formula"&gt;&lt;i&gt;ϵ&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;/span&gt; are called residuals and represent the random variation of the &lt;span class="formula"&gt;&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;/span&gt; around the straight line fit. Thought of another way each &lt;span class="formula"&gt;&lt;i&gt;ϵ&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;/span&gt; is the error between the true value of our response variable &lt;span class="formula"&gt;&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;/span&gt; and the prediction given by our linear regression.&lt;/p&gt;
+&lt;p&gt;We wish to find an intercept/slope &lt;span class="formula"&gt;(&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt;, &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;)&lt;/span&gt; combination that minimises the &lt;span class="formula"&gt;&lt;i&gt;ϵ&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;/span&gt; for &lt;span class="formula"&gt;&lt;i&gt;i&lt;/i&gt; = 1, 2, …&lt;i&gt;n&lt;/i&gt;&lt;/span&gt; meaning that our prediction errors are small. The most popular method of achieving this is to compute the sum of the squares of the residuals for &lt;span class="formula"&gt;&lt;i&gt;i&lt;/i&gt; = 1, 2, …&lt;i&gt;n&lt;/i&gt;&lt;/span&gt; and choose values of &lt;span class="formula"&gt;&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt;&lt;span class="text"&gt;  and &lt;/span&gt;&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;/span&gt; that minimise this quanity. Mathematically we can write the residual sum of square (RSS) as follows:&lt;/p&gt;
+&lt;p&gt;&lt;span class="formula"&gt;&lt;i&gt;RSS&lt;/i&gt; = &lt;span class="limits"&gt;&lt;span class="limit"&gt;∑&lt;/span&gt;&lt;/span&gt;&lt;span class="scripts"&gt;&lt;sup class="script"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;sub class="script"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;ϵ&lt;/i&gt;&lt;span class="scripts"&gt;&lt;sup class="script"&gt;2&lt;/sup&gt;&lt;sub class="script"&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;/span&gt;&lt;span class="unknown"&gt;\tag&lt;/span&gt;3 &lt;a class="eqnumber" name="3"&gt; &lt;/a&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;rearranging &lt;span class="formula"&gt;&lt;span class="unknown"&gt;\eqref&lt;/span&gt;2&lt;/span&gt; to make &lt;span class="formula"&gt;&lt;i&gt;ϵ&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;/span&gt; the subject:&lt;/p&gt;
+&lt;p&gt;&lt;span class="formula"&gt;&lt;i&gt;ϵ&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; = &lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt;&lt;span class="unknown"&gt;\tag&lt;/span&gt;4 &lt;a class="eqnumber" name="4"&gt; &lt;/a&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;substituting &lt;span class="formula"&gt;&lt;span class="unknown"&gt;\eqref&lt;/span&gt;4&lt;/span&gt; into &lt;span class="formula"&gt;&lt;span class="unknown"&gt;\eqref&lt;/span&gt;3&lt;/span&gt; we get:&lt;/p&gt;
+&lt;p&gt;&lt;span class="formula"&gt;&lt;i&gt;RSS&lt;/i&gt; = &lt;span class="limits"&gt;&lt;span class="limit"&gt;∑&lt;/span&gt;&lt;/span&gt;&lt;span class="scripts"&gt;&lt;sup class="script"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;sub class="script"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;(&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt;)&lt;sup&gt;2&lt;/sup&gt;&lt;span class="unknown"&gt;\tag&lt;/span&gt;5 &lt;a class="eqnumber" name="5"&gt; &lt;/a&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;To minimise &lt;span class="formula"&gt;&lt;span class="unknown"&gt;\eqref&lt;/span&gt;5&lt;/span&gt; we differentiate &lt;span class="formula"&gt;&lt;i&gt;RSS&lt;/i&gt;&lt;/span&gt; with respect to both &lt;span class="formula"&gt;&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt;&lt;/span&gt; and &lt;span class="formula"&gt;&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;/span&gt; set the resulting quantity equal to zero and solve the two equations.&lt;/p&gt;
+&lt;p&gt;We can make use of the chain rule which states that for a composite function of the form:&lt;/p&gt;
+&lt;div class="formula"&gt;
+&lt;span class="environment"&gt;&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-r"&gt;
+
+&lt;/span&gt;
+&lt;span class="arraycell align-l"&gt;
+&lt;i&gt;F&lt;/i&gt;(&lt;i&gt;x&lt;/i&gt;) = &lt;i&gt;f&lt;/i&gt;(&lt;i&gt;g&lt;/i&gt;(&lt;i&gt;x&lt;/i&gt;))
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-r"&gt;
+ 
+&lt;/span&gt;
+&lt;span class="arraycell align-l"&gt;
+ 
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-r"&gt;
+
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;/div&gt;
+&lt;p&gt;the deriviate is given by&lt;/p&gt;
+&lt;p&gt;&lt;span class="formula"&gt;&lt;i&gt;F&lt;/i&gt;’(&lt;i&gt;x&lt;/i&gt;) = &lt;i&gt;f&lt;/i&gt;’(&lt;i&gt;g&lt;/i&gt;(&lt;i&gt;x&lt;/i&gt;))&lt;i&gt;g&lt;/i&gt;’(&lt;i&gt;x&lt;/i&gt;)&lt;span class="unknown"&gt;\tag&lt;/span&gt;6 &lt;a class="eqnumber" name="6"&gt; &lt;/a&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Applying &lt;span class="formula"&gt;&lt;span class="unknown"&gt;\eqref&lt;/span&gt;6&lt;/span&gt; to &lt;span class="formula"&gt;&lt;span class="unknown"&gt;\eqref&lt;/span&gt;5&lt;/span&gt; we get:&lt;/p&gt;
+&lt;p&gt;&lt;span class="formula"&gt;&lt;span class="fraction"&gt;&lt;span class="ignored"&gt;(&lt;/span&gt;&lt;span class="numerator"&gt;∂&lt;i&gt;RSS&lt;/i&gt;&lt;/span&gt;&lt;span class="ignored"&gt;)/(&lt;/span&gt;&lt;span class="denominator"&gt;∂&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt;&lt;/span&gt;&lt;span class="ignored"&gt;)&lt;/span&gt;&lt;/span&gt; =  − 2&lt;span class="limits"&gt;&lt;span class="limit"&gt;∑&lt;/span&gt;&lt;/span&gt;&lt;span class="scripts"&gt;&lt;sup class="script"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;sub class="script"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;(&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt;) &lt;a class="eqnumber" name="7"&gt; &lt;/a&gt;&lt;span class="unknown"&gt;\tag&lt;/span&gt;7&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span class="formula"&gt;&lt;span class="fraction"&gt;&lt;span class="ignored"&gt;(&lt;/span&gt;&lt;span class="numerator"&gt;∂&lt;i&gt;RSS&lt;/i&gt;&lt;/span&gt;&lt;span class="ignored"&gt;)/(&lt;/span&gt;&lt;span class="denominator"&gt;∂&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;/span&gt;&lt;span class="ignored"&gt;)&lt;/span&gt;&lt;/span&gt; =  − 2&lt;span class="limits"&gt;&lt;span class="limit"&gt;∑&lt;/span&gt;&lt;/span&gt;&lt;span class="scripts"&gt;&lt;sup class="script"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;sub class="script"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;(&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt;) &lt;a class="eqnumber" name="8"&gt; &lt;/a&gt;&lt;span class="unknown"&gt;\tag&lt;/span&gt;8&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;We set the above equations equal to zero and solve for &lt;span class="formula"&gt;&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt;&lt;/span&gt; and &lt;span class="formula"&gt;&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;/span&gt; to find the minima. Starting with &lt;span class="formula"&gt;&lt;span class="unknown"&gt;\eqref&lt;/span&gt;7&lt;/span&gt;:&lt;/p&gt;
+&lt;div class="formula"&gt;
+&lt;span class="environment"&gt;&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-r"&gt;
+
+&lt;/span&gt;
+&lt;span class="arraycell align-l"&gt;
+0 =  − 2&lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;(&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt;)
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-r"&gt;
+ 
+&lt;/span&gt;
+&lt;span class="arraycell align-l"&gt;
+ 
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-r"&gt;
+
+&lt;/span&gt;
+&lt;span class="arraycell align-l"&gt;
+0 = &lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;(&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt;)
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-r"&gt;
+ 
+&lt;/span&gt;
+&lt;span class="arraycell align-l"&gt;
+ 
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-r"&gt;
+
+&lt;/span&gt;
+&lt;span class="arraycell align-l"&gt;
+0 = &lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 0&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;n&lt;/i&gt;&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt;
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-r"&gt;
+ 
+&lt;/span&gt;
+&lt;span class="arraycell align-l"&gt;
+ 
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-r"&gt;
+
+&lt;/span&gt;
+&lt;span class="arraycell align-l"&gt;
+&lt;i&gt;n&lt;/i&gt;&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt; = &lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;/div&gt;
+&lt;p&gt;making use of &lt;span class="formula"&gt;&lt;span class="bar"&gt;&lt;i&gt;x&lt;/i&gt;&lt;/span&gt; = &lt;span class="fraction"&gt;&lt;span class="ignored"&gt;(&lt;/span&gt;&lt;span class="numerator"&gt;&lt;span class="limits"&gt;&lt;span class="limit"&gt;∑&lt;/span&gt;&lt;/span&gt;&lt;span class="scripts"&gt;&lt;sup class="script"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;sub class="script"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;/span&gt;&lt;span class="ignored"&gt;)/(&lt;/span&gt;&lt;span class="denominator"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/span&gt;&lt;span class="ignored"&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; and &lt;span class="formula"&gt;&lt;span class="bar"&gt;&lt;i&gt;y&lt;/i&gt;&lt;/span&gt; = &lt;span class="fraction"&gt;&lt;span class="ignored"&gt;(&lt;/span&gt;&lt;span class="numerator"&gt;&lt;span class="limits"&gt;&lt;span class="limit"&gt;∑&lt;/span&gt;&lt;/span&gt;&lt;span class="scripts"&gt;&lt;sup class="script"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;sub class="script"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;/span&gt;&lt;span class="ignored"&gt;)/(&lt;/span&gt;&lt;span class="denominator"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/span&gt;&lt;span class="ignored"&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;:&lt;/p&gt;
+&lt;div class="formula"&gt;
+&lt;span class="environment"&gt;&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-r"&gt;
+
+&lt;/span&gt;
+&lt;span class="arraycell align-l"&gt;
+&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt; = &lt;span class="bar"&gt;&lt;i&gt;y&lt;/i&gt;&lt;/span&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;span class="bar"&gt;&lt;i&gt;x&lt;/i&gt;&lt;/span&gt;&lt;a class="eqnumber" name="9"&gt; &lt;/a&gt;&lt;span class="unknown"&gt;\tag&lt;/span&gt;9
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-r"&gt;
+ 
+&lt;/span&gt;
+&lt;span class="arraycell align-l"&gt;
+ 
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-r"&gt;
+
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;/div&gt;
+&lt;p&gt;Now we repeat the same process for &lt;span class="formula"&gt;&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;/span&gt;:&lt;/p&gt;
+&lt;div class="formula"&gt;
+&lt;span class="environment"&gt;&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-r"&gt;
+
+&lt;/span&gt;
+&lt;span class="arraycell align-l"&gt;
+0 =  − 2&lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;(&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt;)
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-r"&gt;
+ 
+&lt;/span&gt;
+&lt;span class="arraycell align-l"&gt;
+ 
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-r"&gt;
+
+&lt;/span&gt;
+&lt;span class="arraycell align-l"&gt;
+0 = &lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;(&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt;)
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;/div&gt;
+&lt;p&gt;substituting in the value for &lt;span class="formula"&gt;&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt;&lt;/span&gt; obtained in &lt;span class="formula"&gt;&lt;span class="unknown"&gt;\eqref&lt;/span&gt;9&lt;/span&gt;:&lt;/p&gt;
+&lt;div class="formula"&gt;
+&lt;span class="environment"&gt;&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-r"&gt;
+
+&lt;/span&gt;
+&lt;span class="arraycell align-l"&gt;
+0 =  − 2&lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;(&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;span class="bar"&gt;&lt;i&gt;y&lt;/i&gt;&lt;/span&gt; + &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;span class="bar"&gt;&lt;i&gt;x&lt;/i&gt;&lt;/span&gt;)
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-r"&gt;
+ 
+&lt;/span&gt;
+&lt;span class="arraycell align-l"&gt;
+ 
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-r"&gt;
+
+&lt;/span&gt;
+&lt;span class="arraycell align-l"&gt;
+0 = &lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;(&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;span class="bar"&gt;&lt;i&gt;y&lt;/i&gt;&lt;/span&gt;) + &lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;(&lt;span class="bar"&gt;&lt;i&gt;x&lt;/i&gt;&lt;/span&gt; − &lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;)
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-r"&gt;
+ 
+&lt;/span&gt;
+&lt;span class="arraycell align-l"&gt;
+ 
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-r"&gt;
+
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-r"&gt;
+ 
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-r"&gt;
+
+&lt;/span&gt;
+&lt;span class="arraycell align-l"&gt;
+&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt; = &lt;span class="fraction"&gt;&lt;span class="ignored"&gt;(&lt;/span&gt;&lt;span class="numerator"&gt; − &lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;(&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;span class="bar"&gt;&lt;i&gt;y&lt;/i&gt;&lt;/span&gt;)&lt;/span&gt;&lt;span class="ignored"&gt;)/(&lt;/span&gt;&lt;span class="denominator"&gt;&lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;(&lt;span class="bar"&gt;&lt;i&gt;x&lt;/i&gt;&lt;/span&gt; − &lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;)&lt;/span&gt;&lt;span class="ignored"&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-r"&gt;
+ 
+&lt;/span&gt;
+&lt;span class="arraycell align-l"&gt;
+ 
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-r"&gt;
+
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-r"&gt;
+ 
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-r"&gt;
+
+&lt;/span&gt;
+&lt;span class="arraycell align-l"&gt;
+&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt; = &lt;span class="fraction"&gt;&lt;span class="ignored"&gt;(&lt;/span&gt;&lt;span class="numerator"&gt; − &lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;(&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;span class="bar"&gt;&lt;i&gt;y&lt;/i&gt;&lt;/span&gt;)&lt;/span&gt;&lt;span class="ignored"&gt;)/(&lt;/span&gt;&lt;span class="denominator"&gt;&lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;(&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;span class="bar"&gt;&lt;i&gt;x&lt;/i&gt;&lt;/span&gt; − &lt;i&gt;x&lt;/i&gt;&lt;span class="scripts"&gt;&lt;sup class="script"&gt;2&lt;/sup&gt;&lt;sub class="script"&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;/span&gt;)&lt;/span&gt;&lt;span class="ignored"&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-r"&gt;
+ 
+&lt;/span&gt;
+&lt;span class="arraycell align-l"&gt;
+ 
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-r"&gt;
+
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-r"&gt;
+ 
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-r"&gt;
+
+&lt;/span&gt;
+&lt;span class="arraycell align-l"&gt;
+&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt; = &lt;span class="fraction"&gt;&lt;span class="ignored"&gt;(&lt;/span&gt;&lt;span class="numerator"&gt;&lt;span class="bar"&gt;&lt;i&gt;y&lt;/i&gt;&lt;/span&gt;&lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;N&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;/span&gt;&lt;span class="ignored"&gt;)/(&lt;/span&gt;&lt;span class="denominator"&gt;&lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt; − &lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;x&lt;/i&gt;&lt;span class="scripts"&gt;&lt;sup class="script"&gt;2&lt;/sup&gt;&lt;sub class="script"&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="ignored"&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-r"&gt;
+ 
+&lt;/span&gt;
+&lt;span class="arraycell align-l"&gt;
+ 
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-r"&gt;
+
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-r"&gt;
+ 
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;span class="arrayrow"&gt;
+&lt;span class="arraycell align-r"&gt;
+
+&lt;/span&gt;
+&lt;span class="arraycell align-l"&gt;
+&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt; = &lt;span class="fraction"&gt;&lt;span class="ignored"&gt;(&lt;/span&gt;&lt;span class="numerator"&gt;&lt;i&gt;n&lt;/i&gt;&lt;span class="bar"&gt;&lt;i&gt;x&lt;/i&gt;&lt;/span&gt;&lt;span class="bar"&gt;&lt;i&gt;y&lt;/i&gt;&lt;/span&gt; − &lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;x&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;i&gt;y&lt;/i&gt;&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;/span&gt;&lt;span class="ignored"&gt;)/(&lt;/span&gt;&lt;span class="denominator"&gt;&lt;i&gt;n&lt;/i&gt;&lt;span class="bar"&gt;&lt;i&gt;x&lt;/i&gt;&lt;/span&gt;&lt;sup&gt;2&lt;/sup&gt; − &lt;span class="limits"&gt;&lt;sup class="limit"&gt;&lt;i&gt;n&lt;/i&gt;&lt;/sup&gt;&lt;span class="limit"&gt;⎲&lt;/span&gt;&lt;span class="limit"&gt;⎳&lt;/span&gt;&lt;sub class="limit"&gt;&lt;i&gt;i&lt;/i&gt; = 1&lt;/sub&gt;&lt;/span&gt;&lt;i&gt;x&lt;/i&gt;&lt;span class="scripts"&gt;&lt;sup class="script"&gt;2&lt;/sup&gt;&lt;sub class="script"&gt;&lt;i&gt;i&lt;/i&gt;&lt;/sub&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="ignored"&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;/span&gt;
+
+&lt;/span&gt;
+&lt;/span&gt;
+&lt;/div&gt;
+&lt;p&gt;We have now derived least squares estimates for &lt;span class="formula"&gt;&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;0&lt;/sub&gt;&lt;/span&gt; and &lt;span class="formula"&gt;&lt;i&gt;β&lt;/i&gt;&lt;sub&gt;1&lt;/sub&gt;&lt;/span&gt; using simple linear regression. Armed with these we can generate parameter estimates for the cherry tree regression:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="nf"&gt;nrow&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;trees&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;x_bar&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="nf"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;trees&lt;/span&gt;&lt;span class="o"&gt;$&lt;/span&gt;&lt;span class="n"&gt;Girth&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;y_bar&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="nf"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;trees&lt;/span&gt;&lt;span class="o"&gt;$&lt;/span&gt;&lt;span class="n"&gt;Volume&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;xi_yi_sum&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="nf"&gt;sum&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;trees&lt;/span&gt;&lt;span class="o"&gt;$&lt;/span&gt;&lt;span class="n"&gt;Girth&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="n"&gt;trees&lt;/span&gt;&lt;span class="o"&gt;$&lt;/span&gt;&lt;span class="n"&gt;Volume&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;xi_squared_sum&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="nf"&gt;sum&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;trees&lt;/span&gt;&lt;span class="o"&gt;$&lt;/span&gt;&lt;span class="n"&gt;Girth&lt;/span&gt; &lt;span class="n"&gt;^&lt;/span&gt; &lt;span class="m"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="n"&gt;beta_1&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="n"&gt;x_bar&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="n"&gt;y_bar&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;xi_yi_sum&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="n"&gt;x_bar^2&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;xi_squared_sum&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;beta_0&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="n"&gt;y_bar&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;beta_1&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="n"&gt;x_bar&lt;/span&gt;
+
+&lt;span class="n"&gt;beta_1&lt;/span&gt;
+&lt;span class="n"&gt;[1]&lt;/span&gt; &lt;span class="m"&gt;5.065856&lt;/span&gt;
+&lt;span class="n"&gt;beta_0&lt;/span&gt;
+&lt;span class="n"&gt;[1]&lt;/span&gt; &lt;span class="m"&gt;-36.94346&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Ofcourse R has a built in function (lm) to build a linear regression. We can use this function to compare the estimates we produced above:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;fit&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="nf"&gt;lm&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;trees&lt;/span&gt;&lt;span class="o"&gt;$&lt;/span&gt;&lt;span class="n"&gt;Volume&lt;/span&gt;&lt;span class="o"&gt;~&lt;/span&gt;&lt;span class="n"&gt;trees&lt;/span&gt;&lt;span class="o"&gt;$&lt;/span&gt;&lt;span class="n"&gt;Girth&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;fit&lt;/span&gt;&lt;span class="o"&gt;$&lt;/span&gt;&lt;span class="nf"&gt;coefficients&lt;/span&gt;
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Intercept&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;trees&lt;/span&gt;&lt;span class="o"&gt;$&lt;/span&gt;&lt;span class="n"&gt;Girth&lt;/span&gt;
+&lt;span class="m"&gt;-36.943459&lt;/span&gt;    &lt;span class="m"&gt;5.065856&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;which match our derived estimates.&lt;/p&gt;
+</content><category term="linear models"></category><category term="R"></category></entry></feed>

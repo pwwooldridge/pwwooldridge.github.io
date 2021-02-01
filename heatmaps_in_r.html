@@ -1,31 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-          <title>Peter Wooldridge's Blog</title>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-143196276-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-143196276-1');
+</script>
+        <title>Peter Wooldridge's Blog</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta charset="utf-8" />
+        <link href="https://peterwooldridge.me/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Peter Wooldridge's Blog Full Atom Feed" />
+        <link href="https://peterwooldridge.me/feeds/machine-learning.atom.xml" type="application/atom+xml" rel="alternate" title="Peter Wooldridge's Blog Categories Atom Feed" />
         <!-- twitter card metadata -->
 <meta name="twitter:site" content="">
 <meta name="twitter:title" content="Visualising networks in R using atomic plot functions">
 <meta name="twitter:description" content="Using atomic plot functions in R to create heatmaps">
         <!-- OG Tags -->
-<meta property="og:url" content="./heatmaps_in_r.html"/>
+<meta property="og:url" content="https://peterwooldridge.me/heatmaps_in_r.html"/>
 <meta property="og:title" content="Peter Wooldridge's Blog | Visualising networks in R using atomic plot functions" />
 <meta property="og:description" content="Using atomic plot functions in R to create heatmaps" />
         <!-- favicon -->
         <!-- moment.js for date formatting -->
-        <script src="./theme/js/moment.js"></script>
+        <script src="https://peterwooldridge.me/theme/js/moment.js"></script>
         <!-- css -->
-        <link rel="stylesheet" type="text/css" href="./theme/css/main.css" />
+        <link rel="stylesheet" type="text/css" href="https://peterwooldridge.me/theme/css/main.css" />
 		<script>
 			
                 /*! grunt-grunticon Stylesheet Loader - v2.1.2 | https://github.com/filamentgroup/grunticon | (c) 2015 Scott Jehl, Filament Group, Inc. | MIT license. */
     
     (function(e){function t(t,n,r,o){"use strict";function a(){for(var e,n=0;u.length>n;n++)u[n].href&&u[n].href.indexOf(t)>-1&&(e=!0);e?i.media=r||"all":setTimeout(a)}var i=e.document.createElement("link"),l=n||e.document.getElementsByTagName("script")[0],u=e.document.styleSheets;return i.rel="stylesheet",i.href=t,i.media="only x",i.onload=o||null,l.parentNode.insertBefore(i,l),a(),i}var n=function(r,o){"use strict";if(r&&3===r.length){var a=e.navigator,i=e.Image,l=!(!document.createElementNS||!document.createElementNS("http://www.w3.org/2000/svg","svg").createSVGRect||!document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#Image","1.1")||e.opera&&-1===a.userAgent.indexOf("Chrome")||-1!==a.userAgent.indexOf("Series40")),u=new i;u.onerror=function(){n.method="png",n.href=r[2],t(r[2])},u.onload=function(){var e=1===u.width&&1===u.height,a=r[e&&l?0:e?1:2];n.method=e&&l?"svg":e?"datapng":"png",n.href=a,t(a,null,null,o)},u.src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==",document.documentElement.className+=" grunticon"}};n.loadCSS=t,e.grunticon=n})(this);(function(e,t){"use strict";var n=t.document,r="grunticon:",o=function(e){if(n.attachEvent?"complete"===n.readyState:"loading"!==n.readyState)e();else{var t=!1;n.addEventListener("readystatechange",function(){t||(t=!0,e())},!1)}},a=function(e){return t.document.querySelector('link[href$="'+e+'"]')},c=function(e){var t,n,o,a,c,i,u={};if(t=e.sheet,!t)return u;n=t.cssRules?t.cssRules:t.rules;for(var l=0;n.length>l;l++)o=n[l].cssText,a=r+n[l].selectorText,c=o.split(");")[0].match(/US\-ASCII\,([^"']+)/),c&&c[1]&&(i=decodeURIComponent(c[1]),u[a]=i);return u},i=function(e){var t,o,a;o="data-grunticon-embed";for(var c in e)if(a=c.slice(r.length),t=n.querySelectorAll(a+"["+o+"]"),t.length)for(var i=0;t.length>i;i++)t[i].innerHTML=e[c],t[i].style.backgroundImage="none",t[i].removeAttribute(o);return t},u=function(t){"svg"===e.method&&o(function(){i(c(a(e.href))),"function"==typeof t&&t()})};e.embedIcons=i,e.getCSS=a,e.getIcons=c,e.ready=o,e.svgLoadedCallback=u,e.embedSVG=u})(grunticon,this);
                 
-                grunticon(["./theme/css/icons.data.svg.css", "./theme/css/icons.data.png.css", "./theme/css/icons.fallback.css"]);
+                grunticon(["https://peterwooldridge.me/theme/css/icons.data.svg.css", "https://peterwooldridge.me/theme/css/icons.data.png.css", "https://peterwooldridge.me/theme/css/icons.fallback.css"]);
             </script>
-        <noscript><link href="./theme/css/icons.fallback.css" rel="stylesheet"></noscript>
+        <noscript><link href="https://peterwooldridge.me/theme/css/icons.fallback.css" rel="stylesheet"></noscript>
         <!-- menu toggle javascript -->
         <script type="text/javascript">
             document.addEventListener("DOMContentLoaded", initMenu);
@@ -58,9 +69,9 @@
                         <li><a href="/pages/about.html">About</a></li>
                         <li><a href="/categories">Categories</a></li>
                         <li><a href="/tags">Tags</a></li>
-                            <li class="active"><a href="./category/machine-learning.html">Machine Learning</a></li>
-                            <li><a href="./category/sport.html">Sport</a></li>
-                            <li><a href="./category/tech.html">Tech</a></li>
+                            <li class="active"><a href="https://peterwooldridge.me/category/machine-learning.html">Machine Learning</a></li>
+                            <li><a href="https://peterwooldridge.me/category/sport.html">Sport</a></li>
+                            <li><a href="https://peterwooldridge.me/category/tech.html">Tech</a></li>
                 </ul>
             </nav>
         </header>
@@ -88,15 +99,35 @@
 </div>
 <p>We can encode community information to this type of plot by colouring the nodes according to the communitiy memberships.</p>
 <p>As Mike Bostock <a class="reference external" href="https://bost.ocks.org/mike/miserables/">showed</a>, another interesting way to visualise a network is with the adjacency matrix. As a reminder the Adjacency matrix is defined as follows:</p>
-<div class="math">
-\begin{equation*}
-A_{ij} = \left\{
-\begin{array}{lr}
-1 &amp; : \text{if }i\text{ connected to }j\\
-0 &amp; : \text{otherwise}
-\end{array}
-\right.
-\end{equation*}
+<div class="formula">
+<i>A</i><sub><i>ij</i></sub> = <span class="array"><span class="arrayrow"><span class="bracket align-left">⎧</span></span><span class="arrayrow"><span class="bracket align-left">⎨</span></span><span class="arrayrow"><span class="bracket align-left">⎩</span></span></span><span class="array"><span class="arrayrow">
+<span class="arraycell align-l">
+1
+</span>
+<span class="arraycell align-r">
+ : <span class="text"> if </span><i>i</i><span class="text"> connected to </span><i>j</i>
+</span>
+
+</span>
+<span class="arrayrow">
+<span class="arraycell align-l">
+ 
+</span>
+<span class="arraycell align-r">
+ 
+</span>
+
+</span>
+<span class="arrayrow">
+<span class="arraycell align-l">
+0
+</span>
+<span class="arraycell align-r">
+ : <span class="text"> otherwise</span>
+</span>
+
+</span>
+</span><span class="emptydot"></span>
 </div>
 <p>The usefullness of the visualisation of the adjacency matrix depends largely on the order of the rows and columns in the plot. By finding communities in the network, we can reorder the rows and columns of the adjacency matrix accordingly to produce a plot that looks as follows:</p>
 <div class="figure">
@@ -216,68 +247,7 @@ A_{ij} = \left\{
 <span class="nf">dev.off</span><span class="p">()</span>
 </pre></div>
 <p>We have shown how using the atomic plot functions in R we can create some nice looking visualisations of network data. The full code is available at <a class="reference external" href="https://github.com/pwwooldridge/les-mis-adjacency-vis">this github repo</a></p>
-<script type='text/javascript'>if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
-    var align = "center",
-        indent = "0em",
-        linebreak = "false";
 
-    if (false) {
-        align = (screen.width < 768) ? "left" : align;
-        indent = (screen.width < 768) ? "0em" : indent;
-        linebreak = (screen.width < 768) ? 'true' : linebreak;
-    }
-
-    var mathjaxscript = document.createElement('script');
-    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
-    mathjaxscript.type = 'text/javascript';
-    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
-
-    var configscript = document.createElement('script');
-    configscript.type = 'text/x-mathjax-config';
-    configscript[(window.opera ? "innerHTML" : "text")] =
-        "MathJax.Hub.Config({" +
-        "    config: ['MMLorHTML.js']," +
-        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
-        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
-        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
-        "    displayAlign: '"+ align +"'," +
-        "    displayIndent: '"+ indent +"'," +
-        "    showMathMenu: true," +
-        "    messageStyle: 'normal'," +
-        "    tex2jax: { " +
-        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
-        "        displayMath: [ ['$$','$$'] ]," +
-        "        processEscapes: true," +
-        "        preview: 'TeX'," +
-        "    }, " +
-        "    'HTML-CSS': { " +
-        "        availableFonts: ['STIX', 'TeX']," +
-        "        preferredFont: 'STIX'," +
-        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
-        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
-        "    }, " +
-        "}); " +
-        "if ('default' !== 'default') {" +
-            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
-                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
-                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
-                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
-                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
-                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
-            "});" +
-            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
-                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
-                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
-                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
-                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
-                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
-            "});" +
-        "}";
-
-    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
-    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
-}
-</script>
       </div>
       <div class="back-to-top">
           <a href="#top">back to top</a>
