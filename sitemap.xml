@@ -5,37 +5,44 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://peterwooldridge.me/</loc>
-<lastmod>2021-02-02T12:51:19-00:00</lastmod>
+<lastmod>2021-02-08T20:52:02-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://peterwooldridge.me/tags.html</loc>
-<lastmod>2021-02-02T12:51:19-00:00</lastmod>
+<lastmod>2021-02-08T20:52:02-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://peterwooldridge.me/categories.html</loc>
-<lastmod>2021-02-02T12:51:19-00:00</lastmod>
+<lastmod>2021-02-08T20:52:02-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://peterwooldridge.me/authors.html</loc>
-<lastmod>2021-02-02T12:51:19-00:00</lastmod>
+<lastmod>2021-02-08T20:52:02-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://peterwooldridge.me/archives.html</loc>
-<lastmod>2021-02-02T12:51:19-00:00</lastmod>
+<lastmod>2021-02-08T20:52:02-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
+</url>
+
+<url>
+<loc>https://peterwooldridge.me/a-serious-rethink-on-carbs-taught-to-me-by-mastering-diabetes.html</loc>
+<lastmod>2021-02-03T17:40:00+00:00</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.99</priority>
 </url>
 
 <url>
@@ -76,6 +83,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>https://peterwooldridge.me/category/machine-learning.html</loc>
 <lastmod>2019-09-04T11:56:00-00:01</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>https://peterwooldridge.me/category/diabetes.html</loc>
+<lastmod>2021-02-03T17:40:00-00:01</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -131,7 +145,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://peterwooldridge.me/author/peter-wooldridge.html</loc>
-<lastmod>2021-01-31T12:15:00-00:01</lastmod>
+<lastmod>2021-02-03T17:40:00-00:01</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
