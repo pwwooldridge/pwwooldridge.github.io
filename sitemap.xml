@@ -4,147 +4,147 @@ xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitem
 xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
-<loc>https://peterwooldridge.me/</loc>
-<lastmod>2021-02-08T21:00:38-00:00</lastmod>
+<loc>/</loc>
+<lastmod>2021-02-09T13:12:17-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://peterwooldridge.me/tags.html</loc>
-<lastmod>2021-02-08T21:00:38-00:00</lastmod>
+<loc>/tags.html</loc>
+<lastmod>2021-02-09T13:12:17-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://peterwooldridge.me/categories.html</loc>
-<lastmod>2021-02-08T21:00:38-00:00</lastmod>
+<loc>/categories.html</loc>
+<lastmod>2021-02-09T13:12:17-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://peterwooldridge.me/authors.html</loc>
-<lastmod>2021-02-08T21:00:38-00:00</lastmod>
+<loc>/authors.html</loc>
+<lastmod>2021-02-09T13:12:17-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://peterwooldridge.me/archives.html</loc>
-<lastmod>2021-02-08T21:00:38-00:00</lastmod>
+<loc>/archives.html</loc>
+<lastmod>2021-02-09T13:12:17-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://peterwooldridge.me/a-serious-rethink-on-carbs-taught-to-me-by-mastering-diabetes.html</loc>
+<loc>/a-serious-rethink-on-carbs-taught-to-me-by-mastering-diabetes.html</loc>
 <lastmod>2021-02-03T17:40:00+00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.99</priority>
 </url>
 
 <url>
-<loc>https://peterwooldridge.me/unix_efficiency.html</loc>
+<loc>/unix_efficiency.html</loc>
 <lastmod>2021-01-31T12:15:00+00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.99</priority>
 </url>
 
 <url>
-<loc>https://peterwooldridge.me/svm_1.html</loc>
+<loc>/svm_1.html</loc>
 <lastmod>2019-09-04T11:56:00+01:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.99</priority>
 </url>
 
 <url>
-<loc>https://peterwooldridge.me/heatmaps_in_r.html</loc>
+<loc>/heatmaps_in_r.html</loc>
 <lastmod>2017-09-28T21:13:00+01:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.99</priority>
 </url>
 
 <url>
-<loc>https://peterwooldridge.me/linear_regression.html</loc>
+<loc>/linear_regression.html</loc>
 <lastmod>2017-09-12T21:46:00+01:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.99</priority>
 </url>
 
 <url>
-<loc>https://peterwooldridge.me/jogle_in_106.html</loc>
+<loc>/jogle_in_106.html</loc>
 <lastmod>2016-11-03T11:41:00+00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.99</priority>
 </url>
 
 <url>
-<loc>https://peterwooldridge.me/category/machine-learning.html</loc>
+<loc>/category/machine-learning.html</loc>
 <lastmod>2019-09-04T11:56:00-00:01</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://peterwooldridge.me/category/diabetes.html</loc>
+<loc>/category/diabetes.html</loc>
 <lastmod>2021-02-03T17:40:00-00:01</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://peterwooldridge.me/category/sport.html</loc>
+<loc>/category/sport.html</loc>
 <lastmod>2016-11-03T11:41:00-00:01</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://peterwooldridge.me/category/tech.html</loc>
+<loc>/category/tech.html</loc>
 <lastmod>2021-01-31T12:15:00-00:01</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://peterwooldridge.me/tag/r.html</loc>
+<loc>/tag/r.html</loc>
 <lastmod>2017-09-28T21:13:00-00:01</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://peterwooldridge.me/tag/networks.html</loc>
+<loc>/tag/networks.html</loc>
 <lastmod>2017-09-28T21:13:00-00:01</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://peterwooldridge.me/tag/visualisation.html</loc>
+<loc>/tag/visualisation.html</loc>
 <lastmod>2017-09-28T21:13:00-00:01</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://peterwooldridge.me/tag/linear-models.html</loc>
+<loc>/tag/linear-models.html</loc>
 <lastmod>2017-09-12T21:46:00-00:01</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://peterwooldridge.me/tag/endurance.html</loc>
+<loc>/tag/endurance.html</loc>
 <lastmod>2016-11-03T11:41:00-00:01</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://peterwooldridge.me/author/peter-wooldridge.html</loc>
+<loc>/author/peter-wooldridge.html</loc>
 <lastmod>2021-02-03T17:40:00-00:01</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
