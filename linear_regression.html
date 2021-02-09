@@ -1,31 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-          <title>Peter Wooldridge's Blog</title>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-143196276-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-143196276-1');
+</script>
+        <title>Peter Wooldridge's Blog</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta charset="utf-8" />
+        <link href="https://peterwooldridge.me/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Peter Wooldridge's Blog Full Atom Feed" />
+        <link href="https://peterwooldridge.me/feeds/machine-learning.atom.xml" type="application/atom+xml" rel="alternate" title="Peter Wooldridge's Blog Categories Atom Feed" />
         <!-- twitter card metadata -->
 <meta name="twitter:site" content="">
 <meta name="twitter:title" content="Linear Regression from first principles">
 <meta name="twitter:description" content="Derivation of parameter estimates for simple linear regression from first principles">
         <!-- OG Tags -->
-<meta property="og:url" content="./linear_regression.html"/>
+<meta property="og:url" content="https://peterwooldridge.me/linear_regression.html"/>
 <meta property="og:title" content="Peter Wooldridge's Blog | Linear Regression from first principles" />
 <meta property="og:description" content="Derivation of parameter estimates for simple linear regression from first principles" />
         <!-- favicon -->
         <!-- moment.js for date formatting -->
-        <script src="./theme/js/moment.js"></script>
+        <script src="https://peterwooldridge.me/theme/js/moment.js"></script>
         <!-- css -->
-        <link rel="stylesheet" type="text/css" href="./theme/css/main.css" />
+        <link rel="stylesheet" type="text/css" href="https://peterwooldridge.me/theme/css/main.css" />
 		<script>
 			
                 /*! grunt-grunticon Stylesheet Loader - v2.1.2 | https://github.com/filamentgroup/grunticon | (c) 2015 Scott Jehl, Filament Group, Inc. | MIT license. */
     
     (function(e){function t(t,n,r,o){"use strict";function a(){for(var e,n=0;u.length>n;n++)u[n].href&&u[n].href.indexOf(t)>-1&&(e=!0);e?i.media=r||"all":setTimeout(a)}var i=e.document.createElement("link"),l=n||e.document.getElementsByTagName("script")[0],u=e.document.styleSheets;return i.rel="stylesheet",i.href=t,i.media="only x",i.onload=o||null,l.parentNode.insertBefore(i,l),a(),i}var n=function(r,o){"use strict";if(r&&3===r.length){var a=e.navigator,i=e.Image,l=!(!document.createElementNS||!document.createElementNS("http://www.w3.org/2000/svg","svg").createSVGRect||!document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#Image","1.1")||e.opera&&-1===a.userAgent.indexOf("Chrome")||-1!==a.userAgent.indexOf("Series40")),u=new i;u.onerror=function(){n.method="png",n.href=r[2],t(r[2])},u.onload=function(){var e=1===u.width&&1===u.height,a=r[e&&l?0:e?1:2];n.method=e&&l?"svg":e?"datapng":"png",n.href=a,t(a,null,null,o)},u.src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==",document.documentElement.className+=" grunticon"}};n.loadCSS=t,e.grunticon=n})(this);(function(e,t){"use strict";var n=t.document,r="grunticon:",o=function(e){if(n.attachEvent?"complete"===n.readyState:"loading"!==n.readyState)e();else{var t=!1;n.addEventListener("readystatechange",function(){t||(t=!0,e())},!1)}},a=function(e){return t.document.querySelector('link[href$="'+e+'"]')},c=function(e){var t,n,o,a,c,i,u={};if(t=e.sheet,!t)return u;n=t.cssRules?t.cssRules:t.rules;for(var l=0;n.length>l;l++)o=n[l].cssText,a=r+n[l].selectorText,c=o.split(");")[0].match(/US\-ASCII\,([^"']+)/),c&&c[1]&&(i=decodeURIComponent(c[1]),u[a]=i);return u},i=function(e){var t,o,a;o="data-grunticon-embed";for(var c in e)if(a=c.slice(r.length),t=n.querySelectorAll(a+"["+o+"]"),t.length)for(var i=0;t.length>i;i++)t[i].innerHTML=e[c],t[i].style.backgroundImage="none",t[i].removeAttribute(o);return t},u=function(t){"svg"===e.method&&o(function(){i(c(a(e.href))),"function"==typeof t&&t()})};e.embedIcons=i,e.getCSS=a,e.getIcons=c,e.ready=o,e.svgLoadedCallback=u,e.embedSVG=u})(grunticon,this);
                 
-                grunticon(["./theme/css/icons.data.svg.css", "./theme/css/icons.data.png.css", "./theme/css/icons.fallback.css"]);
+                grunticon(["https://peterwooldridge.me/theme/css/icons.data.svg.css", "https://peterwooldridge.me/theme/css/icons.data.png.css", "https://peterwooldridge.me/theme/css/icons.fallback.css"]);
             </script>
-        <noscript><link href="./theme/css/icons.fallback.css" rel="stylesheet"></noscript>
+        <noscript><link href="https://peterwooldridge.me/theme/css/icons.fallback.css" rel="stylesheet"></noscript>
         <!-- menu toggle javascript -->
         <script type="text/javascript">
             document.addEventListener("DOMContentLoaded", initMenu);
@@ -57,10 +68,10 @@
                         <li><a href="/pages/about.html">About</a></li>
                         <li><a href="/categories">Categories</a></li>
                         <li><a href="/tags">Tags</a></li>
-                            <li class="active"><a href="./category/machine-learning.html">Machine Learning</a></li>
-                            <li><a href="./category/diabetes.html">Diabetes</a></li>
-                            <li><a href="./category/sport.html">Sport</a></li>
-                            <li><a href="./category/tech.html">Tech</a></li>
+                            <li class="active"><a href="https://peterwooldridge.me/category/machine-learning.html">Machine Learning</a></li>
+                            <li><a href="https://peterwooldridge.me/category/diabetes.html">Diabetes</a></li>
+                            <li><a href="https://peterwooldridge.me/category/sport.html">Sport</a></li>
+                            <li><a href="https://peterwooldridge.me/category/tech.html">Tech</a></li>
                 </ul>
             </nav>
         </header>
@@ -87,11 +98,11 @@
 <div class="highlight"><pre><span></span><span class="nf">plot</span><span class="p">(</span><span class="n">trees</span><span class="o">$</span><span class="n">Girth</span><span class="p">,</span> <span class="n">trees</span><span class="o">$</span><span class="n">Volume</span><span class="p">,</span> <span class="n">xlab</span><span class="o">=</span><span class="s">&quot;Girth (inches)&quot;</span><span class="p">,</span> <span class="n">ylab</span><span class="o">=</span><span class="s">&quot;Volume (cubic feet)&quot;</span><span class="p">)</span>
 </pre></div>
 <div class="figure">
-<img alt="" src="./tree_girths.png" />
+<img alt="" src="https://peterwooldridge.me/tree_girths.png" />
 </div>
 <p>The data certainly looks to have a linear relationship. A straight line equation in 2 dimensions can be defined by two variables namely the slope and intercept. Different choices for these parameters will produce different best fit lines as shown in the plot below:</p>
 <div class="figure">
-<img alt="" src="./possible_linear_fits.png" />
+<img alt="" src="https://peterwooldridge.me/possible_linear_fits.png" />
 </div>
 <p>The left hand figure above shows linear fits with varying slopes and a fixed intercept. The right hand figure shows linear fits with varying intercepts and constant slopes. We want to find the combination of parameters for which our line best fits the data.</p>
 <p>We'll return back to the trees example but suppose that in general we observe <span class="math">\(n\)</span> pairs of data points <span class="math">\((x_1, y_1), (x_2, y_2),\ldots, (x_n, y_n)\)</span> for <span class="math">\(i = 1,2,\ldots n\)</span>. We can define a linear relationship by writing each observation pair as follows:</p>

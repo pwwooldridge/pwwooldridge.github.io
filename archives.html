@@ -1,25 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-143196276-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-143196276-1');
+</script>
         <title>Peter Wooldridge's Blog</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta charset="utf-8" />
+        <link href="https://peterwooldridge.me/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Peter Wooldridge's Blog Full Atom Feed" />
         <!-- twitter card metadata -->
         <!-- OG Tags -->
         <!-- favicon -->
         <!-- moment.js for date formatting -->
-        <script src="./theme/js/moment.js"></script>
+        <script src="https://peterwooldridge.me/theme/js/moment.js"></script>
         <!-- css -->
-        <link rel="stylesheet" type="text/css" href="./theme/css/main.css" />
+        <link rel="stylesheet" type="text/css" href="https://peterwooldridge.me/theme/css/main.css" />
 		<script>
 			
                 /*! grunt-grunticon Stylesheet Loader - v2.1.2 | https://github.com/filamentgroup/grunticon | (c) 2015 Scott Jehl, Filament Group, Inc. | MIT license. */
     
     (function(e){function t(t,n,r,o){"use strict";function a(){for(var e,n=0;u.length>n;n++)u[n].href&&u[n].href.indexOf(t)>-1&&(e=!0);e?i.media=r||"all":setTimeout(a)}var i=e.document.createElement("link"),l=n||e.document.getElementsByTagName("script")[0],u=e.document.styleSheets;return i.rel="stylesheet",i.href=t,i.media="only x",i.onload=o||null,l.parentNode.insertBefore(i,l),a(),i}var n=function(r,o){"use strict";if(r&&3===r.length){var a=e.navigator,i=e.Image,l=!(!document.createElementNS||!document.createElementNS("http://www.w3.org/2000/svg","svg").createSVGRect||!document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#Image","1.1")||e.opera&&-1===a.userAgent.indexOf("Chrome")||-1!==a.userAgent.indexOf("Series40")),u=new i;u.onerror=function(){n.method="png",n.href=r[2],t(r[2])},u.onload=function(){var e=1===u.width&&1===u.height,a=r[e&&l?0:e?1:2];n.method=e&&l?"svg":e?"datapng":"png",n.href=a,t(a,null,null,o)},u.src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==",document.documentElement.className+=" grunticon"}};n.loadCSS=t,e.grunticon=n})(this);(function(e,t){"use strict";var n=t.document,r="grunticon:",o=function(e){if(n.attachEvent?"complete"===n.readyState:"loading"!==n.readyState)e();else{var t=!1;n.addEventListener("readystatechange",function(){t||(t=!0,e())},!1)}},a=function(e){return t.document.querySelector('link[href$="'+e+'"]')},c=function(e){var t,n,o,a,c,i,u={};if(t=e.sheet,!t)return u;n=t.cssRules?t.cssRules:t.rules;for(var l=0;n.length>l;l++)o=n[l].cssText,a=r+n[l].selectorText,c=o.split(");")[0].match(/US\-ASCII\,([^"']+)/),c&&c[1]&&(i=decodeURIComponent(c[1]),u[a]=i);return u},i=function(e){var t,o,a;o="data-grunticon-embed";for(var c in e)if(a=c.slice(r.length),t=n.querySelectorAll(a+"["+o+"]"),t.length)for(var i=0;t.length>i;i++)t[i].innerHTML=e[c],t[i].style.backgroundImage="none",t[i].removeAttribute(o);return t},u=function(t){"svg"===e.method&&o(function(){i(c(a(e.href))),"function"==typeof t&&t()})};e.embedIcons=i,e.getCSS=a,e.getIcons=c,e.ready=o,e.svgLoadedCallback=u,e.embedSVG=u})(grunticon,this);
                 
-                grunticon(["./theme/css/icons.data.svg.css", "./theme/css/icons.data.png.css", "./theme/css/icons.fallback.css"]);
+                grunticon(["https://peterwooldridge.me/theme/css/icons.data.svg.css", "https://peterwooldridge.me/theme/css/icons.data.png.css", "https://peterwooldridge.me/theme/css/icons.fallback.css"]);
             </script>
-        <noscript><link href="./theme/css/icons.fallback.css" rel="stylesheet"></noscript>
+        <noscript><link href="https://peterwooldridge.me/theme/css/icons.fallback.css" rel="stylesheet"></noscript>
         <!-- menu toggle javascript -->
         <script type="text/javascript">
             document.addEventListener("DOMContentLoaded", initMenu);
@@ -45,10 +55,10 @@
                         <li><a href="/pages/about.html">About</a></li>
                         <li><a href="/categories">Categories</a></li>
                         <li><a href="/tags">Tags</a></li>
-                            <li><a href="./category/machine-learning.html">Machine Learning</a></li>
-                            <li><a href="./category/diabetes.html">Diabetes</a></li>
-                            <li><a href="./category/sport.html">Sport</a></li>
-                            <li><a href="./category/tech.html">Tech</a></li>
+                            <li><a href="https://peterwooldridge.me/category/machine-learning.html">Machine Learning</a></li>
+                            <li><a href="https://peterwooldridge.me/category/diabetes.html">Diabetes</a></li>
+                            <li><a href="https://peterwooldridge.me/category/sport.html">Sport</a></li>
+                            <li><a href="https://peterwooldridge.me/category/tech.html">Tech</a></li>
                 </ul>
             </nav>
         </header>
@@ -66,11 +76,11 @@
                         <time datetime="2021-02-03 17:40:00+00:00">
                             <script>document.write(moment('2021-02-03 17:40:00+00:00').format('LL'));</script>
                         </time>
-                                in <a href="./category/diabetes.html"><span class="category-tag">Diabetes</span></a>
+                                in <a href="https://peterwooldridge.me/category/diabetes.html"><span class="category-tag">Diabetes</span></a>
                     </p>
                 </footer>
                 <header>
-                    <a href="./a-serious-rethink-on-carbs-taught-to-me-by-mastering-diabetes.html">
+                    <a href="https://peterwooldridge.me/a-serious-rethink-on-carbs-taught-to-me-by-mastering-diabetes.html">
                         <h2>A serious rethink on carbs taught to me by Mastering Diabetes</h2>
                     </a>
                 </header>
@@ -82,7 +92,7 @@ I've been working with for the last 25 years to manage my type 1 …</p> </div>
                     <ul class="tags">
                     </ul>
                 </div>
-                <a href="./a-serious-rethink-on-carbs-taught-to-me-by-mastering-diabetes.html">
+                <a href="https://peterwooldridge.me/a-serious-rethink-on-carbs-taught-to-me-by-mastering-diabetes.html">
                     <p class="readmore">Read more...</p>
                 </a>
             </article>
@@ -94,11 +104,11 @@ I've been working with for the last 25 years to manage my type 1 …</p> </div>
                         <time datetime="2021-01-31 12:15:00+00:00">
                             <script>document.write(moment('2021-01-31 12:15:00+00:00').format('LL'));</script>
                         </time>
-                                in <a href="./category/tech.html"><span class="category-tag">Tech</span></a>
+                                in <a href="https://peterwooldridge.me/category/tech.html"><span class="category-tag">Tech</span></a>
                     </p>
                 </footer>
                 <header>
-                    <a href="./unix_efficiency.html">
+                    <a href="https://peterwooldridge.me/unix_efficiency.html">
                         <h2>The single UNIX setting that always saves me time</h2>
                     </a>
                 </header>
@@ -107,7 +117,7 @@ I've been working with for the last 25 years to manage my type 1 …</p> </div>
                     <ul class="tags">
                     </ul>
                 </div>
-                <a href="./unix_efficiency.html">
+                <a href="https://peterwooldridge.me/unix_efficiency.html">
                     <p class="readmore">Read more...</p>
                 </a>
             </article>
@@ -119,11 +129,11 @@ I've been working with for the last 25 years to manage my type 1 …</p> </div>
                         <time datetime="2019-09-04 11:56:00+01:00">
                             <script>document.write(moment('2019-09-04 11:56:00+01:00').format('LL'));</script>
                         </time>
-                                in <a href="./category/machine-learning.html"><span class="category-tag">Machine Learning</span></a>
+                                in <a href="https://peterwooldridge.me/category/machine-learning.html"><span class="category-tag">Machine Learning</span></a>
                     </p>
                 </footer>
                 <header>
-                    <a href="./svm_1.html">
+                    <a href="https://peterwooldridge.me/svm_1.html">
                         <h2>Support Vector Machines (Part 1)</h2>
                     </a>
                 </header>
@@ -133,7 +143,7 @@ I've been working with for the last 25 years to manage my type 1 …</p> </div>
                     <ul class="tags">
                     </ul>
                 </div>
-                <a href="./svm_1.html">
+                <a href="https://peterwooldridge.me/svm_1.html">
                     <p class="readmore">Read more...</p>
                 </a>
             </article>
@@ -145,11 +155,11 @@ I've been working with for the last 25 years to manage my type 1 …</p> </div>
                         <time datetime="2017-09-28 21:13:00+01:00">
                             <script>document.write(moment('2017-09-28 21:13:00+01:00').format('LL'));</script>
                         </time>
-                                in <a href="./category/machine-learning.html"><span class="category-tag">Machine Learning</span></a>
+                                in <a href="https://peterwooldridge.me/category/machine-learning.html"><span class="category-tag">Machine Learning</span></a>
                     </p>
                 </footer>
                 <header>
-                    <a href="./heatmaps_in_r.html">
+                    <a href="https://peterwooldridge.me/heatmaps_in_r.html">
                         <h2>Visualising networks in R using atomic plot functions</h2>
                     </a>
                 </header>
@@ -160,12 +170,12 @@ I've been working with for the last 25 years to manage my type 1 …</p> </div>
 <p>We can encode community information to this …</p> </div>
                 <div class="tags">
                     <ul class="tags">
-                        <li><a href="./tag/r.html" class="tag">R</a></li>
-                        <li><a href="./tag/networks.html" class="tag">networks</a></li>
-                        <li><a href="./tag/visualisation.html" class="tag">visualisation</a></li>
+                        <li><a href="https://peterwooldridge.me/tag/r.html" class="tag">R</a></li>
+                        <li><a href="https://peterwooldridge.me/tag/networks.html" class="tag">networks</a></li>
+                        <li><a href="https://peterwooldridge.me/tag/visualisation.html" class="tag">visualisation</a></li>
                     </ul>
                 </div>
-                <a href="./heatmaps_in_r.html">
+                <a href="https://peterwooldridge.me/heatmaps_in_r.html">
                     <p class="readmore">Read more...</p>
                 </a>
             </article>
@@ -177,11 +187,11 @@ I've been working with for the last 25 years to manage my type 1 …</p> </div>
                         <time datetime="2017-09-12 21:46:00+01:00">
                             <script>document.write(moment('2017-09-12 21:46:00+01:00').format('LL'));</script>
                         </time>
-                                in <a href="./category/machine-learning.html"><span class="category-tag">Machine Learning</span></a>
+                                in <a href="https://peterwooldridge.me/category/machine-learning.html"><span class="category-tag">Machine Learning</span></a>
                     </p>
                 </footer>
                 <header>
-                    <a href="./linear_regression.html">
+                    <a href="https://peterwooldridge.me/linear_regression.html">
                         <h2>Linear Regression from first principles</h2>
                     </a>
                 </header>
@@ -189,11 +199,11 @@ I've been working with for the last 25 years to manage my type 1 …</p> </div>
 <p>As an example let's take the trees dataset provided by the datasets package …</p> </div>
                 <div class="tags">
                     <ul class="tags">
-                        <li><a href="./tag/linear-models.html" class="tag">linear models</a></li>
-                        <li><a href="./tag/r.html" class="tag">R</a></li>
+                        <li><a href="https://peterwooldridge.me/tag/linear-models.html" class="tag">linear models</a></li>
+                        <li><a href="https://peterwooldridge.me/tag/r.html" class="tag">R</a></li>
                     </ul>
                 </div>
-                <a href="./linear_regression.html">
+                <a href="https://peterwooldridge.me/linear_regression.html">
                     <p class="readmore">Read more...</p>
                 </a>
             </article>
@@ -205,27 +215,27 @@ I've been working with for the last 25 years to manage my type 1 …</p> </div>
                         <time datetime="2016-11-03 11:41:00+00:00">
                             <script>document.write(moment('2016-11-03 11:41:00+00:00').format('LL'));</script>
                         </time>
-                                in <a href="./category/sport.html"><span class="category-tag">Sport</span></a>
+                                in <a href="https://peterwooldridge.me/category/sport.html"><span class="category-tag">Sport</span></a>
                     </p>
                 </footer>
                 <header>
-                    <a href="./jogle_in_106.html">
+                    <a href="https://peterwooldridge.me/jogle_in_106.html">
                         <h2>JOGLE in 106 hours</h2>
                     </a>
                 </header>
                 <div class="summary"><div class="section" id="day-1-john-o-groats-to-fort-william">
 <h2>Day 1 : John O' Groats to Fort William</h2>
 <div class="figure align-center" style="width: 90%">
-<img alt="" src="./screen-shot-2016-11-04-at-10-32-501.png" />
+<img alt="" src="https://peterwooldridge.me/screen-shot-2016-11-04-at-10-32-501.png" />
 </div>
 <p><strong>Jon</strong></p>
 <p>After a long long drive for the support crew from Plymouth. Pete and I met the campervan at Stockport, loaded kit and bikes onto rack, and we were en route to John O'Groats. We departed Stockport at 18:30. I offered …</p></div> </div>
                 <div class="tags">
                     <ul class="tags">
-                        <li><a href="./tag/endurance.html" class="tag">endurance</a></li>
+                        <li><a href="https://peterwooldridge.me/tag/endurance.html" class="tag">endurance</a></li>
                     </ul>
                 </div>
-                <a href="./jogle_in_106.html">
+                <a href="https://peterwooldridge.me/jogle_in_106.html">
                     <p class="readmore">Read more...</p>
                 </a>
             </article>
