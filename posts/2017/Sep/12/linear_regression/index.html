@@ -20,7 +20,7 @@
 <meta name="twitter:title" content="Linear Regression from first principles">
 <meta name="twitter:description" content="Derivation of parameter estimates for simple linear regression from first principles">
         <!-- OG Tags -->
-<meta property="og:url" content="https://peterwooldridge.me/linear_regression.html"/>
+<meta property="og:url" content="https://peterwooldridge.me/posts/2017/Sep/12/linear_regression/"/>
 <meta property="og:title" content="Peter Wooldridge's Blog | Linear Regression from first principles" />
 <meta property="og:description" content="Derivation of parameter estimates for simple linear regression from first principles" />
         <!-- favicon -->
@@ -98,11 +98,11 @@
 <div class="highlight"><pre><span></span><span class="nf">plot</span><span class="p">(</span><span class="n">trees</span><span class="o">$</span><span class="n">Girth</span><span class="p">,</span> <span class="n">trees</span><span class="o">$</span><span class="n">Volume</span><span class="p">,</span> <span class="n">xlab</span><span class="o">=</span><span class="s">&quot;Girth (inches)&quot;</span><span class="p">,</span> <span class="n">ylab</span><span class="o">=</span><span class="s">&quot;Volume (cubic feet)&quot;</span><span class="p">)</span>
 </pre></div>
 <div class="figure">
-<img alt="" src="https://peterwooldridge.me/tree_girths.png" />
+<img alt="" src="https://peterwooldridge.me/posts/2017/Sep/12/linear_regression/tree_girths.png" />
 </div>
 <p>The data certainly looks to have a linear relationship. A straight line equation in 2 dimensions can be defined by two variables namely the slope and intercept. Different choices for these parameters will produce different best fit lines as shown in the plot below:</p>
 <div class="figure">
-<img alt="" src="https://peterwooldridge.me/possible_linear_fits.png" />
+<img alt="" src="https://peterwooldridge.me/posts/2017/Sep/12/linear_regression/possible_linear_fits.png" />
 </div>
 <p>The left hand figure above shows linear fits with varying slopes and a fixed intercept. The right hand figure shows linear fits with varying intercepts and constant slopes. We want to find the combination of parameters for which our line best fits the data.</p>
 <p>We'll return back to the trees example but suppose that in general we observe <span class="math">\(n\)</span> pairs of data points <span class="math">\((x_1, y_1), (x_2, y_2),\ldots, (x_n, y_n)\)</span> for <span class="math">\(i = 1,2,\ldots n\)</span>. We can define a linear relationship by writing each observation pair as follows:</p>

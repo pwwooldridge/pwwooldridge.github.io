@@ -5,76 +5,83 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://peterwooldridge.me/</loc>
-<lastmod>2021-02-10T17:57:47-00:00</lastmod>
+<lastmod>2021-02-27T18:15:43-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://peterwooldridge.me/tags.html</loc>
-<lastmod>2021-02-10T17:57:47-00:00</lastmod>
+<lastmod>2021-02-27T18:15:43-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://peterwooldridge.me/categories.html</loc>
-<lastmod>2021-02-10T17:57:47-00:00</lastmod>
+<lastmod>2021-02-27T18:15:43-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://peterwooldridge.me/authors.html</loc>
-<lastmod>2021-02-10T17:57:47-00:00</lastmod>
+<lastmod>2021-02-27T18:15:43-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://peterwooldridge.me/archives.html</loc>
-<lastmod>2021-02-10T17:57:47-00:00</lastmod>
+<lastmod>2021-02-27T18:15:43-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://peterwooldridge.me/carbs-rethink.html</loc>
+<loc>https://peterwooldridge.me/posts/2021/Feb/16/dexcom-download-pt1/</loc>
+<lastmod>2021-02-16T08:35:00+00:00</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.99</priority>
+</url>
+
+<url>
+<loc>https://peterwooldridge.me/posts/2021/Feb/09/carbs-rethink/</loc>
 <lastmod>2021-02-09T17:40:00+00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.99</priority>
 </url>
 
 <url>
-<loc>https://peterwooldridge.me/unix_efficiency.html</loc>
+<loc>https://peterwooldridge.me/posts/2021/Jan/31/unix_efficiency/</loc>
 <lastmod>2021-01-31T12:15:00+00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.99</priority>
 </url>
 
 <url>
-<loc>https://peterwooldridge.me/svm_1.html</loc>
+<loc>https://peterwooldridge.me/posts/2019/Sep/04/svm_1/</loc>
 <lastmod>2019-09-04T11:56:00+01:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.99</priority>
 </url>
 
 <url>
-<loc>https://peterwooldridge.me/heatmaps_in_r.html</loc>
+<loc>https://peterwooldridge.me/posts/2017/Sep/28/heatmaps_in_r/</loc>
 <lastmod>2017-09-28T21:13:00+01:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.99</priority>
 </url>
 
 <url>
-<loc>https://peterwooldridge.me/linear_regression.html</loc>
+<loc>https://peterwooldridge.me/posts/2017/Sep/12/linear_regression/</loc>
 <lastmod>2017-09-12T21:46:00+01:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.99</priority>
 </url>
 
 <url>
-<loc>https://peterwooldridge.me/jogle_in_106.html</loc>
+<loc>https://peterwooldridge.me/posts/2016/Nov/03/jogle_in_106/</loc>
 <lastmod>2016-11-03T11:41:00+00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.99</priority>
@@ -89,7 +96,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://peterwooldridge.me/category/diabetes.html</loc>
-<lastmod>2021-02-09T17:40:00-00:01</lastmod>
+<lastmod>2021-02-16T08:35:00-00:01</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -145,7 +152,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://peterwooldridge.me/author/peter-wooldridge.html</loc>
-<lastmod>2021-02-09T17:40:00-00:01</lastmod>
+<lastmod>2021-02-16T08:35:00-00:01</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
