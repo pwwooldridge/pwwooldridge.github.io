@@ -94,13 +94,13 @@
          <p>Support Vector Machines (SVMs) are a versatile classification algorithm that should be a staple in every data scientists toolbox. In this first of a series of posts, my goal is to describe the intuition behind SVMs what makes them such a powerful technique for classification.</p>
 <p>Suppose we want to classify the red dots from the blue in the figure below. Plotted on the axes are an orange, black and green hyperplane. All three perfectly separate the red and blue classes. So which one is the best choice to split our data?</p>
 <p align="center">
-   <img src="images/multiple_hyperplanes.png" alt="drawing" width="500"/>  
+   <img src="https://peterwooldridge.me/posts/2019/Sep/04/svm_1/multiple_hyperplanes.png" alt="drawing" width="500"/>  
 </p>
 
 <p>The hardest points to classify are those sat closest to the hyperplane. Therefore, a decision boundary that creates a large gap between the classes is preferable because new data points are more likely to be correctly classified. The SVM defines this criterion as finding a decision boundary that is maximally far away from any data point. The distance between the decision boundary and the closest data point determines the margin of the classifier.</p>
 <p>The figure below shows the data being separated by the largest margin decision boundary. The maximum margin decision boundary is defined by two parallel hyperplanes, one that goes through the positive data points closest to the decision boundary and one that goes through the negative points closest to the decision boundary. These are known as the support vectors.</p>
 <p align="center">
-   <img src="images/maximal_margin.png" alt="Drawing" width="500"/>
+   <img src="https://peterwooldridge.me/posts/2019/Sep/04/svm_1/maximal_margin.png" alt="Drawing" width="500"/>
 </p>
 
 <p>Mathematically, we can summarise what we have described so far.</p>
@@ -114,14 +114,14 @@ h_{w,b}(x) =
 $$</div>
 <p>In the two dimensional case, our decision boundary <span class="math">\(w^{T} x + b = 0\)</span> is simply a line with the regions above and below it represented by <span class="math">\(w^{T}x + b &gt; 0\)</span> and <span class="math">\(w^{T}x + b &lt; 0\)</span>.</p>
 <p align="center">
-   <img src="images/decision_boundary.png" alt="Drawing" width="500"/>
+   <img src="https://peterwooldridge.me/posts/2019/Sep/04/svm_1/decision_boundary.png" alt="Drawing" width="500"/>
 </p>
 
 <h3>Distance between points and the hyperplane</h3>
 <p>We know that we want to find the values of <span class="math">\(w\)</span> and <span class="math">\(b\)</span> that provide the widest margin. Therefore, we need a way to measure the distance between a given point and the hyperplane. Let's define <span class="math">\(\gamma^{(i)}\)</span> to be the distance between the <span class="math">\(i^{th}\)</span> training observation <span class="math">\(x^{(i)}\)</span> and our hyperplane.</p>
 <p>Consider the decision boundary shown in the figure below. If we define <span class="math">\(x_{0}\)</span> to be a vector on the hyperplane. Then the <span class="math">\(x^{(i)} - x_{0}\)</span> represents a vector from <span class="math">\(x^{(i)}\)</span> to the hyperplane. The dotted black line from <span class="math">\(x^{(i)}\)</span> to the hyperplane represents the vector whose distance is the shortest to the hyperplane. This dotted line forms a right-angled triangle with the hyperplane and we can label the unknown angle at the top of our triangle <span class="math">\(\theta\)</span>. The vector <span class="math">\(w^{*}\)</span> represents the unit vector perpendicular to the hyperplane.</p>
 <p align="center">
-   <img src="images/svm_distance_to_hyperplane.png" alt="Drawing" width="500"/>
+   <img src="https://peterwooldridge.me/posts/2019/Sep/04/svm_1/svm_distance_to_hyperplane.png" alt="Drawing" width="500"/>
 </p>
 
 <p>Using trigonometry, and setting <span class="math">\(f = x^{(i)} - x_{0}\)</span>:</p>

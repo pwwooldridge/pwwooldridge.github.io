@@ -17,11 +17,11 @@
         <link href="https://peterwooldridge.me/feeds/diabetes.atom.xml" type="application/atom+xml" rel="alternate" title="Peter Wooldridge's Blog Categories Atom Feed" />
         <!-- twitter card metadata -->
 <meta name="twitter:site" content="">
-<meta name="twitter:title" content="Creating a local CGM database using with a Pi 4 and Node-RED">
+<meta name="twitter:title" content="Creating a local CGM database using a Pi 4 and Node-RED">
 <meta name="twitter:description" content="">
         <!-- OG Tags -->
 <meta property="og:url" content="https://peterwooldridge.me/posts/2021/Feb/16/dexcom-download-pt1/"/>
-<meta property="og:title" content="Peter Wooldridge's Blog | Creating a local CGM database using with a Pi 4 and Node-RED" />
+<meta property="og:title" content="Peter Wooldridge's Blog | Creating a local CGM database using a Pi 4 and Node-RED" />
 <meta property="og:description" content="" />
         <!-- favicon -->
         <!-- moment.js for date formatting -->
@@ -86,7 +86,7 @@
         </footer>
         <header>
           <h2>
-            Creating a local CGM database using with a Pi 4 and Node-RED
+            Creating a local CGM database using a Pi 4 and Node-RED
           </h2>
         </header>
       <div class="content">
@@ -97,33 +97,39 @@
   <p align="center">
      <img src="https://peterwooldridge.me/posts/2021/Feb/16/dexcom-download-pt1/dexcom.png" alt="Drawing" width="30%"/>
   </p>
-</embed><p>I've been using the Dexcom continuous glucose monitors for about 4 years now. The sensor, currently the G6 model, attaches to my body and transmits glucose readings every 5 mins.
-The sensor connects directly with the Dexcom smartphone app and then the data is sent to the Dexcom Share Servers in the cloud.</p>
-<p>Dexcom has a web tool called Clarity which lets you view a report related to your CGM data. Dexcom Clarity is useful for exploring glucose data but, I wanted to start building a local copy of my glucose data to:</p>
+</embed><p>I've been using the Dexcom continuous glucose monitors for about 4 years now. The latest sensor, currently the G6 model, attaches to my body and transmits glucose readings every 5 mins. The sensor connects directly with the companion smartphone app via bluetooth and then the data is sends the data to the cloud. With the data in the cloud, Dexcom provide a web based tool called Clarity that allows one to analyse various aspects of their glucose data.</p>
+<embed>
+  <p align="center">
+     <img src="https://peterwooldridge.me/posts/2021/Feb/16/dexcom-download-pt1/dexcom-app.jpg" alt="Drawing" width="50%"/>
+     <figcaption>The Dexcom mobile app</figcaption>
+  </p>
+</embed><p>Clarity is useful tool for sure but, it struck me that over the course of four years, I've generated a lot of data. I wanted to start building a local backup of my glucose data to:</p>
 <ul class="simple">
 <li>Have a local backup of all of my glucose readings (Dexcom doesn't offer a download data option and if I change CGM providers I don't want to lose all that useful historic data)</li>
 <li>Build custom visualisations that are more relevant to my day-to-day tracking of my diabetes goals (I hope to show some of these in later posts)</li>
 <li>See how my control has fluctuated over the years (Clarity only lets me view or compare 90 days at a time)</li>
 <li>Combine other data sources so that I can explore how different situations affect my glucose</li>
 </ul>
-<p>Another tool for exploring glucose data is <a class="reference external" href="https://nightscout.github.io/">Nightscout</a> which I also use extensively. The reports are really useful; the only issue I have is that mongoDB database used in heroku (the cloud hosting platform) has a free tier limit of 512GB which for me gets filled up every few months forcing me to empty the database periodically - another reason for me wanting to creating a local copy.</p>
+<p>Another tool for exploring glucose data is <a class="reference external" href="https://nightscout.github.io/">Nightscout</a> which I also use extensively. The reports are really useful; the only issue I have is that mongoDB database used in heroku (the cloud hosting platform) has a free tier limit of 512GB which for me gets filled up every few months forcing me to empty the database periodically - another reason for me wanting to creating a local backup.</p>
 <div class="section" id="the-setup">
 <h2>The Setup</h2>
-<p>The setup I've built uses a Raspberry Pi 4 and a software called <a class="reference external" href="https://nodered.org/">Node-RED</a> which comes pre-installed with Raspian. Node-RED is a low-code environment for events driven applications. There are loads of amazing applications of what can be done with this technology.</p>
-<p>For this project, I created a simple <cite>flow</cite> in Node-RED that runs a few http requests to authenticate with the Dexcom servers, query my glucose and then finally puts results into a local mysql database running on the pi.</p>
-<p>A <cite>flow</cite> is composed of a sequence of nodes that run sequentially and each perform a task. The results of each nodes task is fed into the next connected node till the chain is completed.</p>
+<p>The setup I've built uses a Raspberry Pi 4 and some software called <a class="reference external" href="https://nodered.org/">Node-RED</a> which comes pre-installed with Raspian. Node-RED is a low-code environment for events driven applications.</p>
+<p>There are plenty of useful resources online that describe Node-RED but, the essential building block is the idea of a flow. A <cite>flow</cite> in Node-RED is a sequence of nodes that run sequentially and each perform a task. The results of each nodes task is fed into the next connected node till the chain is completed. Since there are many pre-defined nodes for things like connecting to database or making an http request, there is a reduced need to write much code to do a lot of tasks.</p>
+<p>For this project, I created a simple flow in Node-RED that runs a few http requests to authenticate with the Dexcom servers, queries my glucose data and finally puts results into a mysql database running on the pi. I leave the pi running 24/7 and schedule the flow to run every few minutes so new glucose data are drip fed as they become available.</p>
 <embed>
   <p align="center">
      <img src="https://peterwooldridge.me/posts/2021/Feb/16/dexcom-download-pt1/node-red-flow.png" alt="Drawing" width="100%" caption="sdfsdf"/>
      <figcaption>How flows look in the Node-RED web interface</figcaption>
   </p>
-</embed><p>Node-RED makes it really easy to schedule flows to run on a specific schedule. Since the Dexcom CGMs produce a glucose reading every 5 minutes, I set the flow to query the api every 2.5 minutes to ensure the database was topped up with the latest data.</p>
-<p>Eventually, hosting the database externally from the pi is probably a better idea as the flash storage on the pi is not ideal for backing up data longterm. That said, to get going quickly and start exploring the data, this was perfect.</p>
+</embed><p>Eventually, hosting the database externally from the pi is probably a better idea as the flash storage on the pi is not ideal for long term backups. That said, to get going quickly and start exploring the data, this was perfect.</p>
 <p>For anyone interested in how I built this setup, the following video details the setup step-by-step and, I've also walked through it in the remainder of this post.</p>
 <div class="youtube"><iframe src="https://www.youtube.com/embed/GRtUX1Wiqfo" width="512" height="320" allowfullscreen seamless frameBorder="0"></iframe></div><div class="line-block">
 <div class="line"><br /></div>
 </div>
-<p>The remainder of this guide assumes you have a raspberry pi 4 booted and connected up to a display, and a dexcom account with which to pull glucose data from.</p>
+</div>
+<div class="section" id="prerequisites">
+<h2>Prerequisites</h2>
+<p>For anyone looking to follow the setup, the remainder of this post assumes you have a raspberry pi 4: installed with Raspian, booted and connected up to a display. You'll of course need a Dexcom CGM with sharing turned on in the app as we'll be pulling the data from the servers.</p>
 </div>
 <div class="section" id="setting-up-and-configuring-node-red">
 <h2>Setting up and configuring Node-RED</h2>
@@ -142,10 +148,13 @@ The sensor connects directly with the Dexcom smartphone app and then the data is
 <p>Run the following in a terminal to setup the service which will auto-start Node-RED after the next reboot:</p>
 <div class="highlight"><pre><span></span>sudo systemctl <span class="nb">enable</span> nodered.service
 </pre></div>
-<p>The Node-RED flow I built can be found at the following <a class="reference external" href="https://github.com/pwwooldridge/dexcom-to-db">github repo</a>. Flows are defined as json files and my repo contains two: <cite>dexcom-pull-eu.json</cite> and <cite>dexcom-pull-us.json</cite> for those in the EU and US respectively (the dexcom servers endpoints are different, but the flows are pretty much the same). The other difference is that I made the EU flow output glucose data in mmol/L and the US one in mg/dL by default.</p>
-<p>To import the flow into Node-RED you can copy and paste the JSON file to the clipboard and then inside the node-RED web interface, press <cite>Ctrl-i</cite> to open up the import flow panel and paste your flow right in.</p>
-<p>After the flow is imported, you should see the nodes appear on the canvas. The next thing we need to do is install a couple of extra nodes that I've made use of. Click the 3 horizontal bars in the top right of the Node-RED interface, click <cite>manage palette</cite> and then navigate to the <cite>install</cite> tab. The two nodes that need to be installed are <cite>node-red-contrib-credentials</cite> and <cite>node-red-node-mysql</cite>. Go ahead and type these into the search, find the packages and install them at which point you should see the dashed lines around the outsides of the mysql and credentials nodes fill in on your canvas.</p>
-<p>I also made use of an additional nodejs library <cite>sql-template-strings</cite> from inside this flow so I need to install this using npm. To do this, head out of Node-RED and open up a terminal from the <cite>Programming</cite> menu in Raspian. Once you have a terminal open, run the following commands:</p>
+<p>Node-RED flows can be exported as JSON files and the flows I built for this project can be found at the following <a class="reference external" href="https://github.com/pwwooldridge/dexcom-to-db">github repo</a>. My repo contains two: <cite>dexcom-pull-eu.json</cite> and <cite>dexcom-pull-us.json</cite> for those in the EU and US respectively (the Dexcom servers endpoints are different, but the flows are pretty much the same). The other difference is that I made the EU flow output glucose data in mmol/L and the US one in mg/dL by default (it's possible to change this by modifying the 'Clean glucose data' node).</p>
+<p>To import the flow into Node-RED you can copy and paste the JSON file to your clipboard and then inside the node-RED web interface, press <cite>Ctrl-i</cite> to open up the import flow panel and paste your flow right in.</p>
+<p>After the flow is imported, you should see the nodes and their connections appearing on the canvas.</p>
+<p>Node-RED comes with a base set of nodes installed, however we can also install others as needed. For my particular flow we need to install a couple of other nodes that I've made use of.</p>
+<p>Click the 3 horizontal bars in the top right of the Node-RED interface, click <cite>manage palette</cite> and then navigate to the <cite>install</cite> tab. The two nodes that need to be installed are <cite>node-red-contrib-credentials</cite> and <cite>node-red-node-mysql</cite>. Go ahead and type these into the search, find the packages and install them at which point you should see the dashed lines around the outsides of the mysql and credentials nodes fill in on your canvas.</p>
+<p>In addition to the extra nodes, I also made use of an additional nodejs library <tt class="docutils literal"><span class="pre">sql-template-strings</span></tt>. This library was used in one of the nodes that uses some code to create the SQL statements for adding to the database.</p>
+<p>I need to install this using npm. To do this, head out of Node-RED and open up a terminal from the <cite>Programming</cite> menu. Once you have a terminal open, run the following commands:</p>
 <div class="highlight"><pre><span></span><span class="nb">cd</span> ~/.node-red
 npm install sql-template-strings
 nano settings.js
@@ -171,8 +180,8 @@ nano settings.js
 </div>
 <div class="section" id="setting-up-mysql">
 <h2>Setting up mysql</h2>
-<p>Now we're ready to get our database setup. Note: In Raspian, MariaDB is used as a drop-in replacement to MySQL. All MySQL commands should still work with MariaDB.</p>
-<p>We can use the terminal we used earlier to install and configure the database. The first step is to check for any package updates, by running the following:</p>
+<p>Now we're ready to get our database setup. Note: In Raspian, MariaDB is used as a drop-in replacement to MySQL so I installed that instead, but all MySQL commands should still work with MariaDB.</p>
+<p>Use the terminal to install and configure the database. The first step is to check for any package updates, by running the following:</p>
 <div class="highlight"><pre><span></span>sudo apt-get update
 sudo apt-get upgrade
 </pre></div>
@@ -190,7 +199,7 @@ sudo apt-get upgrade
 <li>Press <code>Y</code> to reload privilege tables. (last step)</li>
 </ul>
 <p>and we're done. We've now set the root password for connecting to our database.</p>
-<p>To be able to login with the password we just set, I had to change the database plugin from auth_socket to mysql_native_password. To do this, connect to the MySQL shell using <code>sudo mysql -u root</code>, then run the following to switch the plugin:</p>
+<p>To be able to login with the password we just set, I had to change the default database plugin from auth_socket to mysql_native_password otherwise I was getting an error when trying to connect to my database. To change this, connect to the MySQL shell using <code>sudo mysql -u root</code>, then run the following with the mysql shell    to switch the plugin:</p>
 <div class="highlight"><pre><span></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="n">USE</span> <span class="n">mysql</span><span class="p">;</span>
 <span class="n">mysql</span><span class="o">&gt;</span> <span class="k">UPDATE</span> <span class="k">user</span> <span class="k">SET</span> <span class="n">plugin</span><span class="o">=</span><span class="s1">&#39;mysql_native_password&#39;</span> <span class="k">WHERE</span> <span class="k">User</span><span class="o">=</span><span class="s1">&#39;root&#39;</span><span class="p">;</span>
 <span class="n">mysql</span><span class="o">&gt;</span> <span class="n">FLUSH</span> <span class="k">PRIVILEGES</span><span class="p">;</span>
@@ -199,35 +208,61 @@ sudo apt-get upgrade
 <p>In order to make the settings take effect, restart MySQL by running:</p>
 <div class="highlight"><pre><span></span>$ sudo service mysql restart
 </pre></div>
-<p>Now we can connect to our database by using the following command (you'll be required to enter your root password):</p>
+<p>Now we can connect to our database by using the following command (you'll be required to enter your database root password):</p>
 <div class="highlight"><pre><span></span>mysql -u root -p
 </pre></div>
 <p>The above command connects to the mysql database using the command line and allows us to run commands from the prompt directly on the database.</p>
-<p>We can use the mysql command line tool to create the database and tables to store the glucose data. First I'll create a database in mysql called <code>glucose</code> and then connect to it.</p>
+<p>We can use the mysql command line tool to create the database and tables to store the incoming glucose data. First we need to create a database called <code>glucose</code> and then connect to it:</p>
 <div class="highlight"><pre><span></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">create</span> <span class="k">database</span> <span class="n">glucose</span><span class="p">;</span>
 <span class="n">mysql</span><span class="o">&gt;</span> <span class="n">use</span> <span class="n">glucose</span><span class="p">;</span>
 </pre></div>
 <p>Once connected, I can create a table to store my glucose data:</p>
 <div class="highlight"><pre><span></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">create</span> <span class="k">table</span> <span class="n">glucose</span> <span class="p">(</span>
-<span class="n">mysql</span><span class="o">&gt;</span>     <span class="n">date_string</span> <span class="n">datetime</span> <span class="k">primary</span> <span class="k">key</span><span class="p">,</span>
+<span class="n">mysql</span><span class="o">&gt;</span>     <span class="nb">date</span> <span class="n">datetime</span> <span class="k">primary</span> <span class="k">key</span><span class="p">,</span>
 <span class="n">mysql</span><span class="o">&gt;</span>     <span class="n">value</span> <span class="nb">float</span><span class="p">,</span>
 <span class="n">mysql</span><span class="o">&gt;</span>     <span class="n">direction</span> <span class="nb">text</span>
 <span class="n">mysql</span><span class="o">&gt;</span> <span class="p">);</span>
 </pre></div>
-<p>Once I've executed this, I can press <cite>Ctrl-d</cite> to exit from the mysql command line and head back to the node-RED web ui for the final setup part.</p>
-<p>Okay, we're nearly up and running. Final 3 small bits of setup to do back in Node-RED. First thing we need to do is add our dexcom <cite>accountId</cite> and <cite>password</cite> into the credentials node so that Node-RED can authenticate with dexcom. To do this, double click on the node called <cite>credentials</cite> in your flow and type in your accountId and password.</p>
+<p>The above table has three columns:</p>
+<ul class="simple">
+<li><tt class="docutils literal">date</tt>, the time the glucose reading was taken</li>
+<li><tt class="docutils literal">value</tt>, the glucose reading</li>
+<li><tt class="docutils literal">direction</tt>, the direction the glucose is trending e.g. (Flat, FortyFiveUp, FortyFiveDown etc).</li>
+</ul>
+<p>Once I've executed this, I can press <cite>Ctrl-d</cite> to exit from the mysql command line and head back to the node-RED web interface.</p>
+<p>Okay, we're nearly up and running. Final 3 small bits of setup to do back in Node-RED. First thing we need to do is add our Dexcom <cite>accountId</cite> and <cite>password</cite> into the credentials node so that Node-RED can authenticate with Dexcom. To do this, double click on the node called <cite>credentials</cite> in your flow and type in your accountId and password.</p>
 <embed>
   <p align="center">
      <img src="https://peterwooldridge.me/posts/2021/Feb/16/dexcom-download-pt1/node-red-credentials.png" alt="Drawing" width="100%"/>
   </p>
 </embed><p>Next, double click on the orange mysql node called <cite>diabetes</cite>. Similar to the credentials node setup, double click the node, add &quot;root&quot; as the database user and for the password, use the one you setup in the database setup. For the database put &quot;diabetes&quot;. Click done.</p>
-<p>The final piece of setup involves setting up the flow to run on a regular repeating schedule. To do this, double click on the blue inject node on the very left-hand side of the flow - the name is usually &quot;timestamp&quot;. Double click it and ensure the &quot;Inject once after&quot; box is unticked and then in the repeat dropdown choose interval and make the frequency 150 seconds. Click done to close the dialog and click the red deploy button in the top right.</p>
-<p>The deploy button will launch our flow. Assuming there are no issues upon launching it will continue to run, till we say otherwise. If we've configured everything correctly, we should see in a few minutes time records appearing in the database. Inside the mysql command line, we can check how many records have been created by running:</p>
-<div class="highlight"><pre><span></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="n">use</span> <span class="n">diabetes</span><span class="p">;</span>
-<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">from</span> <span class="n">glucose</span><span class="p">;</span>
+<p>The final piece of setup involves setting up the flow to run on a regular repeating schedule. To do this, double click on the blue inject node on the very left-hand side of the flow - the name is usually &quot;timestamp&quot;. Double click it and ensure the &quot;Inject once after&quot; box is unticked and then in the repeat dropdown choose interval and make the frequency 150 seconds. This will schedule poll the Dexcom api every 2.5 minutes. Click done to close the menu.</p>
+<p>We're now ready to deploy our flow so that it actually starts running. To do this click the red deploy button in the top right.</p>
+<p>Assuming there are errors upon deploying the flow should be running and will continue to do so till we stop it. If we've configured everything correctly, we should see within a few minutes records starting to appear in the database. Below I show a select statement that shows 10 rows from the glucose table.</p>
+<div class="highlight"><pre><span></span><span class="n">MariaDB</span> <span class="p">[(</span><span class="k">none</span><span class="p">)]</span><span class="o">&gt;</span> <span class="n">use</span> <span class="n">diabetes</span><span class="p">;</span>
+<span class="k">Database</span> <span class="n">changed</span>
+<span class="n">MariaDB</span> <span class="p">[</span><span class="n">diabetes</span><span class="p">]</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">glucose</span> <span class="k">order</span> <span class="k">by</span> <span class="nb">date</span> <span class="k">desc</span> <span class="k">limit</span> <span class="mi">10</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">---------------------+---------+-------------+</span>
+<span class="o">|</span> <span class="nb">date</span>                <span class="o">|</span> <span class="n">value</span>   <span class="o">|</span> <span class="n">direction</span>   <span class="o">|</span>
+<span class="o">+</span><span class="c1">---------------------+---------+-------------+</span>
+<span class="o">|</span> <span class="mi">2021</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">28</span> <span class="mi">10</span><span class="p">:</span><span class="mi">57</span><span class="p">:</span><span class="mi">54</span> <span class="o">|</span> <span class="mi">6</span><span class="p">.</span><span class="mi">61111</span> <span class="o">|</span> <span class="n">Flat</span>        <span class="o">|</span>
+<span class="o">|</span> <span class="mi">2021</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">28</span> <span class="mi">10</span><span class="p">:</span><span class="mi">52</span><span class="p">:</span><span class="mi">54</span> <span class="o">|</span> <span class="mi">6</span><span class="p">.</span><span class="mi">55556</span> <span class="o">|</span> <span class="n">Flat</span>        <span class="o">|</span>
+<span class="o">|</span> <span class="mi">2021</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">28</span> <span class="mi">10</span><span class="p">:</span><span class="mi">47</span><span class="p">:</span><span class="mi">54</span> <span class="o">|</span> <span class="mi">6</span><span class="p">.</span><span class="mi">61111</span> <span class="o">|</span> <span class="n">Flat</span>        <span class="o">|</span>
+<span class="o">|</span> <span class="mi">2021</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">28</span> <span class="mi">10</span><span class="p">:</span><span class="mi">42</span><span class="p">:</span><span class="mi">55</span> <span class="o">|</span> <span class="mi">6</span><span class="p">.</span><span class="mi">77778</span> <span class="o">|</span> <span class="n">Flat</span>        <span class="o">|</span>
+<span class="o">|</span> <span class="mi">2021</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">28</span> <span class="mi">10</span><span class="p">:</span><span class="mi">37</span><span class="p">:</span><span class="mi">55</span> <span class="o">|</span> <span class="mi">6</span><span class="p">.</span><span class="mi">83333</span> <span class="o">|</span> <span class="n">Flat</span>        <span class="o">|</span>
+<span class="o">|</span> <span class="mi">2021</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">28</span> <span class="mi">10</span><span class="p">:</span><span class="mi">32</span><span class="p">:</span><span class="mi">54</span> <span class="o">|</span>       <span class="mi">7</span> <span class="o">|</span> <span class="n">Flat</span>        <span class="o">|</span>
+<span class="o">|</span> <span class="mi">2021</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">28</span> <span class="mi">10</span><span class="p">:</span><span class="mi">27</span><span class="p">:</span><span class="mi">54</span> <span class="o">|</span> <span class="mi">6</span><span class="p">.</span><span class="mi">94444</span> <span class="o">|</span> <span class="n">FortyFiveUp</span> <span class="o">|</span>
+<span class="o">|</span> <span class="mi">2021</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">28</span> <span class="mi">10</span><span class="p">:</span><span class="mi">22</span><span class="p">:</span><span class="mi">54</span> <span class="o">|</span> <span class="mi">6</span><span class="p">.</span><span class="mi">61111</span> <span class="o">|</span> <span class="n">Flat</span>        <span class="o">|</span>
+<span class="o">|</span> <span class="mi">2021</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">28</span> <span class="mi">10</span><span class="p">:</span><span class="mi">17</span><span class="p">:</span><span class="mi">55</span> <span class="o">|</span> <span class="mi">6</span><span class="p">.</span><span class="mi">22222</span> <span class="o">|</span> <span class="n">Flat</span>        <span class="o">|</span>
+<span class="o">|</span> <span class="mi">2021</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">28</span> <span class="mi">10</span><span class="p">:</span><span class="mi">12</span><span class="p">:</span><span class="mi">55</span> <span class="o">|</span> <span class="mi">5</span><span class="p">.</span><span class="mi">72222</span> <span class="o">|</span> <span class="n">Flat</span>        <span class="o">|</span>
+<span class="o">+</span><span class="c1">---------------------+---------+-------------+</span>
+<span class="mi">10</span> <span class="k">rows</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">001</span> <span class="n">sec</span><span class="p">)</span>
 </pre></div>
-<p>This should return a number, hopefully greater than zero, indicating that glucose records are being synced into the database and WE ARE DONE!</p>
-<p>Thanks for reading this far! If you try to set this setup up yourself, check out the video where I go into a bit more detail on testing the flow as I go.</p>
+</div>
+<div class="section" id="and-we-re-there">
+<h2>And we're there</h2>
+<p>Thanks for reading this far! If you're having any problems following the specific setup, do check out the video where I go into a bit more detail on testing the flow as part of the setup.</p>
+<p>Otherwise congratulations on creating your local glucose store!</p>
 </div>
 
       </div>

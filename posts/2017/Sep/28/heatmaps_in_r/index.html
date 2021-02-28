@@ -17,12 +17,12 @@
         <link href="https://peterwooldridge.me/feeds/machine-learning.atom.xml" type="application/atom+xml" rel="alternate" title="Peter Wooldridge's Blog Categories Atom Feed" />
         <!-- twitter card metadata -->
 <meta name="twitter:site" content="">
-<meta name="twitter:title" content="Visualising networks in R using atomic plot functions">
-<meta name="twitter:description" content="Using atomic plot functions in R to create heatmaps">
+<meta name="twitter:title" content="Visualising network communities in R">
+<meta name="twitter:description" content="">
         <!-- OG Tags -->
 <meta property="og:url" content="https://peterwooldridge.me/posts/2017/Sep/28/heatmaps_in_r/"/>
-<meta property="og:title" content="Peter Wooldridge's Blog | Visualising networks in R using atomic plot functions" />
-<meta property="og:description" content="Using atomic plot functions in R to create heatmaps" />
+<meta property="og:title" content="Peter Wooldridge's Blog | Visualising network communities in R" />
+<meta property="og:description" content="" />
         <!-- favicon -->
         <!-- moment.js for date formatting -->
         <script src="https://peterwooldridge.me/theme/js/moment.js"></script>
@@ -52,7 +52,6 @@
             };
         </script>
 
-    <meta name="description" content="Using atomic plot functions in R to create heatmaps" />
 
     <meta name="tags" content="R" />
     <meta name="tags" content="networks" />
@@ -90,15 +89,16 @@
         </footer>
         <header>
           <h2>
-            Visualising networks in R using atomic plot functions
+            Visualising network communities in R
           </h2>
         </header>
       <div class="content">
          <p>One of the most natural ways to visualise a social network is a network diagram which consists of a series of dots representing the entity in the network and lines representing the relationships between the entities. This type of visualisation looks as follows:</p>
-<div class="figure">
-<img alt="" src="images/standard-network-plot.png" />
-</div>
-<p>We can encode community information to this type of plot by colouring the nodes according to the communitiy memberships.</p>
+<embed>
+  <p align="center">
+     <img src="https://peterwooldridge.me/posts/2017/Sep/28/heatmaps_in_r/standard-network-plot.png" alt="Drawing"/>
+  </p>
+</embed><p>We can encode community information to this type of plot by colouring the nodes according to the communitiy memberships.</p>
 <p>As Mike Bostock <a class="reference external" href="https://bost.ocks.org/mike/miserables/">showed</a>, another interesting way to visualise a network is with the adjacency matrix. As a reminder the Adjacency matrix is defined as follows:</p>
 <div class="math">
 \begin{equation*}
@@ -110,11 +110,12 @@ A_{ij} = \left\{
 \right.
 \end{equation*}
 </div>
-<p>The usefullness of the visualisation of the adjacency matrix depends largely on the order of the rows and columns in the plot. By finding communities in the network, we can reorder the rows and columns of the adjacency matrix accordingly to produce a plot that looks as follows:</p>
-<div class="figure">
-<img alt="" src="images/lesmis.png" />
-</div>
-<p>In this post I show how to create the above plot using atomic plot functions in R. The coloured blocks down the diagonal of the plot represent the different communities in the network.</p>
+<p>The usefulness of the adjacency matrix visualisation depends largely on the order of the rows and columns in the plot. By finding communities in the network, we can reorder the rows and columns of the adjacency matrix accordingly to produce a plot that looks as follows:</p>
+<embed>
+  <p align="center">
+     <img src="https://peterwooldridge.me/posts/2017/Sep/28/heatmaps_in_r/lesmis.png" alt="Drawing"/>
+  </p>
+</embed><p>In this post I show how to create the above plot using atomic plot functions in R. The coloured blocks down the diagonal of the plot represent the different communities in the network.</p>
 <p>To get started, the first thing we need is some data in a matrix object. We load the same Les Misérables data as used for the visualisation <a class="reference external" href="https://bost.ocks.org/mike/miserables/">here</a>:</p>
 <div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">jsonlite</span><span class="p">)</span>
 <span class="nf">library</span><span class="p">(</span><span class="n">igraph</span><span class="p">)</span>

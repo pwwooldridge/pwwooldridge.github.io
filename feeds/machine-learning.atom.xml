@@ -3,13 +3,13 @@
 &lt;p&gt;Suppose we want to classify …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Support Vector Machines (SVMs) are a versatile classification algorithm that should be a staple in every data scientists toolbox. In this first of a series of posts, my goal is to describe the intuition behind SVMs what makes them such a powerful technique for classification.&lt;/p&gt;
 &lt;p&gt;Suppose we want to classify the red dots from the blue in the figure below. Plotted on the axes are an orange, black and green hyperplane. All three perfectly separate the red and blue classes. So which one is the best choice to split our data?&lt;/p&gt;
 &lt;p align="center"&gt;
-   &lt;img src="images/multiple_hyperplanes.png" alt="drawing" width="500"/&gt;  
+   &lt;img src="https://peterwooldridge.me/posts/2019/Sep/04/svm_1/multiple_hyperplanes.png" alt="drawing" width="500"/&gt;  
 &lt;/p&gt;
 
 &lt;p&gt;The hardest points to classify are those sat closest to the hyperplane. Therefore, a decision boundary that creates a large gap between the classes is preferable because new data points are more likely to be correctly classified. The SVM defines this criterion as finding a decision boundary that is maximally far away from any data point. The distance between the decision boundary and the closest data point determines the margin of the classifier.&lt;/p&gt;
 &lt;p&gt;The figure below shows the data being separated by the largest margin decision boundary. The maximum margin decision boundary is defined by two parallel hyperplanes, one that goes through the positive data points closest to the decision boundary and one that goes through the negative points closest to the decision boundary. These are known as the support vectors.&lt;/p&gt;
 &lt;p align="center"&gt;
-   &lt;img src="images/maximal_margin.png" alt="Drawing" width="500"/&gt;
+   &lt;img src="https://peterwooldridge.me/posts/2019/Sep/04/svm_1/maximal_margin.png" alt="Drawing" width="500"/&gt;
 &lt;/p&gt;
 
 &lt;p&gt;Mathematically, we can summarise what we have described so far.&lt;/p&gt;
@@ -23,14 +23,14 @@ h_{w,b}(x) =
 $$&lt;/div&gt;
 &lt;p&gt;In the two dimensional case, our decision boundary &lt;span class="math"&gt;\(w^{T} x + b = 0\)&lt;/span&gt; is simply a line with the regions above and below it represented by &lt;span class="math"&gt;\(w^{T}x + b &amp;gt; 0\)&lt;/span&gt; and &lt;span class="math"&gt;\(w^{T}x + b &amp;lt; 0\)&lt;/span&gt;.&lt;/p&gt;
 &lt;p align="center"&gt;
-   &lt;img src="images/decision_boundary.png" alt="Drawing" width="500"/&gt;
+   &lt;img src="https://peterwooldridge.me/posts/2019/Sep/04/svm_1/decision_boundary.png" alt="Drawing" width="500"/&gt;
 &lt;/p&gt;
 
 &lt;h3&gt;Distance between points and the hyperplane&lt;/h3&gt;
 &lt;p&gt;We know that we want to find the values of &lt;span class="math"&gt;\(w\)&lt;/span&gt; and &lt;span class="math"&gt;\(b\)&lt;/span&gt; that provide the widest margin. Therefore, we need a way to measure the distance between a given point and the hyperplane. Let's define &lt;span class="math"&gt;\(\gamma^{(i)}\)&lt;/span&gt; to be the distance between the &lt;span class="math"&gt;\(i^{th}\)&lt;/span&gt; training observation &lt;span class="math"&gt;\(x^{(i)}\)&lt;/span&gt; and our hyperplane.&lt;/p&gt;
 &lt;p&gt;Consider the decision boundary shown in the figure below. If we define &lt;span class="math"&gt;\(x_{0}\)&lt;/span&gt; to be a vector on the hyperplane. Then the &lt;span class="math"&gt;\(x^{(i)} - x_{0}\)&lt;/span&gt; represents a vector from &lt;span class="math"&gt;\(x^{(i)}\)&lt;/span&gt; to the hyperplane. The dotted black line from &lt;span class="math"&gt;\(x^{(i)}\)&lt;/span&gt; to the hyperplane represents the vector whose distance is the shortest to the hyperplane. This dotted line forms a right-angled triangle with the hyperplane and we can label the unknown angle at the top of our triangle &lt;span class="math"&gt;\(\theta\)&lt;/span&gt;. The vector &lt;span class="math"&gt;\(w^{*}\)&lt;/span&gt; represents the unit vector perpendicular to the hyperplane.&lt;/p&gt;
 &lt;p align="center"&gt;
-   &lt;img src="images/svm_distance_to_hyperplane.png" alt="Drawing" width="500"/&gt;
+   &lt;img src="https://peterwooldridge.me/posts/2019/Sep/04/svm_1/svm_distance_to_hyperplane.png" alt="Drawing" width="500"/&gt;
 &lt;/p&gt;
 
 &lt;p&gt;Using trigonometry, and setting &lt;span class="math"&gt;\(f = x^{(i)} - x_{0}\)&lt;/span&gt;:&lt;/p&gt;
@@ -124,15 +124,17 @@ respect to a training example as:&lt;/p&gt;
     (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
-&lt;/script&gt;</content></entry><entry><title>Visualising networks in R using atomic plot functions</title><link href="https://peterwooldridge.me/posts/2017/Sep/28/heatmaps_in_r/" rel="alternate"></link><published>2017-09-28T21:13:00+01:00</published><updated>2017-09-28T21:13:00+01:00</updated><author><name>Peter Wooldridge</name></author><id>tag:peterwooldridge.me,2017-09-28:/posts/2017/Sep/28/heatmaps_in_r/</id><summary type="html">&lt;p&gt;One of the most natural ways to visualise a social network is a network diagram which consists of a series of dots representing the entity in the network and lines representing the relationships between the entities. This type of visualisation looks as follows:&lt;/p&gt;
-&lt;div class="figure"&gt;
-&lt;img alt="" src="images/standard-network-plot.png" /&gt;
-&lt;/div&gt;
-&lt;p&gt;We can encode community information to this …&lt;/p&gt;</summary><content type="html">&lt;p&gt;One of the most natural ways to visualise a social network is a network diagram which consists of a series of dots representing the entity in the network and lines representing the relationships between the entities. This type of visualisation looks as follows:&lt;/p&gt;
-&lt;div class="figure"&gt;
-&lt;img alt="" src="images/standard-network-plot.png" /&gt;
-&lt;/div&gt;
-&lt;p&gt;We can encode community information to this type of plot by colouring the nodes according to the communitiy memberships.&lt;/p&gt;
+&lt;/script&gt;</content></entry><entry><title>Visualising network communities in R</title><link href="https://peterwooldridge.me/posts/2017/Sep/28/heatmaps_in_r/" rel="alternate"></link><published>2017-09-28T21:13:00+01:00</published><updated>2017-09-28T21:13:00+01:00</updated><author><name>Peter Wooldridge</name></author><id>tag:peterwooldridge.me,2017-09-28:/posts/2017/Sep/28/heatmaps_in_r/</id><summary type="html">&lt;p&gt;One of the most natural ways to visualise a social network is a network diagram which consists of a series of dots representing the entity in the network and lines representing the relationships between the entities. This type of visualisation looks as follows:&lt;/p&gt;
+&lt;embed&gt;
+  &lt;p align="center"&gt;
+     &lt;img src="https://peterwooldridge.me/posts/2017/Sep/28/heatmaps_in_r/standard-network-plot.png" alt="Drawing"/&gt;
+  &lt;/p&gt;
+&lt;/embed&gt;&lt;p&gt;We can encode community information to this …&lt;/p&gt;</summary><content type="html">&lt;p&gt;One of the most natural ways to visualise a social network is a network diagram which consists of a series of dots representing the entity in the network and lines representing the relationships between the entities. This type of visualisation looks as follows:&lt;/p&gt;
+&lt;embed&gt;
+  &lt;p align="center"&gt;
+     &lt;img src="https://peterwooldridge.me/posts/2017/Sep/28/heatmaps_in_r/standard-network-plot.png" alt="Drawing"/&gt;
+  &lt;/p&gt;
+&lt;/embed&gt;&lt;p&gt;We can encode community information to this type of plot by colouring the nodes according to the communitiy memberships.&lt;/p&gt;
 &lt;p&gt;As Mike Bostock &lt;a class="reference external" href="https://bost.ocks.org/mike/miserables/"&gt;showed&lt;/a&gt;, another interesting way to visualise a network is with the adjacency matrix. As a reminder the Adjacency matrix is defined as follows:&lt;/p&gt;
 &lt;div class="math"&gt;
 \begin{equation*}
@@ -144,11 +146,12 @@ A_{ij} = \left\{
 \right.
 \end{equation*}
 &lt;/div&gt;
-&lt;p&gt;The usefullness of the visualisation of the adjacency matrix depends largely on the order of the rows and columns in the plot. By finding communities in the network, we can reorder the rows and columns of the adjacency matrix accordingly to produce a plot that looks as follows:&lt;/p&gt;
-&lt;div class="figure"&gt;
-&lt;img alt="" src="images/lesmis.png" /&gt;
-&lt;/div&gt;
-&lt;p&gt;In this post I show how to create the above plot using atomic plot functions in R. The coloured blocks down the diagonal of the plot represent the different communities in the network.&lt;/p&gt;
+&lt;p&gt;The usefulness of the adjacency matrix visualisation depends largely on the order of the rows and columns in the plot. By finding communities in the network, we can reorder the rows and columns of the adjacency matrix accordingly to produce a plot that looks as follows:&lt;/p&gt;
+&lt;embed&gt;
+  &lt;p align="center"&gt;
+     &lt;img src="https://peterwooldridge.me/posts/2017/Sep/28/heatmaps_in_r/lesmis.png" alt="Drawing"/&gt;
+  &lt;/p&gt;
+&lt;/embed&gt;&lt;p&gt;In this post I show how to create the above plot using atomic plot functions in R. The coloured blocks down the diagonal of the plot represent the different communities in the network.&lt;/p&gt;
 &lt;p&gt;To get started, the first thing we need is some data in a matrix object. We load the same Les Misérables data as used for the visualisation &lt;a class="reference external" href="https://bost.ocks.org/mike/miserables/"&gt;here&lt;/a&gt;:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nf"&gt;library&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;jsonlite&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="nf"&gt;library&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;igraph&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
